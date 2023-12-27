@@ -45,13 +45,19 @@ public class Dto_wdh {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Dto_wdh(String pname, String pcolor, int psize, int pprice, int pqty) {
+	public Dto_wdh(String pname, String pcolor, int psize, int pprice, int pqty, int p_seq) {
 		super();
 		this.pname = pname;
 		this.pprice = pprice;
 		this.pcolor = pcolor;
 		this.psize = psize;
 		this.pqty = pqty;
+		this.p_seq = p_seq;
+	}
+
+	public Dto_wdh(String pcolor) {
+		super();
+		this.pcolor = pcolor;
 	}
 
 	// Method

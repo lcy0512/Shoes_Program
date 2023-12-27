@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Dao_wdh {
 
@@ -68,14 +69,25 @@ public class Dao_wdh {
 		this.stock = stock;
 	}
 
+	public Dao_wdh(int sap_seq, String sacustomer_id) {
+		super();
+		this.sap_seq = sap_seq;
+		this.sacustomer_id = sacustomer_id;
+	}
+
+	public Dao_wdh(String pname) {
+		super();
+		this.pname = pname;
+	}
 	// Method
 	
+
 	// p_seq를 가져와서 pname, pcolor, psize, pprice, qty, image의 정보를 띄워줌
 	public Dto_wdh viewDetailInfo() {
 		Dto_wdh dto_wdh = null;
 
 		// sql에서 p_seq를 통해 이름, 색깔, 사이즈, 가격, 이미지를 가져옴
-		String where = "select name, color, size, price, qty from product where p_seq = " + p_seq;
+		String where = "select name, color, size, price, qty, p_seq from product where p_seq = " + p_seq;
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -90,6 +102,7 @@ public class Dao_wdh {
 				int wkSize = rs.getInt(3);
 				int wkPrice = rs.getInt(4);
 				int wkQty = rs.getInt(5);
+				int wkP_seq = rs.getInt(6);
 
 				// file을 만들어 주는 것..
 //				ShareVar_wdh.image = ShareVar_wdh.image + 1;
@@ -101,7 +114,7 @@ public class Dao_wdh {
 //					output.write(buffer);
 //				}
 
-				dto_wdh = new Dto_wdh(wkName, wkColor, wkSize, wkPrice, wkQty);  // Model에 적용
+				dto_wdh = new Dto_wdh(wkName, wkColor, wkSize, wkPrice, wkQty, wkP_seq);  // Model에 적용
 			}
 			conn_mysql.close();
 
@@ -144,16 +157,11 @@ public class Dao_wdh {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			
-			String where1 = "insert into sale (name, telno, address, email, relation, file)";
-			String where2 = " values (?, ?, ?, ?, ?, ?)";
+			String insert = "insert into sale (p_seq, customer_id) values (?, ?)";
 			
-			ps = conn_mysql.prepareStatement(where1 + where2);
-			ps.setString(1, name);
-			ps.setString(2, telno);
-			ps.setString(3, address);
-			ps.setString(4, email);
-			ps.setString(5, relation);
-			ps.setBinaryStream(6, file);
+			ps = conn_mysql.prepareStatement(insert);
+			ps.setInt(1, sap_seq);
+			ps.setString(2, sacustomer_id);
 			ps.executeUpdate();			// 무조건 executeUpdate를 해줄것!!!!!!!!!!!!
 			
 			conn_mysql.close();
@@ -165,6 +173,35 @@ public class Dao_wdh {
 		return true;
 
 	}
+	
+	public ArrayList<String> productColor(String name) {
+		Dto_wdh dto_wdh = null;
+		ArrayList<String> productColor = new ArrayList<String>();
+
+		// sql에서 name을 통해 color를 가져옴
+		String where = "select color from product where name = '" + "name'";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(where);
+
+			while (rs.next()) {
+				String wkColor = rs.getString(1);
+				dto_wdh = new Dto_wdh(wkColor);  // Model에 적용
+				productColor.add(wkColor);
+			}
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return productColor;
+	}
+
+	
 
 
 	

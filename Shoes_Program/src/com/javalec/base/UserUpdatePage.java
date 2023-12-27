@@ -8,7 +8,13 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+
+
+
+
 public class UserUpdatePage extends JDialog {
+	
+	static UserUpdatePage userUpdatedialog = new UserUpdatePage();
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -18,9 +24,9 @@ public class UserUpdatePage extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			UserUpdatePage dialog = new UserUpdatePage();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+			userUpdatedialog = new UserUpdatePage();
+			userUpdatedialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			userUpdatedialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -53,4 +59,12 @@ public class UserUpdatePage extends JDialog {
 		}
 	}
 
-}
+	// Function 
+	
+	
+	
+	
+	
+	
+	
+}// End

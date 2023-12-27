@@ -135,6 +135,37 @@ public class Dao_wdh {
 		return true;
 
 	}
+	
+	// 장바구니를 눌렀을 때 임시저장에 insert
+	public boolean insertAction() {
+		PreparedStatement ps = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			String where1 = "insert into sale (name, telno, address, email, relation, file)";
+			String where2 = " values (?, ?, ?, ?, ?, ?)";
+			
+			ps = conn_mysql.prepareStatement(where1 + where2);
+			ps.setString(1, name);
+			ps.setString(2, telno);
+			ps.setString(3, address);
+			ps.setString(4, email);
+			ps.setString(5, relation);
+			ps.setBinaryStream(6, file);
+			ps.executeUpdate();			// 무조건 executeUpdate를 해줄것!!!!!!!!!!!!
+			
+			conn_mysql.close();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return true;
+
+	}
+
 
 	
 	

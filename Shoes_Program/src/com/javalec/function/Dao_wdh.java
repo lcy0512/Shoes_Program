@@ -47,14 +47,13 @@ public class Dao_wdh {
 	int saseq;
 	int sap_seq;
 	String sacustomer_id;
-	
+
 	//
 	int stock;
 
 	// Constructor
 
 	public Dao_wdh() {
-		// TODO Auto-generated constructor stub
 	}
 
 	// p_seq를 가져오는 생성자
@@ -62,7 +61,7 @@ public class Dao_wdh {
 		super();
 		this.p_seq = p_seq;
 	}
-	
+
 	public Dao_wdh(int p_seq, int stock) {
 		super();
 		this.p_seq = p_seq;
@@ -79,8 +78,14 @@ public class Dao_wdh {
 		super();
 		this.pname = pname;
 	}
-	// Method
 	
+	public Dao_wdh(String pname, String pcolor) {
+		super();
+		this.pname = pname;
+		this.pcolor = pcolor;
+	}
+
+	// Method
 
 	// p_seq를 가져와서 pname, pcolor, psize, pprice, qty, image의 정보를 띄워줌
 	public Dto_wdh viewDetailInfo() {
@@ -114,7 +119,7 @@ public class Dao_wdh {
 //					output.write(buffer);
 //				}
 
-				dto_wdh = new Dto_wdh(wkName, wkColor, wkSize, wkPrice, wkQty, wkP_seq);  // Model에 적용
+				dto_wdh = new Dto_wdh(wkName, wkColor, wkSize, wkPrice, wkQty, wkP_seq); // Model에 적용
 			}
 			conn_mysql.close();
 
@@ -123,63 +128,62 @@ public class Dao_wdh {
 		}
 		return dto_wdh;
 	}
-	
+
 	// 바로구매를 눌렀을 때 수량만큼 재고에서 빼는 Method
 	public boolean updateAction() {
 		PreparedStatement ps = null;
-		
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			
+
 			String where = "update product set qty = ? where p_seq = ?";
-			
+
 			ps = conn_mysql.prepareStatement(where);
 			ps.setInt(1, stock);
 			ps.setInt(2, p_seq);
 			ps.executeUpdate();
-			
+
 			conn_mysql.close();
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return true;
 
 	}
-	
+
 	// 장바구니를 눌렀을 때 임시저장에 insert
 	public boolean insertAction() {
 		PreparedStatement ps = null;
-		
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			
+
 			String insert = "insert into sale (p_seq, customer_id) values (?, ?)";
-			
+
 			ps = conn_mysql.prepareStatement(insert);
 			ps.setInt(1, sap_seq);
 			ps.setString(2, sacustomer_id);
-			ps.executeUpdate();			// 무조건 executeUpdate를 해줄것!!!!!!!!!!!!
-			
+			ps.executeUpdate(); // 무조건 executeUpdate를 해줄것!!!!!!!!!!!!
+
 			conn_mysql.close();
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return true;
 
 	}
-	
-	public ArrayList<Dto_wdh> productColor(String name) {
-		Dto_wdh dto_wdh = null;
-		ArrayList<Dto_wdh> productColor = new ArrayList<Dto_wdh>();
 
-		// sql에서 name을 통해 color를 가져옴
-		String where = "select color from product where name = '" + "name'";
+	// sql에서 name을 통해 color를 가져옴
+	public ArrayList<String> productColor() {
+		ArrayList<String> productColor = new ArrayList<String>();
+
+		String where = "select color from product where name = '" + pname + "' group by color";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -187,12 +191,11 @@ public class Dao_wdh {
 			Statement stmt_mysql = conn_mysql.createStatement();
 
 			ResultSet rs = stmt_mysql.executeQuery(where);
-
 			while (rs.next()) {
 				String wkColor = rs.getString(1);
-				dto_wdh = new Dto_wdh(wkColor);  // Model에 적용
-				productColor.add(dto_wdh);
+				productColor.add(wkColor);
 			}
+
 			conn_mysql.close();
 
 		} catch (Exception e) {
@@ -200,25 +203,32 @@ public class Dao_wdh {
 		}
 		return productColor;
 	}
+	
+	// sql에서 name, color를 통해 size를 가져옴
+	public ArrayList<Integer> productSize() {
+		ArrayList<Integer> productSize = new ArrayList<Integer>();
 
-	
+		String where = "select size from product where name = '" + pname + "' and color = '" + pcolor + "' group by size order by size asc";
 
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+			ResultSet rs = stmt_mysql.executeQuery(where);
+			while (rs.next()) {
+				int wkSize = rs.getInt(1);
+				productSize.add(wkSize);
+			}
+
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return productSize;
+	}
+
 	
 
 } // End

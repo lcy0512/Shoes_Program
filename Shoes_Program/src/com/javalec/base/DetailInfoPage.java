@@ -29,6 +29,10 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class DetailInfoPage extends JDialog {
 
@@ -40,7 +44,7 @@ public class DetailInfoPage extends JDialog {
 	private JButton btnBucket2;
 	private JButton btnBuy;
 	private JLabel lblNewLabel_2;
-	private JTextField tfProductCode;
+	private JTextField tfName;
 	private JLabel lblNewLabel_2_1;
 	private JComboBox cbQty;
 	private JLabel lblNewLabel_2_1_1;
@@ -73,7 +77,8 @@ public class DetailInfoPage extends JDialog {
 			public void windowActivated(WindowEvent e) {
 				activatedScreen();
 				cbQtyNum();
-				cbColor();
+				cbColorColumn();
+				cbSizeColumn();
 			}
 		});
 		setBounds(100, 100, 800, 600);
@@ -98,7 +103,7 @@ public class DetailInfoPage extends JDialog {
 		contentPanel.add(getBtnBucket2());
 		contentPanel.add(getBtnBuy());
 		contentPanel.add(getLblNewLabel_2());
-		contentPanel.add(getTfProductCode());
+		contentPanel.add(getTfName());
 		contentPanel.add(getLblNewLabel_2_1());
 		contentPanel.add(getCbQty());
 		contentPanel.add(getLblNewLabel_2_1_1());
@@ -171,14 +176,14 @@ public class DetailInfoPage extends JDialog {
 		return lblNewLabel_2;
 	}
 
-	private JTextField getTfProductCode() {
-		if (tfProductCode == null) {
-			tfProductCode = new JTextField();
-			tfProductCode.setEditable(false);
-			tfProductCode.setBounds(536, 101, 112, 30);
-			tfProductCode.setColumns(10);
+	private JTextField getTfName() {
+		if (tfName == null) {
+			tfName = new JTextField();
+			tfName.setEditable(false);
+			tfName.setBounds(536, 101, 112, 30);
+			tfName.setColumns(10);
 		}
-		return tfProductCode;
+		return tfName;
 	}
 
 	private JLabel getLblNewLabel_2_1() {
@@ -214,6 +219,11 @@ public class DetailInfoPage extends JDialog {
 	private JComboBox getCbColor() {
 		if (cbColor == null) {
 			cbColor = new JComboBox();
+			cbColor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					colorChange();
+				}
+			});
 			cbColor.setBounds(536, 223, 112, 25);
 		}
 		return cbColor;
@@ -266,7 +276,7 @@ public class DetailInfoPage extends JDialog {
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
 //		System.out.println(dto_wdh.getPname());			// 잘 출력하는지 실험
 
-		tfProductCode.setText(dto_wdh.getPname()); // 제품명 출력
+		tfName.setText(dto_wdh.getPname()); // 제품명 출력
 
 		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
 
@@ -326,23 +336,45 @@ public class DetailInfoPage extends JDialog {
 		}
 	}
 	
-	// 상품의 color를 나타내는 combobox에 function
-	private void cbColor() {
+	// 상품의 color를 나타내는 combobox의 function
+	private void cbColorColumn() {
 		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
-		dao_wdh.productColor(dto_wdh.getPname());
-		System.out.println(dto_wdh.getPcolor());
-		
-		ArrayList<String> productColor = new ArrayList<String>();
-		for(int i = 0; i < productColor.size(); i++) {
-			
+		String pName = dto_wdh.getPname();	// pname 받아오기
+		Dao_wdh dao_wdh2 = new Dao_wdh(pName);	// pname을 다시 주기
+		dao_wdh2.productColor();		// productColor Method에 pname 주기
+//		System.out.println(dao_wdh.productColor(pName));	// ArrayList 잘 되었는지 확인
+		for(int i = 0; i < dao_wdh2.productColor().size(); i++) {
+			cbColor.addItem(dao_wdh2.productColor().get(i));
 		}
-		
-		
-		
 	}
-
+	
+	// 상품의 size를 나타내는 combobox의 function
+	private void cbSizeColumn() {
+		int seq = MainView_Info.clickSeq; 		// seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+		Dao_wdh dao_wdh = new Dao_wdh(seq); 	// Dao에 seq를 보냄
+		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();	// product DB 받아오기
+		String pName = dto_wdh.getPname();		// pname 받아오기
+		String pColor = dto_wdh.getPcolor();	// pcolor 받아오기
+		Dao_wdh dao_wdh2 = new Dao_wdh(pName, pColor);	// pname, pcolor 다시 주기
+		dao_wdh2.productSize();		// productColor Method에 pname 주기
+//		System.out.println(dao_wdh.productSize(pName, pColor));	// ArrayList 잘 되었는지 확인
+		for(int i = 0; i < dao_wdh2.productSize().size(); i++) {
+			cbSize.addItem(dao_wdh2.productSize().get(i));
+		}
+	}
+	
+	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시 search
+	private void colorChange() {
+		String pName = tfName.getText();
+		System.out.println(pName);
+		String pColor = (String) cbColor.getSelectedItem();
+		System.out.println(pColor);
+		cbSize.getSelectedItem();
+		System.out.println(cbSize.getSelectedItem());
+		Dao_wdh dao_wdh = new Dao_wdh();
+	}
 
 
 

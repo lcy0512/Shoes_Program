@@ -174,9 +174,9 @@ public class Dao_wdh {
 
 	}
 	
-	public ArrayList<String> productColor(String name) {
+	public ArrayList<Dto_wdh> productColor(String name) {
 		Dto_wdh dto_wdh = null;
-		ArrayList<String> productColor = new ArrayList<String>();
+		ArrayList<Dto_wdh> productColor = new ArrayList<Dto_wdh>();
 
 		// sql에서 name을 통해 color를 가져옴
 		String where = "select color from product where name = '" + "name'";
@@ -191,7 +191,7 @@ public class Dao_wdh {
 			while (rs.next()) {
 				String wkColor = rs.getString(1);
 				dto_wdh = new Dto_wdh(wkColor);  // Model에 적용
-				productColor.add(wkColor);
+				productColor.add(dto_wdh);
 			}
 			conn_mysql.close();
 

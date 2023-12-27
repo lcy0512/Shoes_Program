@@ -282,7 +282,7 @@ public class DetailInfoPage extends JDialog {
 	}
 	
 	
-	
+	// 즉시 구매 버튼을 눌렀을 때
 	private void buyClick() {
 		if (lblId.getText().equals("로그인이 필요합니다.")) {
 			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");
@@ -295,7 +295,7 @@ public class DetailInfoPage extends JDialog {
 		}
 	}
 
-	// 현재 재고를 찾는 function
+	// 현재 재고가 몇개인지 나타내는 function
 	private int currentStock() {
 		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄

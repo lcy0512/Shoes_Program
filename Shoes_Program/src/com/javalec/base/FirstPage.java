@@ -30,7 +30,7 @@ public class FirstPage extends JDialog {
 	 */
 	
 	
-	static FirstPage dialog =  new FirstPage();
+	static FirstPage firstdialog =  new FirstPage();
 	
 
 	/**
@@ -38,9 +38,9 @@ public class FirstPage extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			dialog = new FirstPage();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+		
+			firstdialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			firstdialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -60,6 +60,9 @@ public class FirstPage extends JDialog {
 			JButton btnNotMember = new JButton("비회원 입장");
 			btnNotMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
+					
+					goToMainView();
 					
 					
 				}
@@ -129,26 +132,46 @@ public class FirstPage extends JDialog {
 	private void normalCustomerLogin() {
 		
 		
-		dialog.setVisible(false);
 
 		LoginPage login  = new LoginPage();
 		login.setVisible(true);
+		firstdialog.setVisible(false);
+		this.setVisible(false);
 		
+		//dispose();
 		
 	}
 	
 	private void joinPageAction() {
-		dialog.setVisible(false);
+		firstdialog.setVisible(false);
 
 		JoinPage join  = new JoinPage();
 		join.setVisible(true);
+		dispose();
+		this.setVisible(false);
 		
 	}
 	private void premiumLogin() {
-		dialog.setVisible(false);
+		firstdialog.setVisible(false);
 
 		JoinPage join  = new JoinPage();
 		join.setVisible(true);
+		dispose();
+		this.setVisible(false);
+		
+		
+	}
+	
+	private void goToMainView() {
+		
+		
+		
+		firstdialog.setVisible(false);
+
+		MainView mainView  = new MainView();
+		mainView.setVisible(true);
+		dispose();
+		this.setVisible(false);
 		
 		
 	}

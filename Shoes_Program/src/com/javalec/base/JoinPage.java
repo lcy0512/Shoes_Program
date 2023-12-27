@@ -63,14 +63,14 @@ public class JoinPage extends JDialog {
 	
 	
 	
-	static JoinPage joindialog = null;
+	static JoinPage joindialog = new JoinPage();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			joindialog = new JoinPage();
+			//joindialog = new JoinPage();
 			joindialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			joindialog.setVisible(true);
 		} catch (Exception e) {
@@ -449,11 +449,8 @@ public class JoinPage extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					
 					
-					joindialog.setVisible(false);
-					
-					FirstPage first = new FirstPage();
-					
-					first.setVisible(true);
+					goHomeAction();
+
 					
 					
 					
@@ -465,4 +462,24 @@ public class JoinPage extends JDialog {
 		}
 		return btnNewButton_2;
 	}
+	
+	
+	//Function
+	
+	private void goHomeAction() {
+		joindialog.setVisible(false);
+		
+		FirstPage first = new FirstPage();
+		
+		first.setVisible(true);
+		
+		//this.setVisible(false);
+		dispose();
+		
+		
+		
+	}
+	
+	
+	
 }// ENd

@@ -46,7 +46,7 @@ public class LoginPage extends JDialog {
 	
 	
 	
-	static LoginPage login_dialog =null;
+	static LoginPage login_dialog =new LoginPage();
 	private JComboBox cbExample;
 	
 

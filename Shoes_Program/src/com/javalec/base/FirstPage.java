@@ -30,7 +30,7 @@ public class FirstPage extends JDialog {
 	 */
 	
 	
-	static FirstPage dialog = null;
+	static FirstPage dialog =  new FirstPage();
 	
 
 	/**
@@ -152,7 +152,7 @@ public class FirstPage extends JDialog {
 		
 		
 	}
-	
+
 	
 	
 	

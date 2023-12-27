@@ -45,6 +45,7 @@ public class JoinPage extends JDialog {
 	private JButton btnNewButton_1;
 	private JPasswordField passwordField;
 	private JLabel lblPassword_1;
+	private JButton btnNewButton_2;
 	
 	/*
 	 * Description :  회원 가입 페이
@@ -62,16 +63,16 @@ public class JoinPage extends JDialog {
 	
 	
 	
-	
+	static JoinPage joindialog = null;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			JoinPage dialog = new JoinPage();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+			joindialog = new JoinPage();
+			joindialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			joindialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -108,6 +109,7 @@ public class JoinPage extends JDialog {
 		contentPanel.add(getBtnNewButton_1());
 		contentPanel.add(getLblPassword_1());
 		contentPanel.add(getPasswordField());
+		contentPanel.add(getBtnNewButton_2());
 	}
 
 	private JLabel getLblID() {
@@ -439,5 +441,28 @@ public class JoinPage extends JDialog {
 			lblPassword_1.setBounds(246, 210, 88, 16);
 		}
 		return lblPassword_1;
+	}
+	private JButton getBtnNewButton_2() {
+		if (btnNewButton_2 == null) {
+			btnNewButton_2 = new JButton("");
+			btnNewButton_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+					joindialog.setVisible(false);
+					
+					FirstPage first = new FirstPage();
+					
+					first.setVisible(true);
+					
+					
+					
+					
+				}
+			});
+			btnNewButton_2.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/home1.png")));
+			btnNewButton_2.setBounds(713, 16, 35, 35);
+		}
+		return btnNewButton_2;
 	}
 }// ENd

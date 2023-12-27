@@ -172,7 +172,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_6() {
 		if (lblNewLabel_6 == null) {
 			lblNewLabel_6 = new JLabel("");
-			lblNewLabel_6.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/PW1.png"));
+			lblNewLabel_6.setIcon(new ImageIcon("/com/javalec/image/PW1.png"));
 			lblNewLabel_6.setBounds(198, 150, 35, 35);
 		}
 		return lblNewLabel_6;
@@ -203,7 +203,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_4() {
 		if (lblNewLabel_4 == null) {
 			lblNewLabel_4 = new JLabel("");
-			lblNewLabel_4.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/email.png"));
+			lblNewLabel_4.setIcon(new ImageIcon("/com/javalec/image/email.png"));
 			lblNewLabel_4.setBounds(198, 279, 35, 35);
 		}
 		return lblNewLabel_4;
@@ -211,7 +211,7 @@ public class JoinPage extends JDialog {
 	private JLabel getNameImage() {
 		if (nameImage == null) {
 			nameImage = new JLabel("");
-			nameImage.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/Name.png"));
+			nameImage.setIcon(new ImageIcon("/com/javalec/image/Name.png"));
 			nameImage.setBounds(198, 343, 35, 35);
 		}
 		return nameImage;
@@ -227,7 +227,7 @@ public class JoinPage extends JDialog {
 	private JLabel getMailImage() {
 		if (mailImage == null) {
 			mailImage = new JLabel("");
-			mailImage.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/email.png"));
+			mailImage.setIcon(new ImageIcon("/com/javalec/image/email.png"));
 			mailImage.setBounds(240, 283, 35, 35);
 		}
 		return mailImage;
@@ -235,7 +235,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_6_1_1() {
 		if (lblNewLabel_6_1_1 == null) {
 			lblNewLabel_6_1_1 = new JLabel("");
-			lblNewLabel_6_1_1.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/Name.png"));
+			lblNewLabel_6_1_1.setIcon(new ImageIcon("/com/javalec/image/Name.png"));
 			lblNewLabel_6_1_1.setBounds(198, 100, 35, 35);
 		}
 		return lblNewLabel_6_1_1;
@@ -298,7 +298,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_6_1_2() {
 		if (lblNewLabel_6_1_2 == null) {
 			lblNewLabel_6_1_2 = new JLabel("");
-			lblNewLabel_6_1_2.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/email.png"));
+			lblNewLabel_6_1_2.setIcon(new ImageIcon("/com/javalec/image/email.png"));
 			lblNewLabel_6_1_2.setBounds(198, 399, 35, 35);
 		}
 		return lblNewLabel_6_1_2;

@@ -52,7 +52,7 @@ public class FirstPage extends JDialog {
 	public FirstPage() {
 		setBounds(100, 100, 800,600);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(new Color(153, 204, 204));
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -100,14 +100,14 @@ public class FirstPage extends JDialog {
 		}
 		{
 			JLabel lblNewLabel = new JLabel("New label");
-			lblNewLabel.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/로고 .png"));
-			lblNewLabel.setBounds(168, -50, 500, 500);
+			lblNewLabel.setIcon(new ImageIcon(FirstPage.class.getResource("/com/javalec/image/로고 .png")));
+			lblNewLabel.setBounds(392, -49, 500, 500);
 			contentPanel.add(lblNewLabel);
 		}
 		{
-			JLabel lblNewLabel_1 = new JLabel("JUMP");
+			JLabel lblNewLabel_1 = new JLabel("신발가게");
 			lblNewLabel_1.setFont(new Font("Lucida Grande", Font.BOLD, 33));
-			lblNewLabel_1.setBounds(158, 75, 271, 86);
+			lblNewLabel_1.setBounds(194, 150, 271, 86);
 			contentPanel.add(lblNewLabel_1);
 		}
 		{
@@ -154,8 +154,8 @@ public class FirstPage extends JDialog {
 	private void premiumLogin() {
 		firstdialog.setVisible(false);
 
-		JoinPage join  = new JoinPage();
-		join.setVisible(true);
+		LoginPage login  = new LoginPage();
+		login.setVisible(true);
 		dispose();
 		this.setVisible(false);
 		

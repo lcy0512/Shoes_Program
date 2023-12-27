@@ -46,7 +46,7 @@ public class LoginPage extends JDialog {
 	
 	
 	
-	static LoginPage login_dialog =null;
+	static LoginPage login_dialog =new LoginPage();
 	private JComboBox cbExample;
 	
 
@@ -55,7 +55,7 @@ public class LoginPage extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			login_dialog = new LoginPage();
+			//login_dialog = new LoginPage();
 			login_dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			login_dialog.setVisible(true);
 		} catch (Exception e) {
@@ -93,7 +93,7 @@ public class LoginPage extends JDialog {
 		contentPanel.add(getPfPassword());
 		contentPanel.add(getBtnNewButton());
 		contentPanel.add(getBtnNewButton_1());
-		contentPanel.add(getCbExample());
+	
 	}
 	private JPasswordField getPfPassword() {
 		if (pfPassword == null) {
@@ -172,30 +172,18 @@ public class LoginPage extends JDialog {
 		FirstPage first = new FirstPage();
 		
 		login_dialog.setVisible(false);
+
 		
 		first.setVisible(true);
+		
+		dispose();
+		this.setVisible(false);
 				
 		
 	}
 	
-	
-	private JComboBox getCbExample() {
-		if (cbExample == null) {
-			cbExample = new JComboBox();
-			cbExample.setBounds(124, 416, 141, 27);
-		}
+
 		
 		
-		for (int i=0 ; i<10 ; i++) {
-			
-			cbExample.addItem(i);
-		}
-		
-		
-		
-		
-		
-		
-		return cbExample;
-	}
+
 } // END

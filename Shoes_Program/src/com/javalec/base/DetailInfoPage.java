@@ -83,7 +83,7 @@ public class DetailInfoPage extends JDialog {
 			}
 			@Override
 			public void windowDeactivated(WindowEvent e) {
-				removeColumn();
+				deactivatedScreen();
 			}
 		});
 		setBounds(100, 100, 800, 600);
@@ -293,11 +293,21 @@ public class DetailInfoPage extends JDialog {
 
 	}
 	
+	// 화면이 deactivated 되었을 때
+	private void deactivatedScreen() {
+		tfName.setText("");
+		cbQty.removeAllItems();
+		cbColor.removeAllItems();
+		cbSize.removeAllItems();
+		tfPrice.setText("");
+	}
+
+	
 	// 화면이 deactivated 되었을 때, color를 바꿨을 때
 	private void removeColumn() {
 		tfName.setText("");
 		cbQty.removeAllItems();
-		cbColor.removeAllItems();
+//		cbColor.removeAllItems();
 		cbSize.removeAllItems();
 		tfPrice.setText("");
 	}
@@ -379,9 +389,8 @@ public class DetailInfoPage extends JDialog {
 	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시 search
 	private void colorChange() {
 		searchPseq();
-		removeColumn();
-		activateColumn();
-		
+//		removeColumn();
+//		activateColumn();
 	}
 	
 	//cbColor의 색상을 통해 제품명, 색상, 사이즈를 통해 제품코드를 search
@@ -394,7 +403,7 @@ public class DetailInfoPage extends JDialog {
 		System.out.println(pSize);	// 사이즈 가져오기
 		Dao_wdh dao_wdh = new Dao_wdh(pName, pColor, pSize);
 		dao_wdh.searchSeq();
-
+		System.out.println(dao_wdh.searchSeq());
 	}
 
 	private void activateColumn() {

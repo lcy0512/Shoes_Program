@@ -66,6 +66,7 @@ public class CurrentSituation extends JDialog {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				tableInit();
+				searchAction();
 			}
 		});
 		setBounds(100, 100, 800, 600);
@@ -189,7 +190,7 @@ public class CurrentSituation extends JDialog {
 		int listCount = dtoList.size();
 		for (int i = 0; i < listCount; i++) {
 			String temp = Integer.toString(dtoList.get(i).getSseq()); // 어레이 리스트에서시퀀스를 가져온다 그래서 get이 두
-			String[] qTxt = { temp, dtoList.get(i).getSdate(), dtoList.get(i).getSdate()};
+			String[] qTxt = {dtoList.get(i).getSdate(),Integer.toString(dtoList.get(i).getSprice())};
 			outerTable.addRow(qTxt);
 		}
 	}

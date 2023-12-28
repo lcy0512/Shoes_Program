@@ -67,7 +67,7 @@ public class Dao_pjh {
 	
 	public ArrayList<Dto_pjh> selectList() {
 		ArrayList<Dto_pjh> dtolist = new ArrayList<Dto_pjh>();
-		String whereDefault = "select date,sum(price*qty) from sale where date=CURRENT_DATE() group by date";
+		String whereDefault = "select date,sum(price*qty) from sale group by date";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -81,9 +81,9 @@ public class Dao_pjh {
 			while (rs.next()) {
 				String wkDate = rs.getString(1);
 				int wkprice = rs.getInt(2);
-				int wkQty = rs.getInt(3);
+				
 
-				Dto_pjh dto = new Dto_pjh(wkDate, wkprice, wkQty);
+				Dto_pjh dto = new Dto_pjh(wkDate, wkprice);
 				dtolist.add(dto);
 
 			}

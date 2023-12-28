@@ -379,18 +379,16 @@ public class DetailInfoPage extends JDialog {
 		}
 	}
 
-	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시
-	// search
+	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시 search
 	private void colorChange() {
 		cbSize.removeAllItems();
+//		cbQty.removeAllItems();
 		searchSizeCb();
+		
 		Dao_wdh dao_wdh = new Dao_wdh(searchPseq()); // Dao에 seq를 보냄
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
 
-		tfName.setText(dto_wdh.getPname()); // 제품명 출력
 		cbQtyNum(); // 수량 넣기
-		cbColorColumn(); // 색깔 넣기
-		cbSizeColumn(); // 사이즈 넣기
 		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
 
 		// Image File

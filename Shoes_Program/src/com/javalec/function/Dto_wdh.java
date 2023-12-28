@@ -60,8 +60,14 @@ public class Dto_wdh {
 		this.pcolor = pcolor;
 	}
 
-	// Method
+//	public Dto_wdh(int p_seq) {
+//		super();
+//		this.p_seq = p_seq;
+//	}
+
 	
+	// Method
+
 	public int getP_seq() {
 		return p_seq;
 	}

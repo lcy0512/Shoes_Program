@@ -33,6 +33,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
 
 public class DetailInfoPage extends JDialog {
 
@@ -76,9 +80,10 @@ public class DetailInfoPage extends JDialog {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				activatedScreen();
-				cbQtyNum();
-				cbColorColumn();
-				cbSizeColumn();
+			}
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				removeColumn();
 			}
 		});
 		setBounds(100, 100, 800, 600);
@@ -219,9 +224,13 @@ public class DetailInfoPage extends JDialog {
 	private JComboBox getCbColor() {
 		if (cbColor == null) {
 			cbColor = new JComboBox();
-			cbColor.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			cbColor.addPopupMenuListener(new PopupMenuListener() {
+				public void popupMenuCanceled(PopupMenuEvent e) {
+				}
+				public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 					colorChange();
+				}
+				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				}
 			});
 			cbColor.setBounds(536, 223, 112, 25);
@@ -277,18 +286,28 @@ public class DetailInfoPage extends JDialog {
 //		System.out.println(dto_wdh.getPname());			// 잘 출력하는지 실험
 
 		tfName.setText(dto_wdh.getPname()); // 제품명 출력
-
+		cbQtyNum();			// 수량 넣기
+		cbColorColumn();	// 색깔 넣기
+		cbSizeColumn();		// 사이즈 넣기
 		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
 
+	}
+	
+	// 화면이 deactivated 되었을 때, color를 바꿨을 때
+	private void removeColumn() {
+		tfName.setText("");
+		cbQty.removeAllItems();
+		cbColor.removeAllItems();
+		cbSize.removeAllItems();
+		tfPrice.setText("");
 	}
 
 	// cbQty의 재고수량 만들기
 	private void cbQtyNum() {
 		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
-		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
-		for (int i = 0; i < dto_wdh.getPqty(); i++) {
-			cbQty.addItem(i+1);
+		for (int i = 0; i <= dao_wdh.viewDetailInfo().getPqty(); i++) {
+			cbQty.addItem(i);
 		}
 	}
 	
@@ -340,13 +359,9 @@ public class DetailInfoPage extends JDialog {
 	private void cbColorColumn() {
 		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
-		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
-		String pName = dto_wdh.getPname();	// pname 받아오기
-		Dao_wdh dao_wdh2 = new Dao_wdh(pName);	// pname을 다시 주기
-		dao_wdh2.productColor();		// productColor Method에 pname 주기
-//		System.out.println(dao_wdh.productColor(pName));	// ArrayList 잘 되었는지 확인
-		for(int i = 0; i < dao_wdh2.productColor().size(); i++) {
-			cbColor.addItem(dao_wdh2.productColor().get(i));
+//		System.out.println(dao_wdh.productColor());	// ArrayList 잘 되었는지 확인
+		for(int i = 0; i < dao_wdh.productColor().size(); i++) {
+			cbColor.addItem(dao_wdh.productColor().get(i));
 		}
 	}
 	
@@ -354,28 +369,49 @@ public class DetailInfoPage extends JDialog {
 	private void cbSizeColumn() {
 		int seq = MainView_Info.clickSeq; 		// seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 		Dao_wdh dao_wdh = new Dao_wdh(seq); 	// Dao에 seq를 보냄
-		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();	// product DB 받아오기
-		String pName = dto_wdh.getPname();		// pname 받아오기
-		String pColor = dto_wdh.getPcolor();	// pcolor 받아오기
-		Dao_wdh dao_wdh2 = new Dao_wdh(pName, pColor);	// pname, pcolor 다시 주기
-		dao_wdh2.productSize();		// productColor Method에 pname 주기
-//		System.out.println(dao_wdh.productSize(pName, pColor));	// ArrayList 잘 되었는지 확인
-		for(int i = 0; i < dao_wdh2.productSize().size(); i++) {
-			cbSize.addItem(dao_wdh2.productSize().get(i));
+		dao_wdh.productSize();		// productColor Method 사용
+//		System.out.println(dao_wdh.productSize());	// ArrayList 잘 되었는지 확인
+		for(int i = 0; i < dao_wdh.productSize().size(); i++) {
+			cbSize.addItem(dao_wdh.productSize().get(i));
 		}
 	}
 	
 	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시 search
 	private void colorChange() {
+		searchPseq();
+		removeColumn();
+		activateColumn();
+		
+	}
+	
+	//cbColor의 색상을 통해 제품명, 색상, 사이즈를 통해 제품코드를 search
+	private void searchPseq() {
 		String pName = tfName.getText();
-		System.out.println(pName);
-		String pColor = (String) cbColor.getSelectedItem();
-		System.out.println(pColor);
-		cbSize.getSelectedItem();
-		System.out.println(cbSize.getSelectedItem());
-		Dao_wdh dao_wdh = new Dao_wdh();
+		System.out.println(pName);	// 이름 가져오기
+		String pColor = cbColor.getSelectedItem().toString();
+		System.out.println(pColor);	// 색깔 가져오기
+		int pSize = Integer.parseInt(cbSize.getSelectedItem().toString());
+		System.out.println(pSize);	// 사이즈 가져오기
+		Dao_wdh dao_wdh = new Dao_wdh(pName, pColor, pSize);
+		dao_wdh.searchSeq();
+
 	}
 
+	private void activateColumn() {
+
+		int seq = 5; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
+//		System.out.println(dao_wdh.viewDetailInfo());	// 잘 가져오는지 실험
+		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
+//		System.out.println(dto_wdh.getPname());			// 잘 출력하는지 실험
+
+		tfName.setText(dto_wdh.getPname()); // 제품명 출력
+		cbQtyNum();			// 수량 넣기
+		cbColorColumn();	// 색깔 넣기
+		cbSizeColumn();		// 사이즈 넣기
+		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
+
+	}
 
 
 

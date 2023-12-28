@@ -74,19 +74,14 @@ public class Dao_wdh {
 		this.sacustomer_id = sacustomer_id;
 	}
 
-	public Dao_wdh(String pname) {
-		super();
-		this.pname = pname;
-	}
-	
-	public Dao_wdh(String pname, String pcolor) {
+	public Dao_wdh(String pname, String pcolor, int psize) {
 		super();
 		this.pname = pname;
 		this.pcolor = pcolor;
+		this.psize = psize;
 	}
 
 	// Method
-
 	// p_seq를 가져와서 pname, pcolor, psize, pprice, qty, image의 정보를 띄워줌
 	public Dto_wdh viewDetailInfo() {
 		Dto_wdh dto_wdh = null;
@@ -181,6 +176,8 @@ public class Dao_wdh {
 
 	// sql에서 name을 통해 color를 가져옴
 	public ArrayList<String> productColor() {
+		String pname = viewDetailInfo().getPname();
+		
 		ArrayList<String> productColor = new ArrayList<String>();
 
 		String where = "select color from product where name = '" + pname + "' group by color";
@@ -206,6 +203,9 @@ public class Dao_wdh {
 	
 	// sql에서 name, color를 통해 size를 가져옴
 	public ArrayList<Integer> productSize() {
+		String pname = viewDetailInfo().getPname();
+		String pcolor = viewDetailInfo().getPcolor();
+		
 		ArrayList<Integer> productSize = new ArrayList<Integer>();
 
 		String where = "select size from product where name = '" + pname + "' and color = '" + pcolor + "' group by size order by size asc";
@@ -228,7 +228,72 @@ public class Dao_wdh {
 		}
 		return productSize;
 	}
+	
+	// 제품명, 색깔, 사이즈를 통해 제품번호를 추적
+	public int searchSeq() {
+//		Dto_wdh dto_wdh = null;
+		int wkSeq = 0;
+		String where = "select p_seq from product where name = '" + pname + "' and color = '" + pcolor + "' and size = " + psize;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(where);
+
+			if (rs.next()) {
+				wkSeq = rs.getInt(1);
+
+//				dto_wdh = new Dto_wdh(wkSeq); // Model에 적용
+			}
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return wkSeq;
+		
+	}
+	
+//	// 현재 제품명과 색깔을 통해 사이즈를 추적
+//	public ArrayList<Integer> productSizeSearch(String currentName, String currentColor) {
+//		
+//		ArrayList<Integer> productSize = new ArrayList<Integer>();
+//
+//		String where = "select size from product where name = '" + currentName + "' and color = '" + currentColor + "' group by size order by size asc";
+//
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+//			Statement stmt_mysql = conn_mysql.createStatement();
+//
+//			ResultSet rs = stmt_mysql.executeQuery(where);
+//			while (rs.next()) {
+//				int wkSize = rs.getInt(1);
+//				productSize.add(wkSize);
+//			}
+//
+//			conn_mysql.close();
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return productSize;
+//	}
+
 
 	
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 } // End

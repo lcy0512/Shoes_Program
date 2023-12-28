@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Dao_pdg {
 	
@@ -39,7 +40,7 @@ public class Dao_pdg {
 		// TODO Auto-generated constructor stub
 	}
 
-	// 1. Insert 를 위한 생성자
+	// 1. Insert 를 위한 생성자  + 3. 회원 수정을 위하여 회원정보를 가져오기위한 생성자. 
 	public Dao_pdg(String customer_id, String name, String pw, String telno, String email) {
 		super();
 		this.customer_id = customer_id;
@@ -56,7 +57,14 @@ public class Dao_pdg {
 		this.customer_id = customer_id;
 	}
 	
-	// 3. login Id,pw check 를 위한 생성자 
+
+	
+	
+
+	
+	
+	
+	
 	
 	
 	// < Methods> //
@@ -98,7 +106,7 @@ public class Dao_pdg {
 	}
 
 	// 2. 회원 가입시 아이디 중복확인 
-	public int idOverlapAction() {
+	public int isIdAlreadyExist() {
 		
 		int isIdAlreadyExist = 0;
 		
@@ -134,7 +142,6 @@ public class Dao_pdg {
 	
 	// 3. 로그인 화면에서 아이디 패스워드 대조 
 	
-	
 	public boolean idPwCheck() {
 		
 		boolean isExistUser = false;
@@ -166,6 +173,56 @@ public class Dao_pdg {
 		
 		return isExistUser;
 	}
+	
+	
+	
+	// 4. 회원정보수정을 위한 조회 및 수정 
+	
+	public ArrayList<Dto_PDG_CustomerTable> fetchUserInfo(String userId) {
+		
+		ArrayList<Dto_PDG_CustomerTable> userInfoList = new ArrayList<Dto_PDG_CustomerTable>();
+		
+		String customer_id;
+		String name;
+		String pw;
+		String telno;
+		String email;
+		
+		String fetchUserInfo =" select customer_id , name, pw, telno, email from customer  where customer_id = '"+ userId+"'";
+		
+		try {
+			
+		
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(fetchUserInfo);
+			
+			if(resultSet.next()) {
+				
+				String sql_customer_id = resultSet.getString(1);
+				String sql_name = resultSet.getString(2);
+				String sql_pw = resultSet.getString(3);
+				String sql_telno = resultSet.getString(4);
+				String sql_email = resultSet.getString(5);
+				
+				Dto_PDG_CustomerTable currentRow = new Dto_PDG_CustomerTable(sql_customer_id, sql_name, sql_pw, sql_telno, sql_email);
+				userInfoList.add(currentRow);
+
+			}
+			
+			connection.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return userInfoList;
+		
+		
+		
+	}
+	
 	
 	
 	

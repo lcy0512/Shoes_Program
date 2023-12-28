@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.javalec.function.Dao_pdg;
+import com.javalec.function.ShareVar;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -48,6 +49,7 @@ public class LoginPage extends JDialog {
 	
 	static LoginPage login_dialog =new LoginPage();
 	private JComboBox cbExample;
+	private JButton btnNewButton_2;
 	
 
 	/**
@@ -93,6 +95,7 @@ public class LoginPage extends JDialog {
 		contentPanel.add(getPfPassword());
 		contentPanel.add(getBtnNewButton());
 		contentPanel.add(getBtnNewButton_1());
+		contentPanel.add(getBtnNewButton_2());
 	
 	}
 	private JPasswordField getPfPassword() {
@@ -131,8 +134,12 @@ public class LoginPage extends JDialog {
 			
 			// login pass 후 메인화면 으로 이동 !
 			
-			JOptionPane.showMessageDialog(null, "회원이 입니다.");
+//			JOptionPane.showMessageDialog(null, .");
 			
+			
+			ShareVar.userID =id;
+			
+			goMainView();
 			
 			
 		}else {
@@ -183,7 +190,67 @@ public class LoginPage extends JDialog {
 	}
 	
 
+	private void goMainView() {
 		
 		
+		UserUpdatePage1 userupdate = new UserUpdatePage1();
+		 
+		login_dialog.setVisible(false);
 
+		
+		userupdate.setVisible(true);
+		
+		dispose();
+		this.setVisible(false);
+	 
+		
+		
+		
+		
+//		
+//		MainView mainView = new MainView();
+//		
+//		login_dialog.setVisible(false);
+//
+//		
+//		mainView.setVisible(true);
+//		
+//		dispose();
+//		this.setVisible(false);
+		
+	}
+	private JButton getBtnNewButton_2() {
+		if (btnNewButton_2 == null) {
+			btnNewButton_2 = new JButton("마이페이지");
+			btnNewButton_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+						gotoUserUpdate();
+					 
+					
+				}
+			});
+			btnNewButton_2.setBounds(42, 476, 117, 29);
+		}
+		return btnNewButton_2;
+	}
+	
+	private void gotoUserUpdate() {
+		
+		
+		 UserUpdatePage1 userupdate = new UserUpdatePage1();
+		 
+			login_dialog.setVisible(false);
+
+			
+			userupdate.setVisible(true);
+			
+			dispose();
+			this.setVisible(false);
+		 
+		 
+		
+	}
+	
+	
 } // END

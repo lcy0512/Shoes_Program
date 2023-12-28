@@ -52,12 +52,13 @@ public class FirstPage extends JDialog {
 	public FirstPage() {
 		setBounds(100, 100, 800,600);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(new Color(153, 204, 204));
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JButton btnNotMember = new JButton("비회원 입장");
+			JButton btnNotMember = new JButton("일반 고객 입장");
+			btnNotMember.setForeground(Color.DARK_GRAY);
 			btnNotMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -67,13 +68,15 @@ public class FirstPage extends JDialog {
 					
 				}
 			});
-			btnNotMember.setBackground(new Color(153, 153, 255));
+			btnNotMember.setBackground(Color.WHITE);
 			btnNotMember.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			btnNotMember.setBounds(25, 372, 150, 120);
+			btnNotMember.setBounds(25, 411, 150, 53);
 			contentPanel.add(btnNotMember);
 		}
 		{
-			JButton btnMember = new JButton("일반회원 입장");
+			JButton btnMember = new JButton("멤버쉽회원 입장");
+			btnMember.setForeground(Color.BLUE);
+			btnMember.setBackground(new Color(255, 255, 255));
 			btnMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -83,35 +86,24 @@ public class FirstPage extends JDialog {
 				}
 			});
 			btnMember.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			btnMember.setBounds(212, 372, 150, 120);
+			btnMember.setBounds(25, 279, 150, 120);
 			contentPanel.add(btnMember);
 		}
 		{
-			JButton btnPremiumMember = new JButton("프리미엄 입장");
-			btnPremiumMember.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					premiumLogin();
-					
-				}
-			});
-			btnPremiumMember.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			btnPremiumMember.setBounds(415, 372, 150, 120);
-			contentPanel.add(btnPremiumMember);
-		}
-		{
 			JLabel lblNewLabel = new JLabel("New label");
-			lblNewLabel.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/로고 .png"));
-			lblNewLabel.setBounds(168, -50, 500, 500);
+			lblNewLabel.setIcon(new ImageIcon(FirstPage.class.getResource("/com/javalec/image/로고 .png")));
+			lblNewLabel.setBounds(376, 47, 500, 500);
 			contentPanel.add(lblNewLabel);
 		}
 		{
-			JLabel lblNewLabel_1 = new JLabel("JUMP");
+			JLabel lblNewLabel_1 = new JLabel("신발가게");
 			lblNewLabel_1.setFont(new Font("Lucida Grande", Font.BOLD, 33));
-			lblNewLabel_1.setBounds(158, 75, 271, 86);
+			lblNewLabel_1.setBounds(125, 148, 271, 86);
 			contentPanel.add(lblNewLabel_1);
 		}
 		{
 			JButton btnPremiumMember = new JButton("회원 가입");
+			btnPremiumMember.setForeground(Color.ORANGE);
 			btnPremiumMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -122,7 +114,7 @@ public class FirstPage extends JDialog {
 				}
 			});
 			btnPremiumMember.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			btnPremiumMember.setBounds(616, 372, 150, 120);
+			btnPremiumMember.setBounds(195, 279, 166, 185);
 			contentPanel.add(btnPremiumMember);
 		}
 	}
@@ -149,16 +141,6 @@ public class FirstPage extends JDialog {
 		join.setVisible(true);
 		dispose();
 		this.setVisible(false);
-		
-	}
-	private void premiumLogin() {
-		firstdialog.setVisible(false);
-
-		JoinPage join  = new JoinPage();
-		join.setVisible(true);
-		dispose();
-		this.setVisible(false);
-		
 		
 	}
 	

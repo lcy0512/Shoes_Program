@@ -20,6 +20,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import javax.swing.BoxLayout;
+import javax.swing.SwingConstants;
 
 public class JoinPage extends JDialog {
 
@@ -43,8 +50,8 @@ public class JoinPage extends JDialog {
 	private JButton btnNewButton;
 	private JLabel lblNewLabel_6_1_2;
 	private JButton btnNewButton_1;
-	private JPasswordField passwordField;
-	private JLabel lblPassword_1;
+	private JPasswordField pfPassword_Same;
+	private JLabel lblPassword_2;
 	private JButton btnNewButton_2;
 	
 	/*
@@ -56,7 +63,12 @@ public class JoinPage extends JDialog {
 	 *  o	2. 입력 받은 것으로 db 에 등록하기
 	 *  	3. id 길이가 너무 길면 쿼리가 안들어감. 
 	 *  o	4. 아이디 중복확인.
+	 *  
 	 *  	5. 아이디는 숫자와 영어로만 등록할수있습니다. 
+	 *  
+	 *  	6. 비밀번호 확인 기능 필요
+	 *  	7. 동의가 체크 되어야만 등록 되게 만들것
+	 *  	8. 이미지 업로드 기능 추가할것. 
 	 * 
 	 */
 	
@@ -64,6 +76,16 @@ public class JoinPage extends JDialog {
 	
 	
 	static JoinPage joindialog = new JoinPage();
+	private JLabel lblNewLabel_6_1;
+	private JRadioButton rbNormalMember;
+	private JRadioButton rbPremiumMember;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JRadioButton rbInformationOfferAgree;
+	private JLabel lblNewLabel;
+	private JButton btnCamera;
+	private JButton btnImageUpload;
+	private JButton btnNewButton_3;
+	private JLabel lblPassWordCompare;
 
 	/**
 	 * Launch the application.
@@ -85,7 +107,7 @@ public class JoinPage extends JDialog {
 		setTitle("회원가입");
 		setBounds(100, 100, 800, 600);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(Color.WHITE);
+		contentPanel.setBackground(new Color(247, 245, 247));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -107,16 +129,25 @@ public class JoinPage extends JDialog {
 		contentPanel.add(getBtnNewButton());
 		contentPanel.add(getLblNewLabel_6_1_2());
 		contentPanel.add(getBtnNewButton_1());
-		contentPanel.add(getLblPassword_1());
-		contentPanel.add(getPasswordField());
+		contentPanel.add(getLblPassword_2());
+		contentPanel.add(getPfPassword_Same());
 		contentPanel.add(getBtnNewButton_2());
+		contentPanel.add(getLblNewLabel_6_1());
+		contentPanel.add(getRbNormalMember());
+		contentPanel.add(getRbPremiumMember());
+		contentPanel.add(getRbInformationOfferAgree());
+		contentPanel.add(getLblNewLabel());
+		contentPanel.add(getBtnCamera());
+		contentPanel.add(getBtnImageUpload());
+		contentPanel.add(getBtnNewButton_3());
+		contentPanel.add(getLblPassWordCompare());
 	}
 
 	private JLabel getLblID() {
 		if (lblID == null) {
 			lblID = new JLabel("아이디 : 필수 정보입니다.");
 			lblID.setForeground(Color.GRAY);
-			lblID.setBounds(246, 108, 185, 16);
+			lblID.setBounds(305, 67, 185, 16);
 		}
 		return lblID;
 	}
@@ -143,7 +174,7 @@ public class JoinPage extends JDialog {
 					
 				}
 			});
-			tfID.setBounds(230, 93, 259, 50);
+			tfID.setBounds(289, 52, 259, 50);
 			tfID.setColumns(10);
 		}
 		return tfID;
@@ -152,7 +183,7 @@ public class JoinPage extends JDialog {
 		if (lblPassword == null) {
 			lblPassword = new JLabel("비밀번호");
 			lblPassword.setForeground(Color.GRAY);
-			lblPassword.setBounds(246, 163, 61, 16);
+			lblPassword.setBounds(305, 122, 61, 16);
 		}
 		return lblPassword;
 	}
@@ -165,15 +196,15 @@ public class JoinPage extends JDialog {
 					lblPassword.setVisible(false);
 				}
 			});
-			pfPassword.setBounds(230, 146, 259, 50);
+			pfPassword.setBounds(289, 105, 259, 50);
 		}
 		return pfPassword;
 	}
 	private JLabel getLblNewLabel_6() {
 		if (lblNewLabel_6 == null) {
 			lblNewLabel_6 = new JLabel("");
-			lblNewLabel_6.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/PW1.png"));
-			lblNewLabel_6.setBounds(198, 150, 35, 35);
+			lblNewLabel_6.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/pw_new2.png")));
+			lblNewLabel_6.setBounds(257, 109, 35, 45);
 		}
 		return lblNewLabel_6;
 	}
@@ -188,7 +219,7 @@ public class JoinPage extends JDialog {
 				}
 			});
 			tfEmail.setColumns(10);
-			tfEmail.setBounds(230, 274, 259, 50);
+			tfEmail.setBounds(289, 233, 259, 50);
 		}
 		return tfEmail;
 	}
@@ -196,23 +227,23 @@ public class JoinPage extends JDialog {
 		if (lblEmail == null) {
 			lblEmail = new JLabel("[선택] 비밀번호 분실시 확인용 이메일");
 			lblEmail.setForeground(Color.GRAY);
-			lblEmail.setBounds(242, 289, 189, 16);
+			lblEmail.setBounds(301, 251, 189, 16);
 		}
 		return lblEmail;
 	}
 	private JLabel getLblNewLabel_4() {
 		if (lblNewLabel_4 == null) {
 			lblNewLabel_4 = new JLabel("");
-			lblNewLabel_4.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/email.png"));
-			lblNewLabel_4.setBounds(198, 279, 35, 35);
+			lblNewLabel_4.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/email_new1.png")));
+			lblNewLabel_4.setBounds(257, 238, 35, 35);
 		}
 		return lblNewLabel_4;
 	}
 	private JLabel getNameImage() {
 		if (nameImage == null) {
 			nameImage = new JLabel("");
-			nameImage.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/Name.png"));
-			nameImage.setBounds(198, 343, 35, 35);
+			nameImage.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/Name_new.png")));
+			nameImage.setBounds(257, 302, 35, 35);
 		}
 		return nameImage;
 	}
@@ -220,23 +251,23 @@ public class JoinPage extends JDialog {
 		if (lblName == null) {
 			lblName = new JLabel("이름");
 			lblName.setForeground(Color.GRAY);
-			lblName.setBounds(246, 351, 61, 16);
+			lblName.setBounds(305, 310, 61, 16);
 		}
 		return lblName;
 	}
 	private JLabel getMailImage() {
 		if (mailImage == null) {
 			mailImage = new JLabel("");
-			mailImage.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/email.png"));
-			mailImage.setBounds(240, 283, 35, 35);
+			mailImage.setIcon(new ImageIcon("/com/javalec/image/email.png"));
+			mailImage.setBounds(299, 242, 35, 35);
 		}
 		return mailImage;
 	}
 	private JLabel getLblNewLabel_6_1_1() {
 		if (lblNewLabel_6_1_1 == null) {
 			lblNewLabel_6_1_1 = new JLabel("");
-			lblNewLabel_6_1_1.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/Name.png"));
-			lblNewLabel_6_1_1.setBounds(198, 100, 35, 35);
+			lblNewLabel_6_1_1.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/login_new.png")));
+			lblNewLabel_6_1_1.setBounds(252, 59, 35, 35);
 		}
 		return lblNewLabel_6_1_1;
 	}
@@ -244,7 +275,7 @@ public class JoinPage extends JDialog {
 		if (lblTelno == null) {
 			lblTelno = new JLabel("전화번호");
 			lblTelno.setForeground(Color.GRAY);
-			lblTelno.setBounds(246, 414, 61, 16);
+			lblTelno.setBounds(305, 373, 61, 16);
 		}
 		return lblTelno;
 	}
@@ -259,7 +290,7 @@ public class JoinPage extends JDialog {
 				}
 			});
 			tfName.setColumns(10);
-			tfName.setBounds(230, 336, 259, 50);
+			tfName.setBounds(289, 295, 259, 50);
 		}
 		return tfName;
 	}
@@ -273,7 +304,7 @@ public class JoinPage extends JDialog {
 				}
 			});
 			tfTelno.setColumns(10);
-			tfTelno.setBounds(230, 399, 259, 50);
+			tfTelno.setBounds(289, 358, 259, 50);
 		}
 		return tfTelno;
 	}
@@ -288,18 +319,16 @@ public class JoinPage extends JDialog {
 					registrationAction();
 				}
 			});
-			btnNewButton.setBounds(308, 471, 117, 35);
+			btnNewButton.setBounds(289, 491, 117, 35);
 		}
 		return btnNewButton;
 	}
-
-	
 	
 	private JLabel getLblNewLabel_6_1_2() {
 		if (lblNewLabel_6_1_2 == null) {
 			lblNewLabel_6_1_2 = new JLabel("");
-			lblNewLabel_6_1_2.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/email.png"));
-			lblNewLabel_6_1_2.setBounds(198, 399, 35, 35);
+			lblNewLabel_6_1_2.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/tell_new.png")));
+			lblNewLabel_6_1_2.setBounds(257, 364, 35, 35);
 		}
 		return lblNewLabel_6_1_2;
 	}
@@ -307,13 +336,18 @@ public class JoinPage extends JDialog {
 	// Functions 
 	
 	
-	
-	
 	private void registrationAction() {
 		
 		int i_chk = insertFieldCheck();
 		
-		if (i_chk ==0) {
+		// 중복확인 
+		
+		boolean idOverlapCheck_whenOKbtnClicked = idOverlapCheck();
+		
+		// 정보제공 동의 확인
+		boolean infocheck = informationOfferAgree();
+			
+		if (i_chk ==0 && idOverlapCheck_whenOKbtnClicked && infocheck) {
 			
 			
 			//화면에서 입력받은 값을 변수에 넣어 준다. 
@@ -324,47 +358,27 @@ public class JoinPage extends JDialog {
 			String telno = tfTelno.getText();
 			String email = tfEmail.getText();
 			
-			
-			// 중복확인 
-			
-			idOverlapCheck();
-			
 			// Register 를 위한 Dao 생성
 			
 			try {
 				Dao_pdg dao = new Dao_pdg(customer_id, name, pw, telno, email);
 				boolean isDaoOperated = dao.insertAction();
-				
 				if (isDaoOperated == true) {
 					JOptionPane.showMessageDialog(null, "회원 등록이 완료 되었습니다. ");
-					
 				}else {
-					
 					JOptionPane.showMessageDialog(null ,"등록 중 문제가 생겼습니다. ");
 				}
-				
-				
-				
 			}catch(Exception e ) {
 				e.printStackTrace();
 			}
-			
-			
-			
-			
-			
-
-			
 		}else {
+			
 			// 정상이 아닌 경우
-			JOptionPane.showMessageDialog(null,"데이터를 확인하세요1" );
+			JOptionPane.showMessageDialog(null,"등록 정보를 다시 확인하세요. " );
 		}
-		
-		
-		
-		
-		
 	}
+	
+	
 	private int insertFieldCheck() {
 		
 		int i = 0;
@@ -393,23 +407,155 @@ public class JoinPage extends JDialog {
 	
 
 	// ID 중복 체크 확인 
-	private void idOverlapCheck() {
+	private boolean idOverlapCheck() {
 		
 		String id = tfID.getText().trim();
-		
 		Dao_pdg dao = new Dao_pdg(id);
 		
+		if(id.isEmpty()) {
+			JOptionPane.showMessageDialog(null,"아이디를 입력하세요 .");
+			tfID.requestFocus();
+			return false;
+		}
 		
-		int isIdOverlaped = dao.idOverlapAction();
 		
-		if(isIdOverlaped != 0) {
+		if (!Pattern.matches("^[a-zA-Z]*$", id) ){
+
+			JOptionPane.showMessageDialog(null,"영문과 숫자로만 아이디를 만들수 있습니다. ");
 			
-			JOptionPane.showMessageDialog(null,"중복된 아이디입니다.");
+			tfID.requestFocus();
+			tfID.setEditable(true);
+			
+			return false;
 		}
 		
 		
 		
+
+		
+		
+
+
+
+		
+		int isIdOverlaped = dao.idOverlapAction();
+		
+		
+		if(isIdOverlaped != 0) {
+			JOptionPane.showMessageDialog(null,"중복된 아이디입니다.");
+			tfID.requestFocus();
+			tfID.setEditable(true);
+			return false;
+		}
+		else {
+			JOptionPane.showMessageDialog(null,"사용가능한 아이디입니다. ");
+			tfID.setEditable(false);
+			
+			return true;
+		}
 	}
+	// ok 클릭시 ID 중복 확인 다시!
+	private boolean idOverlapCheckWhenOKClicked() {
+		
+		
+		
+		String id = tfID.getText().trim();
+		Dao_pdg dao = new Dao_pdg(id);
+		
+		
+		Pattern pattern = Pattern.compile("^[a-zA-Z]*$");
+		String str = "abcd";
+
+		Matcher matcher = pattern.matcher(str);
+		System.out.println(matcher.find());   // true
+		
+		
+
+		if (!Pattern.matches("^[a-zA-Z]*$", id) ){
+
+			JOptionPane.showMessageDialog(null,"영문과 숫자로만 아이디를 만들수 있습니다. ");
+			
+			tfID.requestFocus();
+			tfID.setEditable(true);
+			
+			return false;
+		}
+		
+
+		
+
+		
+		
+		int isIdOverlaped = dao.idOverlapAction();
+		
+		
+		if(isIdOverlaped != 0) {
+			JOptionPane.showMessageDialog(null,"중복된 아이디입니다.");
+			
+			tfID.requestFocus();
+			tfID.setEditable(true);
+			
+			return false;
+		}
+		else {
+			
+			tfID.setEditable(false);
+			
+			return true;
+		}
+	}
+	
+	
+	
+	
+	// 정보 제공 동의 확인
+	
+	private boolean informationOfferAgree() {
+		
+		if (rbInformationOfferAgree.isSelected() == false){
+			JOptionPane.showMessageDialog(null, " 가입하시려면  정보 제공 동의가 필요합니다. ");
+			return false;
+		}
+		else {
+			return true;
+		}
+
+	}
+	
+	
+	
+	// 비밀번호 확인
+	
+	private boolean isSameP1P2() {
+		char[] pw1 = pfPassword.getPassword();
+		String passString1 = new String(pw1);
+		char[] pw2 = pfPassword_Same.getPassword();
+		String passString2 = new String(pw2);
+
+		
+		System.out.println(passString1);
+		System.out.println(passString2);
+		
+		if(passString1.equals(passString2)) {
+			
+			lblPassWordCompare.setText("비밀번호가 일치 합니다. ");
+			lblPassWordCompare.setForeground(Color.BLUE);
+			
+		}
+		else{
+			
+			lblPassWordCompare.setText("비밀번호가 일치 하지 않습니다.");
+			lblPassWordCompare.setForeground(Color.RED);
+			
+		}
+		
+		return true;
+		
+		
+	}
+	
+	
+	
 	
 	
 	
@@ -419,32 +565,61 @@ public class JoinPage extends JDialog {
 			btnNewButton_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					//중복확인 
+					//중복확인 버튼 
 					idOverlapCheck();
 				}
 			});
-			btnNewButton_1.setBounds(501, 93, 88, 50);
+			btnNewButton_1.setBounds(560, 54, 88, 45);
 		}
 		return btnNewButton_1;
 	}
-	private JPasswordField getPasswordField() {
-		if (passwordField == null) {
-			passwordField = new JPasswordField();
-			passwordField.setBounds(230, 196, 259, 50);
+	private JPasswordField getPfPassword_Same() {
+		if (pfPassword_Same == null) {
+			pfPassword_Same = new JPasswordField();
+			pfPassword_Same.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					
+					// 비밀번호 확인 용 두번째 비밀번호 
+					lblPassword_2.setVisible(false);
+					
+					
+					
+				}
+				@Override
+				public void keyTyped(KeyEvent e) {
+					
+					
+					// 암호 키 제대로 했는지 확인하기
+					//isSameP1P2();
+				
+					
+				}
+				@Override
+				public void keyReleased(KeyEvent e) {
+					
+					isSameP1P2();
+					
+					
+					
+				}
+			});
+			pfPassword_Same.setBounds(289, 155, 259, 50);
 		}
-		return passwordField;
+		return pfPassword_Same;
 	}
-	private JLabel getLblPassword_1() {
-		if (lblPassword_1 == null) {
-			lblPassword_1 = new JLabel("비밀번호 확인");
-			lblPassword_1.setForeground(Color.GRAY);
-			lblPassword_1.setBounds(246, 210, 88, 16);
+	private JLabel getLblPassword_2() {
+		if (lblPassword_2 == null) {
+			lblPassword_2 = new JLabel("비밀번호 확인");
+			lblPassword_2.setForeground(Color.GRAY);
+			lblPassword_2.setBounds(305, 174, 88, 16);
 		}
-		return lblPassword_1;
+		return lblPassword_2;
 	}
 	private JButton getBtnNewButton_2() {
 		if (btnNewButton_2 == null) {
 			btnNewButton_2 = new JButton("");
+			btnNewButton_2.setBackground(new Color(238, 238, 238));
 			btnNewButton_2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -482,4 +657,93 @@ public class JoinPage extends JDialog {
 	
 	
 	
+	private JLabel getLblNewLabel_6_1() {
+		if (lblNewLabel_6_1 == null) {
+			lblNewLabel_6_1 = new JLabel("");
+			lblNewLabel_6_1.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/pw_new2.png")));
+			lblNewLabel_6_1.setBounds(257, 160, 35, 45);
+		}
+		return lblNewLabel_6_1;
+	}
+	private JRadioButton getRbNormalMember() {
+		if (rbNormalMember == null) {
+			rbNormalMember = new JRadioButton("일반 멤버쉽");
+			buttonGroup.add(rbNormalMember);
+			rbNormalMember.setSelected(true);
+			rbNormalMember.setBounds(299, 420, 99, 23);
+		}
+		return rbNormalMember;
+	}
+	private JRadioButton getRbPremiumMember() {
+		if (rbPremiumMember == null) {
+			rbPremiumMember = new JRadioButton("프리미엄 멤버쉽");
+			buttonGroup.add(rbPremiumMember);
+			rbPremiumMember.setBounds(407, 420, 117, 23);
+		}
+		return rbPremiumMember;
+	}
+	private JRadioButton getRbInformationOfferAgree() {
+		if (rbInformationOfferAgree == null) {
+			rbInformationOfferAgree = new JRadioButton("정보 제공에 동의합니다.");
+			rbInformationOfferAgree.setBounds(301, 455, 167, 23);
+		}
+		return rbInformationOfferAgree;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("");
+			lblNewLabel.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/no_image.png")));
+			lblNewLabel.setBounds(91, 59, 115, 125);
+		}
+		return lblNewLabel;
+	}
+	private JButton getBtnCamera() {
+		if (btnCamera == null) {
+			btnCamera = new JButton("");
+			btnCamera.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/camer_new.png")));
+			btnCamera.setBounds(74, 196, 40, 40);
+		}
+		return btnCamera;
+	}
+	private JButton getBtnImageUpload() {
+		if (btnImageUpload == null) {
+			btnImageUpload = new JButton("내 이미지 업로드");
+			btnImageUpload.setBounds(122, 204, 117, 29);
+		}
+		return btnImageUpload;
+	}
+	private JButton getBtnNewButton_3() {
+		if (btnNewButton_3 == null) {
+			btnNewButton_3 = new JButton("다시쓰기");
+			btnNewButton_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				tfID.setText("");
+				pfPassword.setText("");
+				pfPassword_Same.setText("");
+				tfEmail.setText("");
+				tfName.setText("");
+				tfTelno.setText("");
+				tfID.setEditable(true);
+				pfPassword.setEditable(true);
+				pfPassword_Same.setEditable(true);
+				tfEmail.setEditable(true);
+				tfName.setEditable(true);
+				tfTelno.setEditable(true);
+					
+					
+				}
+			});
+			btnNewButton_3.setBounds(418, 491, 117, 35);
+		}
+		return btnNewButton_3;
+	}
+	private JLabel getLblPassWordCompare() {
+		if (lblPassWordCompare == null) {
+			lblPassWordCompare = new JLabel("비밀번호를 입력하세요.");
+			lblPassWordCompare.setForeground(Color.LIGHT_GRAY);
+			lblPassWordCompare.setBounds(305, 205, 219, 16);
+		}
+		return lblPassWordCompare;
+	}
 }// ENd

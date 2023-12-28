@@ -7,24 +7,40 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
+import com.javalec.function.Dao_pjh;
+import com.javalec.function.Dto_pjh;
+
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class MainView extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JLabel lblNewLabel;
-	private JTextField textField;
-	private JTable table;
+	private JComboBox cbSelection;
+	private JTextField tfSelection;
+	private JButton btnQuery;
+	private JScrollPane scrollPane;
+	private JTable innerTable;
 
+	
+	// table
+			private final DefaultTableModel outerTable = new DefaultTableModel();
+//			private JLabel lblImage;
+//			private JButton btnFilePath;
+//			private JTextField tfFilePath;
 	/**
 	 * Launch the application.
 	 */
@@ -42,57 +58,22 @@ public class MainView extends JDialog {
 	 * Create the dialog.
 	 */
 	public MainView() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				tableInit();
+				defaultAction();
+			}
+		});
 		setBounds(100, 100, 800, 600);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		{
-			JButton btnNewButton = new JButton("메인");
-			btnNewButton.setBounds(660, 10, 30, 30);
-			contentPanel.add(btnNewButton);
-		}
-		{
-			JButton btnNewButton = new JButton("정보수정");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			btnNewButton.setBounds(702, 11, 30, 30);
-			contentPanel.add(btnNewButton);
-		}
-		{
-			JButton btnNewButton = new JButton("장바구니");
-			btnNewButton.setBounds(744, 11, 30, 30);
-			contentPanel.add(btnNewButton);
-		}
-		contentPanel.add(getLblNewLabel());
-		{
-			JComboBox comboBox = new JComboBox();
-			comboBox.setModel(new DefaultComboBoxModel(new String[] {"Nike", "Adidas", "Newbalance"}));
-			comboBox.setBounds(54, 88, 156, 27);
-			contentPanel.add(comboBox);
-		}
-		{
-			textField = new JTextField();
-			textField.setBounds(222, 87, 283, 26);
-			contentPanel.add(textField);
-			textField.setColumns(10);
-		}
-		{
-			JButton btnNewButton_1 = new JButton("검색");
-			btnNewButton_1.setBounds(537, 87, 146, 29);
-			contentPanel.add(btnNewButton_1);
-		}
-		{
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(59, 149, 673, 331);
-			contentPanel.add(scrollPane);
-			{
-				table = new JTable();
-				scrollPane.setViewportView(table);
-			}
-		}
+		contentPanel.add(getCbSelection());
+		contentPanel.add(getTfSelection());
+		contentPanel.add(getBtnQuery());
+		contentPanel.add(getScrollPane());
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -110,12 +91,114 @@ public class MainView extends JDialog {
 			}
 		}
 	}
-	private JLabel getLblNewLabel() {
-		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("로그인이 필요합니다.");
-			lblNewLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblNewLabel.setBounds(502, 10, 146, 30);
+	private JComboBox getCbSelection() {
+		if (cbSelection == null) {
+			cbSelection = new JComboBox();
+			cbSelection.setModel(new DefaultComboBoxModel(new String[] {"Nike", "Adidas", "Newbalance"}));
+			cbSelection.setBounds(41, 39, 134, 27);
 		}
-		return lblNewLabel;
+		return cbSelection;
 	}
+	private JTextField getTfSelection() {
+		if (tfSelection == null) {
+			tfSelection = new JTextField();
+			tfSelection.setBounds(221, 38, 303, 26);
+			tfSelection.setColumns(10);
+		}
+		return tfSelection;
+	}
+	private JButton getBtnQuery() {
+		if (btnQuery == null) {
+			btnQuery = new JButton("검색");
+			btnQuery.setBounds(607, 38, 117, 29);
+		}
+		return btnQuery;
+	}
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(52, 102, 672, 308);
+			scrollPane.setViewportView(getInnerTable());
+		}
+		return scrollPane;
+	}
+	private JTable getInnerTable() {
+		if (innerTable == null) {
+			innerTable = new JTable();
+			innerTable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(e.getButton()==1) {
+					}
+				}
+			});
+			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			innerTable.setModel(outerTable); // 한세트로 움직이게
+		}
+		return innerTable;
+	}
+	
+	private void tableInit() {
+		// table column명 정하
+		outerTable.addColumn("상품사진");
+		outerTable.addColumn("상품명");
+		outerTable.addColumn("상품가격");
+		outerTable.setColumnCount(3);
+		// table column 크기 정하
+		int colNo = 0;
+		TableColumn col = innerTable.getColumnModel().getColumn(colNo);
+		int width = 300;
+		col.setPreferredWidth(width);
+
+		colNo = 1;
+		col = innerTable.getColumnModel().getColumn(colNo);
+		width = 200;
+		col.setPreferredWidth(width);
+		colNo = 2;
+		col = innerTable.getColumnModel().getColumn(colNo);
+		width = 100;
+		col.setPreferredWidth(width);
+		colNo = 3;
+
+		
+
+		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF); // 사이즈 고정이라서 스크롤바가 나온다
+
+		int i = outerTable.getRowCount();
+		for (int j = 1; j <= i; j++) {
+			outerTable.removeRow(0);
+
+		}
+
+	}
+	
+private void defaultAction() {		//윈도우 킬때 액션
+		
+		
+		
+		Dao_pjh daoPjh = new Dao_pjh();
+		ArrayList<Dto_pjh> dtoList = daoPjh.selectProductList();
+
+		int listCount = dtoList.size();
+		for (int i = 0; i < listCount; i++) {
+			String temp = Integer.toString(dtoList.get(i).getSseq()); // 어레이 리스트에서시퀀스를 가져온다 그래서 get이 두
+			String[] qTxt = {dtoList.get(i).getSdate(),Integer.toString(dtoList.get(i).getSprice())};
+			outerTable.addRow(qTxt);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

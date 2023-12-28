@@ -42,9 +42,9 @@ public class CurrentSituation extends JDialog {
 	
 	// table
 		private final DefaultTableModel outerTable = new DefaultTableModel();
-		private JLabel lblImage;
-		private JButton btnFilePath;
-		private JTextField tfFilePath;
+//		private JLabel lblImage;
+//		private JButton btnFilePath;
+//		private JTextField tfFilePath;
 	/**
 	 * Launch the application.
 	 */
@@ -180,7 +180,7 @@ public class CurrentSituation extends JDialog {
 	
 	
 	
-	private void searchAction() {		//버튼 눌렀을때 액션(여기에 스위치 들어가야)
+	private void searchAction() {		//버튼 눌렀을때 액션(여기에 이 들어가야)
 		
 		
 		
@@ -198,6 +198,19 @@ public class CurrentSituation extends JDialog {
 	
 	
 	
+	
+//	private void conditionQuery() {
+//		int i = cbSelection.getSelectedIndex();
+//		String conditionQueryName = "";
+//		
+//		if(i==0) {
+//			conditionQueryName = "name";
+//		}else if (i ==1) {
+//			conditionQueryName = "name";
+//			
+//		}
+//	}
+		
 	
 
 

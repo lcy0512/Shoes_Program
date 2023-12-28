@@ -67,7 +67,7 @@ public class Dao_pjh {
 	
 	public ArrayList<Dto_pjh> selectList() {
 		ArrayList<Dto_pjh> dtolist = new ArrayList<Dto_pjh>();
-		String whereDefault = "select date,sum(price*qty) from sale group by date";
+		String whereDefault = "select date,sum(price*qty) from sale group by date order by date";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -83,6 +83,38 @@ public class Dao_pjh {
 				int wkprice = rs.getInt(2);
 				
 
+				Dto_pjh dto = new Dto_pjh(wkDate, wkprice);
+				dtolist.add(dto);
+
+			}
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return dtolist;
+
+	}
+	
+	public ArrayList<Dto_pjh> selectProductList() {
+		ArrayList<Dto_pjh> dtolist = new ArrayList<Dto_pjh>();
+		String whereDefault = "select date,sum(price*qty) from sale group by date order by date";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+
+			Statement stmt_mysql = conn_mysql.createStatement();
+//			Statement stmt_mysql= conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(whereDefault);
+
+			while (rs.next()) {
+				String wkDate = rs.getString(1);
+				int wkprice = rs.getInt(2);
+				
+				//product_p_seq
 				Dto_pjh dto = new Dto_pjh(wkDate, wkprice);
 				dtolist.add(dto);
 

@@ -11,9 +11,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import com.javalec.function.Dao_pjh;
+import com.javalec.function.Dao_pjh_CurrentSituation;
 import com.javalec.function.Dto;
-import com.javalec.function.Dto_pjh;
+import com.javalec.function.Dto_pjh_CurrentSituation;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -34,14 +34,13 @@ public class CurrentSituation extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JComboBox cbSelection;
-	private JTextField tfSelection;
-	private JButton btnQuery;
 	private JScrollPane scrollPane;
 	private JTable innerTable;
-	
-	
+
 	// table
-		private final DefaultTableModel outerTable = new DefaultTableModel();
+	private final DefaultTableModel outerTable = new DefaultTableModel();
+	private JButton btnNewButton;
+
 //		private JLabel lblImage;
 //		private JButton btnFilePath;
 //		private JTextField tfFilePath;
@@ -66,7 +65,12 @@ public class CurrentSituation extends JDialog {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				tableInit();
-				searchAction();
+				brandSelectAction();
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				exitAction();
 			}
 		});
 		setBounds(100, 100, 800, 600);
@@ -75,55 +79,29 @@ public class CurrentSituation extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getCbSelection());
-		contentPanel.add(getTfSelection());
-		contentPanel.add(getBtnQuery());
 		contentPanel.add(getScrollPane());
+		contentPanel.add(getBtnNewButton());
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
 		}
 	}
+
 	private JComboBox getCbSelection() {
 		if (cbSelection == null) {
 			cbSelection = new JComboBox();
-			cbSelection.setModel(new DefaultComboBoxModel(new String[] {"당일매출현황", "주차별 매출현황", "월별 매출현황", "상품별 매출현황", "재고현황"}));
-			cbSelection.setBounds(41, 39, 134, 27);
+			cbSelection.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					brandSelectAction();
+				}
+			});
+			cbSelection.setModel(new DefaultComboBoxModel(new String[] { "당일매출현황", "월별 매출현황" }));
+			cbSelection.setBounds(173, 46, 147, 27);
 		}
 		return cbSelection;
 	}
-	private JTextField getTfSelection() {
-		if (tfSelection == null) {
-			tfSelection = new JTextField();
-			tfSelection.setBounds(221, 38, 303, 26);
-			tfSelection.setColumns(10);
-		}
-		return tfSelection;
-	}
-	private JButton getBtnQuery() {
-		if (btnQuery == null) {
-			btnQuery = new JButton("검색");
-			btnQuery.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					searchAction();
-					
-				}
-			});
-			btnQuery.setBounds(607, 38, 117, 29);
-		}
-		return btnQuery;
-	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -132,13 +110,14 @@ public class CurrentSituation extends JDialog {
 		}
 		return scrollPane;
 	}
+
 	private JTable getInnerTable() {
 		if (innerTable == null) {
 			innerTable = new JTable();
 			innerTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if(e.getButton()==1) {
+					if (e.getButton() == 1) {
 					}
 				}
 			});
@@ -148,12 +127,16 @@ public class CurrentSituation extends JDialog {
 		}
 		return innerTable;
 	}
-//-----------function
+
+//-----------function--------------------
+
 	private void tableInit() {
 		// table column명 정하
 		outerTable.addColumn("날짜");
 		outerTable.addColumn("가격");
 		outerTable.setColumnCount(2);
+//		TableColumn tc = outerTable.getColumnMo
+
 		// table column 크기 정하
 		int colNo = 0;
 		TableColumn col = innerTable.getColumnModel().getColumn(colNo);
@@ -165,8 +148,6 @@ public class CurrentSituation extends JDialog {
 		width = 200;
 		col.setPreferredWidth(width);
 
-		
-
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF); // 사이즈 고정이라서 스크롤바가 나온다
 
 		int i = outerTable.getRowCount();
@@ -177,92 +158,62 @@ public class CurrentSituation extends JDialog {
 
 	}
 
-	
-	
-	
-	private void searchAction() {		//버튼 눌렀을때 액션(여기에 이 들어가야)
-		
-		
-		
-		Dao_pjh daoPjh = new Dao_pjh();
-		ArrayList<Dto_pjh> dtoList = daoPjh.selectList();
-
-		int listCount = dtoList.size();
-		for (int i = 0; i < listCount; i++) {
-			String temp = Integer.toString(dtoList.get(i).getSseq()); // 어레이 리스트에서시퀀스를 가져온다 그래서 get이 두
-			String[] qTxt = {dtoList.get(i).getSdate(),Integer.toString(dtoList.get(i).getSprice())};
-			outerTable.addRow(qTxt);
-		}
-	}
-	
-	
-	
-	
-	
-//	private void conditionQuery() {
-//		int i = cbSelection.getSelectedIndex();
-//		String conditionQueryName = "";
+//	private void searchAction() { // 버튼 눌렀을때 액션
+//		String QuerySearchName ="";
 //		
-//		if(i==0) {
-//			conditionQueryName = "name";
-//		}else if (i ==1) {
-//			conditionQueryName = "name";
-//			
-//		}
-//	}
-		
-	
-
-
-
-//	private void conditionQuery() {
-//		int i = cbSelection.getSelectedIndex();
-//		String conditionQueryName = "";
-//
-//		switch (i) {
-//		case 0:
-//			conditionQueryName = "name";
-//			break;
-//		case 1:
-//			conditionQueryName = "adress";
-//			break;
-//		case 2:
-//			conditionQueryName = "relation";
-//			break;
-//		default:
-//			break;
-//
+//		if (cbSelection.getSelectedItem().toString().equals("당일매출현황")) {
+//			QuerySearchName="date";
+//		}else if (cbSelection.getSelectedItem().toString().equals("월별 매출현황")) {
+//			QuerySearchName="date";
 //		}
 //		tableInit();
-//		conditionQueryAction(conditionQueryName);
+////		QueryAction(QuerySearchName);  //다오에서 계산 식 만들기
+//		
 //	}
 
+	private void brandSelectAction() { 
+		tableInit();
+		if (cbSelection.getSelectedItem().toString().equals("당일매출현황")) {
+			Dao_pjh_CurrentSituation daoPjh = new Dao_pjh_CurrentSituation();
+			ArrayList<Dto_pjh_CurrentSituation> dtoList = daoPjh.selectList();
 
+			int listCount = dtoList.size();
+			for (int i = 0; i < listCount; i++) {
+				String[] qTxt = { dtoList.get(i).getSdate(), Integer.toString(dtoList.get(i).getSprice()) };
+				outerTable.addRow(qTxt);
 
+			}
 
+		} else if (cbSelection.getSelectedItem().toString().equals("월별 매출현황")) {
+			Dao_pjh_CurrentSituation daoPjh = new Dao_pjh_CurrentSituation();
+			ArrayList<Dto_pjh_CurrentSituation> dtoList = daoPjh.selecMonthList();
 
+			int listCount = dtoList.size();
+			for (int i = 0; i < listCount; i++) {
+				String[] qTxt = { dtoList.get(i).getSdate(), Integer.toString(dtoList.get(i).getSprice()) };
+				outerTable.addRow(qTxt);
+			}
+		}
 
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}//end
+	private void exitAction() {
+		dispose();
+		this.setVisible(false);
+		ManagerPage window =new ManagerPage();
+		window.setVisible(true);
+		
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("뒤로가기");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				exitAction();
+				}
+			});
+			btnNewButton.setBounds(44, 45, 117, 29);
+		}
+		return btnNewButton;
+	}
+}// end

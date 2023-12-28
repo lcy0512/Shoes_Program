@@ -1,6 +1,7 @@
 package com.javalec.function;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -26,6 +27,7 @@ public class Dao_pjm {
 	String color;
 	String qty;
 	String size;
+	FileInputStream image;
 
 	// Construct
 	public Dao_pjm() {
@@ -48,7 +50,8 @@ public class Dao_pjm {
 		this.size = size;
 	}
 
-	public Dao_pjm(String brand, String name, String price, String color, String qty, String size) {
+	public Dao_pjm(String brand, String name, String price, String color, String qty, String size,
+			FileInputStream image) {
 		super();
 		this.brand = brand;
 		this.name = name;
@@ -56,13 +59,14 @@ public class Dao_pjm {
 		this.color = color;
 		this.qty = qty;
 		this.size = size;
+		this.image = image;
 	}
 
 	// Method
 	// 검색결과를 Table 로 보내자
 	public ArrayList<Dto> selectList() {
 		ArrayList<Dto> dtoList = new ArrayList<Dto>();
-		String whereDefault = "select p_seq, brand, name, price, color, qty, size from product";
+		String whereDefault = "select p.p_seq, p.brand, p.name, p.price, p.color, p.qty, p.size , d.date from product as p, delivery as d where p.p_seq = d.p_seq ";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
@@ -78,8 +82,9 @@ public class Dao_pjm {
 				String wkColor = rs.getString(5);
 				String wkQty = rs.getString(6);
 				String wkSize = rs.getString(7);
+				String wkDate = rs.getString(8);
 
-				Dto dto = new Dto(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
+				Dto dto = new Dto(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize, wkDate);
 				dtoList.add(dto);
 
 			}
@@ -89,10 +94,11 @@ public class Dao_pjm {
 		}
 		return dtoList;
 	}
+
 	public Dto tableClick() {
 		Dto dto = null;
 
-		String where1 = "select p_seq, brand, name, price, color, qty, size from product ";
+		String where1 = "select p_seq, brand, name, price, color, qty, size, image from product ";
 		String where2 = " where p_seq = " + p_seq;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -109,20 +115,18 @@ public class Dao_pjm {
 				String wkColor = rs.getString(5);
 				String wkQty = rs.getString(6);
 				String wkSize = rs.getString(7);
-				
-				//file
-//				ShareVar.filename = ShareVar.filename + 1;
-//				File file = new File(Integer.toString(ShareVar.filename));
-//				FileOutputStream output = new FileOutputStream(file);
-//				InputStream input = rs.getBinaryStream(7);
-//				byte[] buffer = new byte[1024];
-//				while(input.read(buffer) > 0) {
-//					output.write(buffer);
-//					
-//				}
-				
-				
-				
+
+				// file
+				ShareVar.filename = ShareVar.filename + 1;
+				File file = new File(Integer.toString(ShareVar.filename));
+				FileOutputStream output = new FileOutputStream(file);
+				InputStream input = rs.getBinaryStream(8);
+				byte[] buffer = new byte[1024];
+				while (input.read(buffer) > 0) {
+					output.write(buffer);
+
+				}
+
 				dto = new Dto(wkSeq, wkBarnd, wkName, wkPrice, wkColor, wkQty, wkSize);
 
 			}
@@ -137,32 +141,104 @@ public class Dao_pjm {
 
 	public boolean insertAction() {
 		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection conn_mysql = null;
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			Statement stmt_mysql = conn_mysql.createStatement();
+			conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 
-			String A = "insert into product (brand, name, price, color, qty, size)";
-			String B = " value (?,?,?,?,?,?)";
-			ps = conn_mysql.prepareStatement(A + B);
+			// Check for existing record with the same brand, name, price, color, and size
+			String checkQuery = "SELECT * FROM product WHERE brand=? AND name=? AND price=? AND color=? AND size=? ";
+			ps = conn_mysql.prepareStatement(checkQuery);
 			ps.setString(1, brand);
 			ps.setString(2, name);
 			ps.setString(3, price);
 			ps.setString(4, color);
-			ps.setString(5, qty);
-			ps.setString(6, size);
-			ps.executeUpdate();
+			ps.setString(5, size);
+			rs = ps.executeQuery();
 
-			conn_mysql.close();
+			if (rs.next()) {
+				// Record already exists, update quantity
+				int existingQty = rs.getInt("qty");
+				int newQty = existingQty + Integer.parseInt(qty);
+
+				// Update the quantity for the existing record
+				String updateQuery = "UPDATE product SET qty=? WHERE brand=? AND name=? AND price=? AND color=? AND size=? ";
+				ps = conn_mysql.prepareStatement(updateQuery);
+				ps.setInt(1, newQty);
+				ps.setString(2, brand);
+				ps.setString(3, name);
+				ps.setString(4, price);
+				ps.setString(5, color);
+				ps.setString(6, size);
+				ps.executeUpdate();
+			} else {
+				// Record does not exist, insert a new record
+				String insertQuery = "INSERT INTO product (brand, name, price, color, qty, size, image) VALUES (?, ?, ?, ?, ?, ?, ?) ";
+				ps = conn_mysql.prepareStatement(insertQuery);
+				ps.setString(1, brand);
+				ps.setString(2, name);
+				ps.setString(3, price);
+				ps.setString(4, color);
+				ps.setString(5, qty);
+				ps.setString(6, size);
+				ps.setBinaryStream(7, image);
+				ps.executeUpdate();
+
+	            String insertDelivey = "insert into delivery (p_seq, date, qty, price) values (?, NOW(), ?, ?) ";
+	            ps = conn_mysql.prepareStatement(insertDelivey);
+	            ps.setInt(1, p_seq);
+	            ps.setInt(2, Integer.parseInt(qty));
+	            ps.setInt(3, Integer.parseInt(price));
+	            ps.executeUpdate();                                                      
+	            
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (ps != null)
+					ps.close();
+				if (conn_mysql != null)
+					conn_mysql.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+
 		return true;
 	}
+
+//	public boolean insertDelivery() {
+//		PreparedStatement ps = null;
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+//			Statement stmt_mysql = conn_mysql.createStatement();
+//
+//			String insertDelivey = "insert into delivery (p_seq, date, qty, price) values (?, NOW(), ?, ?) ";
+//			ps = conn_mysql.prepareStatement(insertDelivey);
+//			ps.setInt(1, p_seq);
+//			ps.setInt(2, Integer.parseInt(qty));
+//			ps.setInt(3, Integer.parseInt(price));
+//			ps.executeUpdate();
+//			conn_mysql.close();
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//		return true;
+//	}
+
 	public boolean updateAction() {
 		PreparedStatement ps = null;
-		String A = "update product set brand = ?, name = ?, price = ?, color = ?, qty = ?, size = ?";
+		String A = "update product set brand = ?, name = ?, price = ?, color = ?, qty = ?, size = ?, image = ? ";
 		String B = " where p_seq = ?";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

@@ -23,7 +23,7 @@ public class Dto_PDG_CustomerTable {
 		// TODO Auto-generated constructor stub
 	}
 
-	// 1. constructor for customer insert
+	// 1. constructor for customer insert + 회원 정보 조회를 위한생성자. 
 	public Dto_PDG_CustomerTable(String customer_id, String name, String pw, String telno, String email) {
 		super();
 		this.customer_id = customer_id;
@@ -34,6 +34,11 @@ public class Dto_PDG_CustomerTable {
 	}
 
 	// 2. constructor for customer id Overlap
+	
+	
+	
+	// 3.  회원정보 조회 를 위한 생성자
+	
 	
 	
 	

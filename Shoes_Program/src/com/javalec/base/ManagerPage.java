@@ -5,8 +5,10 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -73,6 +75,8 @@ public class ManagerPage extends JDialog {
 	private final DefaultTableModel outerTable = new DefaultTableModel();
 	private JRadioButton rbSearch;
 	private AbstractButton tfSize;
+	private JTextField tfFilePath;
+	private JButton btnFilePath;
 
 	/**
 	 * Launch the application.
@@ -130,12 +134,19 @@ public class ManagerPage extends JDialog {
 		contentPanel.add(getLblNewLabel_1_6());
 		contentPanel.add(getCbSelection1());
 		contentPanel.add(getRbSearch());
+		contentPanel.add(getTfFilePath());
+		contentPanel.add(getBtnFilePath());
 	}
 
 	private JComboBox getCbSelection() {
 		if (cbSelection == null) {
 			cbSelection = new JComboBox();
-			cbSelection.setModel(new DefaultComboBoxModel(new String[] { "입고내역", "판매내역" }));
+			cbSelection.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					selectAction();
+				}
+			});
+			cbSelection.setModel(new DefaultComboBoxModel(new String[] { "모든품목", "입고내역", "제품명", "입고일" }));
 			cbSelection.setBounds(20, 55, 104, 27);
 		}
 		return cbSelection;
@@ -144,7 +155,7 @@ public class ManagerPage extends JDialog {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(19, 94, 397, 472);
+			scrollPane.setBounds(19, 94, 492, 472);
 			scrollPane.setViewportView(getInner_Table());
 		}
 		return scrollPane;
@@ -212,6 +223,11 @@ public class ManagerPage extends JDialog {
 	private JButton getBtnSearch() {
 		if (btnSearch == null) {
 			btnSearch = new JButton("검색");
+			btnSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shootAction();
+				}
+			});
 			btnSearch.setBounds(302, 54, 117, 29);
 		}
 		return btnSearch;
@@ -228,8 +244,10 @@ public class ManagerPage extends JDialog {
 
 	private JLabel getLblImage() {
 		if (lblImage == null) {
-			lblImage = new JLabel("                                     이미지");
-			lblImage.setBounds(449, 326, 329, 240);
+			lblImage = new JLabel("");
+			lblImage.setIcon(new ImageIcon(ManagerPage.class.getResource("/com/javalec/image/금지.jpeg")));
+			lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+			lblImage.setBounds(523, 326, 255, 158);
 		}
 		return lblImage;
 	}
@@ -250,7 +268,7 @@ public class ManagerPage extends JDialog {
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("제품번호");
-			lblNewLabel_1.setBounds(449, 95, 61, 16);
+			lblNewLabel_1.setBounds(523, 95, 61, 16);
 		}
 		return lblNewLabel_1;
 	}
@@ -259,7 +277,7 @@ public class ManagerPage extends JDialog {
 		if (tfSeqno == null) {
 			tfSeqno = new JTextField();
 			tfSeqno.setEditable(false);
-			tfSeqno.setBounds(524, 90, 80, 26);
+			tfSeqno.setBounds(598, 90, 80, 26);
 			tfSeqno.setColumns(10);
 		}
 		return tfSeqno;
@@ -268,7 +286,7 @@ public class ManagerPage extends JDialog {
 	private JLabel getLblNewLabel_1_1() {
 		if (lblNewLabel_1_1 == null) {
 			lblNewLabel_1_1 = new JLabel("브랜드명");
-			lblNewLabel_1_1.setBounds(449, 128, 61, 16);
+			lblNewLabel_1_1.setBounds(523, 128, 61, 16);
 		}
 		return lblNewLabel_1_1;
 	}
@@ -277,7 +295,7 @@ public class ManagerPage extends JDialog {
 		if (tfBrand == null) {
 			tfBrand = new JTextField();
 			tfBrand.setColumns(10);
-			tfBrand.setBounds(524, 123, 152, 26);
+			tfBrand.setBounds(598, 123, 152, 26);
 		}
 		return tfBrand;
 	}
@@ -285,7 +303,7 @@ public class ManagerPage extends JDialog {
 	private JLabel getLblNewLabel_1_2() {
 		if (lblNewLabel_1_2 == null) {
 			lblNewLabel_1_2 = new JLabel("제품명");
-			lblNewLabel_1_2.setBounds(449, 161, 61, 16);
+			lblNewLabel_1_2.setBounds(523, 161, 61, 16);
 		}
 		return lblNewLabel_1_2;
 	}
@@ -294,7 +312,7 @@ public class ManagerPage extends JDialog {
 		if (tfName == null) {
 			tfName = new JTextField();
 			tfName.setColumns(10);
-			tfName.setBounds(524, 156, 254, 26);
+			tfName.setBounds(598, 156, 130, 26);
 		}
 		return tfName;
 	}
@@ -302,7 +320,7 @@ public class ManagerPage extends JDialog {
 	private JLabel getLblNewLabel_1_3() {
 		if (lblNewLabel_1_3 == null) {
 			lblNewLabel_1_3 = new JLabel("가격");
-			lblNewLabel_1_3.setBounds(449, 194, 61, 16);
+			lblNewLabel_1_3.setBounds(523, 194, 61, 16);
 		}
 		return lblNewLabel_1_3;
 	}
@@ -311,7 +329,7 @@ public class ManagerPage extends JDialog {
 		if (tfPrice == null) {
 			tfPrice = new JTextField();
 			tfPrice.setColumns(10);
-			tfPrice.setBounds(524, 189, 104, 26);
+			tfPrice.setBounds(598, 189, 104, 26);
 		}
 		return tfPrice;
 	}
@@ -319,7 +337,7 @@ public class ManagerPage extends JDialog {
 	private JLabel getLblNewLabel_1_4() {
 		if (lblNewLabel_1_4 == null) {
 			lblNewLabel_1_4 = new JLabel("색상");
-			lblNewLabel_1_4.setBounds(449, 227, 61, 16);
+			lblNewLabel_1_4.setBounds(523, 227, 61, 16);
 		}
 		return lblNewLabel_1_4;
 	}
@@ -328,7 +346,7 @@ public class ManagerPage extends JDialog {
 		if (tfColor == null) {
 			tfColor = new JTextField();
 			tfColor.setColumns(10);
-			tfColor.setBounds(524, 222, 180, 26);
+			tfColor.setBounds(598, 222, 180, 26);
 		}
 		return tfColor;
 	}
@@ -336,7 +354,7 @@ public class ManagerPage extends JDialog {
 	private JLabel getLblNewLabel_1_5() {
 		if (lblNewLabel_1_5 == null) {
 			lblNewLabel_1_5 = new JLabel("재고");
-			lblNewLabel_1_5.setBounds(449, 260, 61, 16);
+			lblNewLabel_1_5.setBounds(523, 260, 61, 16);
 		}
 		return lblNewLabel_1_5;
 	}
@@ -345,7 +363,7 @@ public class ManagerPage extends JDialog {
 		if (tfQty == null) {
 			tfQty = new JTextField();
 			tfQty.setColumns(10);
-			tfQty.setBounds(524, 255, 62, 26);
+			tfQty.setBounds(598, 255, 62, 26);
 		}
 		return tfQty;
 	}
@@ -353,7 +371,7 @@ public class ManagerPage extends JDialog {
 	private JLabel getLblNewLabel_1_6() {
 		if (lblNewLabel_1_6 == null) {
 			lblNewLabel_1_6 = new JLabel("사이즈");
-			lblNewLabel_1_6.setBounds(449, 293, 61, 16);
+			lblNewLabel_1_6.setBounds(523, 293, 61, 16);
 		}
 		return lblNewLabel_1_6;
 	}
@@ -367,7 +385,7 @@ public class ManagerPage extends JDialog {
 			});
 			cbSelection1.setModel(new DefaultComboBoxModel(new String[] { "220", "225", "230", "235", "240", "245",
 					"250", "255", "260", "265", "270", "275", "280", "285", "290", "295", "300" }));
-			cbSelection1.setBounds(524, 287, 91, 27);
+			cbSelection1.setBounds(598, 287, 91, 27);
 		}
 		return cbSelection1;
 	}
@@ -386,6 +404,29 @@ public class ManagerPage extends JDialog {
 		return rbSearch;
 	}
 
+	private JTextField getTfFilePath() {
+		if (tfFilePath == null) {
+			tfFilePath = new JTextField();
+			tfFilePath.setBounds(648, 496, 130, 26);
+			tfFilePath.setColumns(10);
+		}
+		return tfFilePath;
+	}
+
+	private JButton getBtnFilePath() {
+		if (btnFilePath == null) {
+			btnFilePath = new JButton("파일 첨부");
+			btnFilePath.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					filePath();
+				}
+			});
+			btnFilePath.setToolTipText("");
+			btnFilePath.setBounds(523, 496, 117, 29);
+		}
+		return btnFilePath;
+	}
+
 	// -----Function-----
 	private void tableInit() {
 		// 컬럼 정하기
@@ -396,7 +437,9 @@ public class ManagerPage extends JDialog {
 		outerTable.addColumn("색상 ");
 		outerTable.addColumn("재고 ");
 		outerTable.addColumn("size ");
-		outerTable.setColumnCount(7);
+		outerTable.addColumn("입고일");
+
+		outerTable.setColumnCount(8);
 		// 컬럼 크기 정하기
 		int colNo = 0;
 		TableColumn col = inner_Table.getColumnModel().getColumn(colNo);
@@ -408,7 +451,7 @@ public class ManagerPage extends JDialog {
 		col.setPreferredWidth(width);
 		colNo = 2;
 		col = inner_Table.getColumnModel().getColumn(colNo);
-		width = 80;
+		width = 70;
 		col.setPreferredWidth(width);
 		colNo = 3;
 		col = inner_Table.getColumnModel().getColumn(colNo);
@@ -420,11 +463,15 @@ public class ManagerPage extends JDialog {
 		col.setPreferredWidth(width);
 		colNo = 5;
 		col = inner_Table.getColumnModel().getColumn(colNo);
-		width = 50;
+		width = 60;
 		col.setPreferredWidth(width);
 		colNo = 6;
 		col = inner_Table.getColumnModel().getColumn(colNo);
-		width = 50;
+		width = 60;
+		col.setPreferredWidth(width);
+		colNo = 7;
+		col = inner_Table.getColumnModel().getColumn(colNo);
+		width = 100;
 		col.setPreferredWidth(width);
 
 		inner_Table.setAutoResizeMode(inner_Table.AUTO_RESIZE_OFF);
@@ -447,17 +494,22 @@ public class ManagerPage extends JDialog {
 		for (int i = 0; i < listCount; i++) {
 			String temp = Integer.toString(dtoList.get(i).getP_seq());
 			String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
-					dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
+					dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize(), dtoList.get(i).getDate()};
 			outerTable.addRow(qTxt);
 		}
 
 	}
 
 	private void actionPartition() {
+
 		// 검색일 경우
 		if (rbSearch.isSelected()) {
 			screenPartition();
+			tableInit();
+			shootAction();
+			clearColumn();
 		}
+			
 		// 입력일 경우
 		if (rbInsert.isSelected()) {
 			int i_chk = insertFieldCheck();
@@ -513,6 +565,7 @@ public class ManagerPage extends JDialog {
 			tfColor.setEditable(true);
 			tfQty.setEditable(true);
 			cbSelection1.setEditable(true);
+			lblImage.setEnabled(true);
 
 		}
 
@@ -524,6 +577,7 @@ public class ManagerPage extends JDialog {
 			tfPrice.setEditable(true);
 			tfColor.setEditable(true);
 			cbSelection1.setEditable(true);
+			lblImage.setEnabled(true);
 		}
 		// 삭제일 경우
 		if (rbDelete.isSelected()) {
@@ -532,10 +586,12 @@ public class ManagerPage extends JDialog {
 			tfName.setEditable(false);
 			tfPrice.setEditable(false);
 			tfColor.setEditable(false);
+			tfFilePath.setEditable(false);
 			cbSelection1.setEditable(false);
 		}
 
 	}
+
 	private void tableClick() {
 		int i = inner_Table.getSelectedRow();
 		String tkSequence = (String) inner_Table.getValueAt(i, 0);
@@ -552,25 +608,36 @@ public class ManagerPage extends JDialog {
 		tfQty.setText(dto.getQty());
 		cbSelection1.setSelectedItem(dto.getSize());
 //		 Image 처리 : filename 이 틀려야 보여주기가 가능
-//		String filePath = Integer.toString(ShareVar.filename);
-//		tfFilePath.setText(filePath);
-//		lblImage.setIcon(new ImageIcon(filePath));
-//		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
-//
-//		File file = new File(filePath);
-//		file.delete();
+		String filePath = Integer.toString(ShareVar.filename);
+		tfFilePath.setText(filePath);
+		lblImage.setIcon(new ImageIcon(filePath));
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+
+		File file = new File(filePath);
+		file.delete();
 
 	}
 
 	private void insertAction() {
 		String brand = tfBrand.getText().trim();
-		String name = tfName.getText().trim();
+ 		String name = tfName.getText().trim();
 		String price = tfPrice.getText().trim();
 		String color = tfColor.getText().trim();
 		String qty = tfQty.getText().trim();
 		String size = cbSelection1.getSelectedItem().toString();
+		
+		
+		FileInputStream input = null;
+		File file = new File(tfFilePath.getText());
+		try {
+			input = new FileInputStream(file);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
-		Dao_pjm dao = new Dao_pjm(brand, name, price, color, qty, size);
+		
+		Dao_pjm dao = new Dao_pjm(brand, name, price, color, qty, size, input);
 		boolean result = dao.insertAction();
 
 		if (result == true) {
@@ -581,18 +648,17 @@ public class ManagerPage extends JDialog {
 		}
 
 	}
+
 	private void updateAction() {
 		int seqno = Integer.parseInt(tfSeqno.getText());
-		String Brand = tfBrand.getText().trim();
+		String brand = tfBrand.getText().trim();
 		String name = tfName.getText().trim();
 		String price = tfPrice.getText().trim();
 		String color = tfColor.getText().trim();
 		String qty = tfQty.getText().trim();
-		String Size = cbSelection1.getSelectedItem().toString().trim();
-		
-		
-		
-		Dao_pjm dao = new Dao_pjm(seqno, Brand, name, price, color, qty, Size);
+		String size = cbSelection1.getSelectedItem().toString().trim();
+
+		Dao_pjm dao = new Dao_pjm(seqno, brand, name, price, color, qty, size);
 		boolean result = dao.updateAction();
 
 		if (result == true) {
@@ -603,18 +669,19 @@ public class ManagerPage extends JDialog {
 		}
 
 	}
+
 	private void deleteAction() {
-		
+
 		Dao_pjm dao = new Dao_pjm(Integer.parseInt(tfSeqno.getText()));
 		boolean result = dao.deleteAction();
-		
+
 		if (result == true) {
 			JOptionPane.showMessageDialog(null, tfName.getText() + "님의 정보가 삭제되었습니다.");
 		} else {
 			JOptionPane.showMessageDialog(null, "삭제 중 문제가 발생하였습니다.");
-			
+
 		}
-		
+
 	}
 
 	private int insertFieldCheck() {
@@ -654,7 +721,34 @@ public class ManagerPage extends JDialog {
 		tfColor.setText("");
 		tfQty.setText("");
 		cbSelection1.setSelectedItem("");
+		tfFilePath.setText("");
+		lblImage.setIcon(new ImageIcon(ManagerPage.class.getResource("/com/javalec/image/금지.jpeg")));
+		
+	}
+	private void filePath() {
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG","PNG", "BMP","JPEG");
+		chooser.setFileFilter(filter);
 
+		int ret = chooser.showOpenDialog(null);
+
+		if (ret != JFileChooser.APPROVE_OPTION) {
+			JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다.");
+			return;
+		}
+		String filePath = chooser.getSelectedFile().getPath();
+		tfFilePath.setText(filePath);
+		lblImage.setIcon(new ImageIcon(filePath));
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+		
+	}
+	
+	private void shootAction() {
+		
+
+	}
+	private void selectAction() {
+		
 	}
 
 }// End

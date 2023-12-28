@@ -13,7 +13,7 @@ public class Dto_wdh {
 	String pcolor;
 	int pqty;
 	int psize;
-	FileInputStream file;
+	FileInputStream pimage;
 	// customer
 	String customer_id;
 	String cname;
@@ -60,8 +60,14 @@ public class Dto_wdh {
 		this.pcolor = pcolor;
 	}
 
-	// Method
+//	public Dto_wdh(int p_seq) {
+//		super();
+//		this.p_seq = p_seq;
+//	}
+
 	
+	// Method
+
 	public int getP_seq() {
 		return p_seq;
 	}
@@ -118,12 +124,12 @@ public class Dto_wdh {
 		this.psize = psize;
 	}
 
-	public FileInputStream getFile() {
-		return file;
+	public FileInputStream getPimage() {
+		return pimage;
 	}
 
-	public void setFile(FileInputStream file) {
-		this.file = file;
+	public void setFile(FileInputStream pimage) {
+		this.pimage = pimage;
 	}
 
 	public String getCustomer_id() {

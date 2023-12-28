@@ -384,11 +384,28 @@ public class DetailInfoPage extends JDialog {
 	private void colorChange() {
 		cbSize.removeAllItems();
 		searchSizeCb();
-		searchPseq();
+		Dao_wdh dao_wdh = new Dao_wdh(searchPseq()); // Dao에 seq를 보냄
+		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
+
+		tfName.setText(dto_wdh.getPname()); // 제품명 출력
+		cbQtyNum(); // 수량 넣기
+		cbColorColumn(); // 색깔 넣기
+		cbSizeColumn(); // 사이즈 넣기
+		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
+
+		// Image File
+		String filePath = Integer.toString(ShareVar_wdh.image);
+
+		lblImage.setIcon(new ImageIcon(filePath));
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+
+		File file = new File(filePath);
+		file.delete();
+
 	}
 
 	// cbColor의 색상을 통해 제품명, 색상, 사이즈를 통해 제품코드를 search
-	private void searchPseq() {
+	private int searchPseq() {
 		String pName = tfName.getText();
 		System.out.println(pName); // 이름 가져오기
 		String pColor = cbColor.getSelectedItem().toString();
@@ -396,8 +413,8 @@ public class DetailInfoPage extends JDialog {
 		int pSize = Integer.parseInt(cbSize.getSelectedItem().toString());
 		System.out.println(pSize); // 사이즈 가져오기
 		Dao_wdh dao_wdh = new Dao_wdh(pName, pColor, pSize);
-		dao_wdh.searchSeq();
 		System.out.println(dao_wdh.searchSeq());
+		return dao_wdh.searchSeq();
 	}
 
 	// 바로구매 눌렀을 때 창에서 가져올 것들
@@ -412,9 +429,8 @@ public class DetailInfoPage extends JDialog {
 		dao_wdh.saleInsertAction();
 	}
 
-	// 장바구니 버튼을 눌렀을 때
+	// 장바구니 버튼을 눌렀을 때 다이얼로그를 띄워서 장바구니 페이지로 갈지 안갈지 확인
 	private void bucketClick() {
-
 		if (lblId.getText().equals("로그인이 필요합니다.")) {
 			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");	// 로그인이 되어있지 않다면 구매 불가
 		} else {

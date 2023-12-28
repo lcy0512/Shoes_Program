@@ -1,14 +1,12 @@
 package com.javalec.function;
 
 public class ShareVar {
-<<<<<<< HEAD
+
 	public static String dbName = "jdbc:mysql://127.0.0.1:3306/shoe_program?serverTimezone=UTC&characterEncoding=utf8&useSSL=FALSE";
 	public static String dbUser = "root";
-	public static String dbPass = "gkdldua12!@";
+	public static String dbPass = "qwer1234";
 	
-	
-}
-=======
+
 	/*
 	 * Descritipon"
 	 * Author
@@ -19,15 +17,11 @@ public class ShareVar {
 	 *  		
 	 */
 	
-	// Field
-	public static String dbName =  "jdbc:mysql://127.0.0.1/shoe_program?serverTimezone=UTC&characterEncoding=utf8&useSSL=FALSE";
-	public static String dbUser = "root";
-	public static String dbPass = "qwer1234"; // final 은 써도 되고 안써도 되는데 share 니까 이렇게 쓰는데 배신자가 있을 경우 final 을 쓸것. 
-	
+
 	// image ( 만약 고객 이미지 업로드가 필요할 경우 사용!
 	public static int filename = 0;
 	
 	
 	
 } // End
->>>>>>> 15cd16ffefd0bc81652564fe3bb0c1cdd41d2764
+

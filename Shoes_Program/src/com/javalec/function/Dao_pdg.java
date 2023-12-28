@@ -104,6 +104,8 @@ public class Dao_pdg {
 		
 		String overlapQuery ="select count(name) from customer where customer_id = '" + customer_id + "'";
 		
+		System.out.println(1);
+		
 		try {
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -116,13 +118,15 @@ public class Dao_pdg {
 				isIdAlreadyExist = resultSet.getInt(1);
 						
 				
+				System.out.println(2);
 			}
 			
+			System.out.println(isIdAlreadyExist);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		
+		System.out.println(3);
 		return isIdAlreadyExist;
 		
 	}

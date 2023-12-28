@@ -5,11 +5,13 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.javalec.function.Dao_wdh;
 import com.javalec.function.Dto_wdh;
+import com.javalec.function.ShareVar_wdh;
 import com.javalec.product.MainView_Info;
 
 import java.awt.Font;
@@ -22,6 +24,10 @@ import javax.swing.JComboBox;
 import javax.swing.ImageIcon;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -29,6 +35,15 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.event.PopupMenuEvent;
 
 public class DetailInfoPage extends JDialog {
 
@@ -36,11 +51,11 @@ public class DetailInfoPage extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnBucket;
 	private JLabel lblId;
-	private JLabel lblFile;
+	private JLabel lblImage;
 	private JButton btnBucket2;
 	private JButton btnBuy;
 	private JLabel lblNewLabel_2;
-	private JTextField tfProductCode;
+	private JTextField tfName;
 	private JLabel lblNewLabel_2_1;
 	private JComboBox cbQty;
 	private JLabel lblNewLabel_2_1_1;
@@ -72,7 +87,11 @@ public class DetailInfoPage extends JDialog {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				activatedScreen();
-				cbQtyNum();
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				deactivatedScreen();
 			}
 		});
 		setBounds(100, 100, 800, 600);
@@ -93,11 +112,11 @@ public class DetailInfoPage extends JDialog {
 			contentPanel.add(btnMain);
 		}
 		contentPanel.add(getLblId());
-		contentPanel.add(getLblFile());
+		contentPanel.add(getLblImage());
 		contentPanel.add(getBtnBucket2());
 		contentPanel.add(getBtnBuy());
 		contentPanel.add(getLblNewLabel_2());
-		contentPanel.add(getTfProductCode());
+		contentPanel.add(getTfName());
 		contentPanel.add(getLblNewLabel_2_1());
 		contentPanel.add(getCbQty());
 		contentPanel.add(getLblNewLabel_2_1_1());
@@ -118,21 +137,21 @@ public class DetailInfoPage extends JDialog {
 
 	private JLabel getLblId() {
 		if (lblId == null) {
-			lblId = new JLabel("로그인이 필요합니다.");
+			lblId = new JLabel("wondh1216");
 			lblId.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblId.setBounds(502, 10, 146, 30);
+			lblId.setBounds(457, 10, 191, 30);
 		}
 		return lblId;
 	}
 
-	private JLabel getLblFile() {
-		if (lblFile == null) {
-			lblFile = new JLabel("New label");
-			lblFile.setIcon(new ImageIcon(DetailInfoPage.class.getResource("/com/javalec/Imagesample/LGT.png")));
-			lblFile.setBackground(new Color(255, 255, 255));
-			lblFile.setBounds(45, 35, 400, 400);
+	private JLabel getLblImage() {
+		if (lblImage == null) {
+			lblImage = new JLabel("");
+			lblImage.setIcon(new ImageIcon(DetailInfoPage.class.getResource("/com/javalec/image/PW.png")));
+			lblImage.setBackground(new Color(255, 255, 255));
+			lblImage.setBounds(45, 35, 400, 400);
 		}
-		return lblFile;
+		return lblImage;
 	}
 
 	private JButton getBtnBucket2() {
@@ -170,14 +189,14 @@ public class DetailInfoPage extends JDialog {
 		return lblNewLabel_2;
 	}
 
-	private JTextField getTfProductCode() {
-		if (tfProductCode == null) {
-			tfProductCode = new JTextField();
-			tfProductCode.setEditable(false);
-			tfProductCode.setBounds(536, 101, 112, 30);
-			tfProductCode.setColumns(10);
+	private JTextField getTfName() {
+		if (tfName == null) {
+			tfName = new JTextField();
+			tfName.setEditable(false);
+			tfName.setBounds(536, 101, 112, 30);
+			tfName.setColumns(10);
 		}
-		return tfProductCode;
+		return tfName;
 	}
 
 	private JLabel getLblNewLabel_2_1() {
@@ -213,6 +232,17 @@ public class DetailInfoPage extends JDialog {
 	private JComboBox getCbColor() {
 		if (cbColor == null) {
 			cbColor = new JComboBox();
+			cbColor.addPopupMenuListener(new PopupMenuListener() {
+				public void popupMenuCanceled(PopupMenuEvent e) {
+				}
+
+				public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+					colorChange();
+				}
+
+				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				}
+			});
 			cbColor.setBounds(536, 223, 112, 25);
 		}
 		return cbColor;
@@ -265,33 +295,58 @@ public class DetailInfoPage extends JDialog {
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
 //		System.out.println(dto_wdh.getPname());			// 잘 출력하는지 실험
 
-		tfProductCode.setText(dto_wdh.getPname()); // 제품명 출력
-
+		tfName.setText(dto_wdh.getPname()); // 제품명 출력
+		cbQtyNum(); // 수량 넣기
+		cbColorColumn(); // 색깔 넣기
+		cbSizeColumn(); // 사이즈 넣기
 		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
 
+		// Image File
+		String filePath = Integer.toString(ShareVar_wdh.image);
+		
+		lblImage.setIcon(new ImageIcon(filePath));
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		File file = new File(filePath);
+		file.delete();
+
+
+	}
+	
+
+	// 화면이 deactivated 되었을 때
+	private void deactivatedScreen() {
+
+		tfName.setText("");
+		cbQty.removeAllItems();
+		cbColor.removeAllItems();
+		cbSize.removeAllItems();
+		tfPrice.setText("");
 	}
 
 	// cbQty의 재고수량 만들기
 	private void cbQtyNum() {
 		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
-		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
-		for (int i = 0; i < dto_wdh.getPqty(); i++) {
-			cbQty.addItem(i+1);
+		for (int i = 0; i <= dao_wdh.viewDetailInfo().getPqty(); i++) {
+			cbQty.addItem(i);
 		}
 	}
-	
-	
+
 	// 즉시 구매 버튼을 눌렀을 때
 	private void buyClick() {
 		if (lblId.getText().equals("로그인이 필요합니다.")) {
 			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");
 		} else {
 			int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
-			String num = (String) cbQty.getSelectedItem();
+			String num = cbQty.getSelectedItem().toString();
 			int stock = currentStock() - Integer.parseInt(num);
 			Dao_wdh dao_wdh = new Dao_wdh(seq, stock);
 			dao_wdh.updateAction();
+			getWindow();
+			deactivatedScreen();
+			activatedScreen();
+			JOptionPane.showMessageDialog(null, "구매를 완료하였습니다.");
 		}
 	}
 
@@ -303,31 +358,72 @@ public class DetailInfoPage extends JDialog {
 		int cStock = dto_wdh.getPqty();
 		return cStock;
 	}
-	
+
 	// 장바구니 버튼을 눌렀을 때
 	private void bucketClick() {
 		if (lblId.getText().equals("로그인이 필요합니다.")) {
 			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");
 		} else {
-			int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
-			String num = (String) cbQty.getSelectedItem();
-			int stock = currentStock() - Integer.parseInt(num);
-			Dao_wdh dao_wdh = new Dao_wdh(seq, stock);
-			dao_wdh.updateAction();
+			int sap_seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+			String sapcustomer_id = lblId.getText();
+			Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id);
+			dao_wdh.insertAction();
+			JOptionPane.showMessageDialog(null, "상품을 장바구니에 저장하였습니다");
 		}
 	}
 
+	// 상품의 color를 나타내는 combobox의 function
+	private void cbColorColumn() {
+		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
+//		System.out.println(dao_wdh.productColor());	// ArrayList 잘 되었는지 확인
+		for (int i = 0; i < dao_wdh.productColor().size(); i++) {
+			cbColor.addItem(dao_wdh.productColor().get(i));
+		}
+	}
 
+	// 상품의 size를 나타내는 combobox의 function
+	private void cbSizeColumn() {
+		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
+		dao_wdh.productSize(); // productColor Method 사용
+//		System.out.println(dao_wdh.productSize());	// ArrayList 잘 되었는지 확인
+		for (int i = 0; i < dao_wdh.productSize().size(); i++) {
+			cbSize.addItem(dao_wdh.productSize().get(i));
+		}
+	}
 
+	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시
+	// search
+	private void colorChange() {
+		searchPseq();
+//		removeColumn();
+//		activateColumn();
+	}
 
+	// cbColor의 색상을 통해 제품명, 색상, 사이즈를 통해 제품코드를 search
+	private void searchPseq() {
+		String pName = tfName.getText();
+		System.out.println(pName); // 이름 가져오기
+		String pColor = cbColor.getSelectedItem().toString();
+		System.out.println(pColor); // 색깔 가져오기
+		int pSize = Integer.parseInt(cbSize.getSelectedItem().toString());
+		System.out.println(pSize); // 사이즈 가져오기
+		Dao_wdh dao_wdh = new Dao_wdh(pName, pColor, pSize);
+		dao_wdh.searchSeq();
+		System.out.println(dao_wdh.searchSeq());
+	}
 
+	// 바로구매 눌렀을 때 창에서 가져올 것들
+	private void getWindow() {
+		int sp_seq = MainView_Info.clickSeq; 		// sp_seq
+		String scustomer_id = lblId.getText(); 		// scustomer_id
+		int sprice = Integer.parseInt(tfPrice.getText()); // sprice
+		String sdate = LocalDate.now().toString(); 	// sdate
+		int sqty = Integer.parseInt(cbQty.getSelectedItem().toString()); // sqty
 
-
-
-
-
-
-
-
+		Dao_wdh dao_wdh = new Dao_wdh(sp_seq, scustomer_id, sdate, sprice, sqty);
+		dao_wdh.saleInsertAction();
+	}
 
 } // End

@@ -298,34 +298,31 @@ public class Dao_wdh {
 		
 	}
 	
-//	// 현재 제품명과 색깔을 통해 사이즈를 추적
-//	public ArrayList<Integer> productSizeSearch(String currentName, String currentColor) {
-//		
-//		ArrayList<Integer> productSize = new ArrayList<Integer>();
-//
-//		String where = "select size from product where name = '" + currentName + "' and color = '" + currentColor + "' group by size order by size asc";
-//
-//		try {
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-//			Statement stmt_mysql = conn_mysql.createStatement();
-//
-//			ResultSet rs = stmt_mysql.executeQuery(where);
-//			while (rs.next()) {
-//				int wkSize = rs.getInt(1);
-//				productSize.add(wkSize);
-//			}
-//
-//			conn_mysql.close();
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return productSize;
-//	}
+	// 현재 제품명과 색깔을 통해 사이즈를 추적
+	public ArrayList<Integer> productSizeSearch(String currentName, String currentColor) {
+		
+		ArrayList<Integer> productSize = new ArrayList<Integer>();
 
+		String where = "select size from product where name = '" + currentName + "' and color = '" + currentColor + "' group by size order by size asc";
 
-	
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(where);
+			while (rs.next()) {
+				int wkSize = rs.getInt(1);
+				productSize.add(wkSize);
+			}
+
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return productSize;
+	}
 
 	
 	

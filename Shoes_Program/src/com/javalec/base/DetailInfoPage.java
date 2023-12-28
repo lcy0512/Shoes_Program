@@ -43,6 +43,7 @@ import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.event.PopupMenuEvent;
 
 public class DetailInfoPage extends JDialog {
@@ -303,16 +304,14 @@ public class DetailInfoPage extends JDialog {
 
 		// Image File
 		String filePath = Integer.toString(ShareVar_wdh.image);
-		
+
 		lblImage.setIcon(new ImageIcon(filePath));
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		File file = new File(filePath);
 		file.delete();
 
-
 	}
-	
 
 	// 화면이 deactivated 되었을 때
 	private void deactivatedScreen() {
@@ -359,19 +358,6 @@ public class DetailInfoPage extends JDialog {
 		return cStock;
 	}
 
-	// 장바구니 버튼을 눌렀을 때
-	private void bucketClick() {
-		if (lblId.getText().equals("로그인이 필요합니다.")) {
-			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");
-		} else {
-			int sap_seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
-			String sapcustomer_id = lblId.getText();
-			Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id);
-			dao_wdh.insertAction();
-			JOptionPane.showMessageDialog(null, "상품을 장바구니에 저장하였습니다");
-		}
-	}
-
 	// 상품의 color를 나타내는 combobox의 function
 	private void cbColorColumn() {
 		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
@@ -396,9 +382,9 @@ public class DetailInfoPage extends JDialog {
 	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시
 	// search
 	private void colorChange() {
+		cbSize.removeAllItems();
+		searchSizeCb();
 		searchPseq();
-//		removeColumn();
-//		activateColumn();
 	}
 
 	// cbColor의 색상을 통해 제품명, 색상, 사이즈를 통해 제품코드를 search
@@ -416,14 +402,53 @@ public class DetailInfoPage extends JDialog {
 
 	// 바로구매 눌렀을 때 창에서 가져올 것들
 	private void getWindow() {
-		int sp_seq = MainView_Info.clickSeq; 		// sp_seq
-		String scustomer_id = lblId.getText(); 		// scustomer_id
+		int sp_seq = MainView_Info.clickSeq; // sp_seq
+		String scustomer_id = lblId.getText(); // scustomer_id
 		int sprice = Integer.parseInt(tfPrice.getText()); // sprice
-		String sdate = LocalDate.now().toString(); 	// sdate
+		String sdate = LocalDate.now().toString(); // sdate
 		int sqty = Integer.parseInt(cbQty.getSelectedItem().toString()); // sqty
 
 		Dao_wdh dao_wdh = new Dao_wdh(sp_seq, scustomer_id, sdate, sprice, sqty);
 		dao_wdh.saleInsertAction();
+	}
+
+	// 장바구니 버튼을 눌렀을 때
+	private void bucketClick() {
+
+		if (lblId.getText().equals("로그인이 필요합니다.")) {
+			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");	// 로그인이 되어있지 않다면 구매 불가
+		} else {
+
+			int result = JOptionPane.showConfirmDialog(null, "계속할것입니까?", "Confirm", JOptionPane.YES_NO_OPTION);	// 로그인이 되어 있다면 장바구니 메세지 출력
+			if (result == JOptionPane.CLOSED_OPTION) {
+
+			} else if (result == JOptionPane.YES_OPTION) {
+				int sap_seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를
+														// 가져옴
+				String sapcustomer_id = lblId.getText();	// id 가져옴
+				Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id);
+				dao_wdh.insertAction();	// 임시저장 Entity에 넣어줌
+				JOptionPane.showMessageDialog(null, "상품을 장바구니에 저장하였습니다");	// 메세지 출력
+				dispose(); // 화면 종료는 dispose();로 해주면 됨
+				this.setVisible(false);		// 화면 종료
+				BuyList window = new BuyList();		// BuyList화면 켜줌
+				window.setVisible(true);
+			} else {
+
+			}
+		}
+	}
+
+	// 제품명과 색깔을 통해 사이즈 콤보박스 생성
+	private void searchSizeCb() {
+		String pName = tfName.getText();
+		String pColor = cbColor.getSelectedItem().toString();
+		Dao_wdh dao_wdh = new Dao_wdh();
+		dao_wdh.productSizeSearch(pName, pColor);
+		for (int i = 0; i < dao_wdh.productSizeSearch(pName, pColor).size(); i++) {
+			cbSize.addItem(dao_wdh.productSizeSearch(pName, pColor).get(i));
+		}
+
 	}
 
 } // End

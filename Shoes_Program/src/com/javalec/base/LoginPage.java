@@ -36,12 +36,12 @@ public class LoginPage extends JDialog {
 	 * Date : 20203.12.27
 	 * Author : Dong Geun Forrest Park
 	 * Update : 
-	 * 		1. 아이디 패스워드를  커스터머ㄷ 디비에서 불러와서 있으면 -> 메인 페이지
+	 *  o   1. 아이디 패스워드를  커스터머ㄷ 디비에서 불러와서 있으면 -> 메인 페이지
 	 * 			없으면 회원가입하십시요 
 	 * 	o	1. 아이디 비밀번호 찾기 페이지 
-	 *  	2. 입력 받은 것으로 db 에 등록하기
-	 *  	3. 
-	 * 
+	 *  o	2. 입력 받은 것으로 db 에 등록하기
+	 *  o	3. 로그인창이 가운데로오게 share bar 에서 위치 가져옴. 
+	 * 		4. 회원가입이랑 비슷하게 수
 	 */
 	
 	
@@ -49,7 +49,8 @@ public class LoginPage extends JDialog {
 	
 	static LoginPage login_dialog =new LoginPage();
 	private JComboBox cbExample;
-	private JButton btnNewButton_2;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
 	
 
 	/**
@@ -70,38 +71,41 @@ public class LoginPage extends JDialog {
 	 */
 	public LoginPage() {
 		setTitle("로그인");
-		setBounds(100, 100, 800, 600);
+		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, 800, 600);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(Color.WHITE);
+		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JLabel lblNewLabel = new JLabel("회원 아이디 : ");
-			lblNewLabel.setBounds(234, 202, 107, 16);
+			JLabel lblNewLabel = new JLabel("아이디를 입력하세요.");
+			lblNewLabel.setForeground(Color.GRAY);
+			lblNewLabel.setBounds(312, 212, 107, 16);
 			contentPanel.add(lblNewLabel);
 		}
 		{
 			tfID = new JTextField();
-			tfID.setBounds(330, 185, 213, 50);
+			tfID.setBounds(292, 195, 213, 50);
 			contentPanel.add(tfID);
 			tfID.setColumns(10);
 		}
 		{
-			JLabel lblMemberPassword = new JLabel("회원 패스워드 :");
-			lblMemberPassword.setBounds(234, 247, 141, 21);
+			JLabel lblMemberPassword = new JLabel("패스워드를 입력하세요.");
+			lblMemberPassword.setForeground(Color.GRAY);
+			lblMemberPassword.setBounds(312, 257, 141, 21);
 			contentPanel.add(lblMemberPassword);
 		}
 		contentPanel.add(getPfPassword());
 		contentPanel.add(getBtnNewButton());
 		contentPanel.add(getBtnNewButton_1());
-		contentPanel.add(getBtnNewButton_2());
+		contentPanel.add(getLblNewLabel_1());
+		contentPanel.add(getLblNewLabel_2());
 	
 	}
 	private JPasswordField getPfPassword() {
 		if (pfPassword == null) {
 			pfPassword = new JPasswordField();
-			pfPassword.setBounds(330, 232, 213, 50);
+			pfPassword.setBounds(292, 242, 213, 50);
 		}
 		return pfPassword;
 	}
@@ -114,7 +118,7 @@ public class LoginPage extends JDialog {
 					pressLogIn();
 				}
 			});
-			btnNewButton.setBounds(316, 304, 117, 47);
+			btnNewButton.setBounds(346, 311, 117, 47);
 		}
 		return btnNewButton;
 	}
@@ -166,7 +170,7 @@ public class LoginPage extends JDialog {
 					
 				}
 			});
-			btnNewButton_1.setIcon(new ImageIcon("/Users/tj/Desktop/ShoesMarketSemiProject/Shoes_Program/Shoes_Program/src/com/javalec/image/home1.png"));
+			btnNewButton_1.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/goToFirstPage.png")));
 			btnNewButton_1.setBounds(723, 25, 35, 29);
 		}
 		return btnNewButton_1;
@@ -219,38 +223,22 @@ public class LoginPage extends JDialog {
 //		this.setVisible(false);
 		
 	}
-	private JButton getBtnNewButton_2() {
-		if (btnNewButton_2 == null) {
-			btnNewButton_2 = new JButton("마이페이지");
-			btnNewButton_2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-						gotoUserUpdate();
-					 
-					
-				}
-			});
-			btnNewButton_2.setBounds(42, 476, 117, 29);
+	
+	
+	private JLabel getLblNewLabel_1() {
+		if (lblNewLabel_1 == null) {
+			lblNewLabel_1 = new JLabel("New label");
+			lblNewLabel_1.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/login_new.png")));
+			lblNewLabel_1.setBounds(247, 203, 35, 35);
 		}
-		return btnNewButton_2;
+		return lblNewLabel_1;
 	}
-	
-	private void gotoUserUpdate() {
-		
-		
-		 UserUpdatePage1 userupdate = new UserUpdatePage1();
-		 
-			login_dialog.setVisible(false);
-
-			
-			userupdate.setVisible(true);
-			
-			dispose();
-			this.setVisible(false);
-		 
-		 
-		
+	private JLabel getLblNewLabel_2() {
+		if (lblNewLabel_2 == null) {
+			lblNewLabel_2 = new JLabel("");
+			lblNewLabel_2.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/Password_new.png")));
+			lblNewLabel_2.setBounds(250, 250, 35, 28);
+		}
+		return lblNewLabel_2;
 	}
-	
-	
 } // END

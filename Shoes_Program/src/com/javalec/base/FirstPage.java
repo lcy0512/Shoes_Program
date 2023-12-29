@@ -9,13 +9,19 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.javalec.function.ShareVar;
+
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class FirstPage extends JDialog {
-
+	
+	private static int noticeNum = 0;
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	
@@ -50,9 +56,22 @@ public class FirstPage extends JDialog {
 	 * Create the dialog.
 	 */
 	public FirstPage() {
-		setBounds(100, 100, 800,600);
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				
+				goNoticeBoard();
+				
+				
+			}
+		});
+		
+		// ShareVar 에서 프로그램공통 위치를 가져온다. 
+		setBounds(ShareVar.position_window_x	, ShareVar.position_window_y, 800,600);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(Color.WHITE);
+		//contentPanel.setBackground(Color.WHITE);
+		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -118,8 +137,6 @@ public class FirstPage extends JDialog {
 			contentPanel.add(btnPremiumMember);
 		}
 	}
-
-	
 	
 	private void normalCustomerLogin() {
 		
@@ -146,19 +163,23 @@ public class FirstPage extends JDialog {
 	
 	private void goToMainView() {
 		
-		
-		
 		firstdialog.setVisible(false);
-
 		MainView mainView  = new MainView();
 		mainView.setVisible(true);
 		dispose();
 		this.setVisible(false);
-		
-		
 	}
 
-	
+	private void goNoticeBoard() {
+		
+		if (noticeNum ==0) {
+		final NoticeBoard noticeBoard  = new NoticeBoard();
+		noticeBoard.setVisible(true);
+		noticeNum++;
+		
+		}
+		
+	}
 	
 	
 }// End

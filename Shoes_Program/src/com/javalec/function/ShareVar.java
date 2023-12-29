@@ -1,5 +1,7 @@
 package com.javalec.function;
 
+import java.awt.Color;
+
 public class ShareVar {
 
 	public static String dbName = "jdbc:mysql://127.0.0.1:3306/shoe_program?serverTimezone=UTC&characterEncoding=utf8&useSSL=FALSE";
@@ -9,12 +11,22 @@ public class ShareVar {
 	
 	
 	public static String userID = "";
+	/// Window setting
+	public static int position_window_x = 600;
+	public static int position_window_y = 250;
+	public static int window_size_x = 800;
+	public static int window_size_y = 600;
 	
-	public static int position_window_x = 500;
-	public static int position_window_y = 300;
+	// setBounds(ShareVar.position_window_x, ShareVar.position_window_y, ShareVar.window_size_x, ShareVar.window_size_y);
+	// contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 	
+	// Bulletin setting
+	public static int bulletin_x = 800;
+	public static int bulletin_y = 350;
+	
+	// Window color setting
 	public static int RGB_red = 247;
-	public static int RGB_green= 246;
+	public static int RGB_green = 246;
 	public static int RGB_blue= 248;
 	
 			

@@ -66,7 +66,7 @@ public class Dao_pjm {
 	// 검색결과를 Table 로 보내자
 	public ArrayList<Dto> selectList() {
 		ArrayList<Dto> dtoList = new ArrayList<Dto>();
-		String whereDefault = "select p.p_seq, p.brand, p.name, p.price, p.color, p.qty, p.size , d.date from product as p, delivery as d where p.p_seq = d.p_seq ";
+		String whereDefault = "select p_seq, brand, name, price, color, qty, size from product ";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
@@ -78,13 +78,12 @@ public class Dao_pjm {
 				int wkSeq = rs.getInt(1);
 				String wkBrand = rs.getString(2);
 				String wkName = rs.getString(3);
-				String wkPrice = rs.getString(4);
+				String wkPrice = String.format("%,3d",Integer.parseInt(rs.getString(4)));
 				String wkColor = rs.getString(5);
 				String wkQty = rs.getString(6);
 				String wkSize = rs.getString(7);
-				String wkDate = rs.getString(8);
 
-				Dto dto = new Dto(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize, wkDate);
+				Dto dto = new Dto(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
 				dtoList.add(dto);
 
 			}
@@ -111,7 +110,7 @@ public class Dao_pjm {
 				int wkSeq = rs.getInt(1);
 				String wkBarnd = rs.getString(2);
 				String wkName = rs.getString(3);
-				String wkPrice = rs.getString(4);
+				String wkPrice = String.format("%,3d",Integer.parseInt(rs.getString(4)));
 				String wkColor = rs.getString(5);
 				String wkQty = rs.getString(6);
 				String wkSize = rs.getString(7);
@@ -186,13 +185,6 @@ public class Dao_pjm {
 				ps.setBinaryStream(7, image);
 				ps.executeUpdate();
 
-	            String insertDelivey = "insert into delivery (p_seq, date, qty, price) values (?, NOW(), ?, ?) ";
-	            ps = conn_mysql.prepareStatement(insertDelivey);
-	            ps.setInt(1, p_seq);
-	            ps.setInt(2, Integer.parseInt(qty));
-	            ps.setInt(3, Integer.parseInt(price));
-	            ps.executeUpdate();                                                      
-	            
 			}
 
 		} catch (Exception e) {
@@ -289,5 +281,39 @@ public class Dao_pjm {
 		return result;
 
 	}
+	//제품명으로 검색
+	public ArrayList<Dto> searchName() {
+		ArrayList<Dto> dtoList = new ArrayList<Dto>();
+		String whereDefault = "select p_seq, brand, name, price, color, qty, size from product where like name = ? ";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(whereDefault);
+
+			while (rs.next()) {
+				int wkSeq = rs.getInt(1);
+				String wkBrand = rs.getString(2);
+				String wkName = rs.getString(3);
+				String wkPrice = String.format("%,3d",Integer.parseInt(rs.getString(4)));
+				String wkColor = rs.getString(5);
+				String wkQty = rs.getString(6);
+				String wkSize = rs.getString(7);
+
+				Dto dto = new Dto(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
+				dtoList.add(dto);
+
+			}
+			conn_mysql.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dtoList;
+	}
+	
+
+	
+	
 
 }

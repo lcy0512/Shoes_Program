@@ -452,7 +452,7 @@ public class DetailInfoPage extends JDialog {
 
 	// 바로구매 눌렀을 때 창에서 가져올 것들
 	private void getWindow() {
-		int sp_seq = MainView_Info.clickSeq; // sp_seq
+		int sp_seq = currentSeq(); // sp_seq
 		String scustomer_id = lblId.getText(); // scustomer_id
 		int sprice = Integer.parseInt(tfPrice.getText()); // sprice
 		String sdate = LocalDate.now().toString(); // sdate
@@ -472,8 +472,7 @@ public class DetailInfoPage extends JDialog {
 			if (result == JOptionPane.CLOSED_OPTION) {
 
 			} else if (result == JOptionPane.YES_OPTION) {
-				int sap_seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를
-														// 가져옴
+				int sap_seq = currentSeq(); // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 				String sapcustomer_id = lblId.getText();	// id 가져옴
 				int saveQty = (cbQty.getItemCount()-1);
 				Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id, saveQty);
@@ -500,5 +499,24 @@ public class DetailInfoPage extends JDialog {
 		}
 
 	}
+	
+	private int currentSeq() {
+		int seq = MainView_Info.clickSeq;
+		searchPseq();
+		return seq;
+	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 } // End

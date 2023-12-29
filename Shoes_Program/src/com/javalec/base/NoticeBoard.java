@@ -7,6 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.javalec.function.ShareVar;
+
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -35,8 +38,8 @@ public class NoticeBoard extends JDialog {
 	 */
 	public NoticeBoard() {
 		setTitle("공지사항");
-		setLocation(200,200);
-		setBounds(600, 500, 450, 300);
+
+		setBounds(ShareVar.bulletin_x, ShareVar.bulletin_y, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(new Color(46, 139, 87));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

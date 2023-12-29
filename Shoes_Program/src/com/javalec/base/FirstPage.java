@@ -29,10 +29,14 @@ public class FirstPage extends JDialog {
 	
 	/*
 	 * Description : Fist page
-	 * Date : 2023. 12. 27
+	 * Date : 2023. 12. 27~
 	 * Author : D Forrest Park
 	 * Update : 
-	 * 		1.  관리자용 페이지 버튼 입력되었을 경우???"????? 필요?
+	 * 		1.  관리자용 페이지 버튼 입력되었을 경우
+	 * 		
+	 * Update 2023.12.29
+	 * 		1. share bar 를 통해 윈도우 이 동 
+	 * 		2. 배경화면 바꿈 
 	 */
 	
 	
@@ -68,7 +72,7 @@ public class FirstPage extends JDialog {
 		});
 		
 		// ShareVar 에서 프로그램공통 위치를 가져온다. 
-		setBounds(ShareVar.position_window_x	, ShareVar.position_window_y, 800,600);
+		setBounds(ShareVar.position_window_x	, ShareVar.position_window_y, ShareVar.window_size_x,ShareVar.window_size_y);
 		getContentPane().setLayout(new BorderLayout());
 		//contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
@@ -87,14 +91,20 @@ public class FirstPage extends JDialog {
 					
 				}
 			});
+			{
+				JLabel lblNewLabel_2 = new JLabel("New label");
+				lblNewLabel_2.setIcon(new ImageIcon(FirstPage.class.getResource("/com/javalec/image/JUNES_LOGO.png")));
+				lblNewLabel_2.setBounds(296, 190, 230, 70);
+				contentPanel.add(lblNewLabel_2);
+			}
 			btnNotMember.setBackground(Color.WHITE);
 			btnNotMember.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			btnNotMember.setBounds(25, 411, 150, 53);
+			btnNotMember.setBounds(162, 307, 150, 120);
 			contentPanel.add(btnNotMember);
 		}
 		{
 			JButton btnMember = new JButton("멤버쉽회원 입장");
-			btnMember.setForeground(Color.BLUE);
+			btnMember.setForeground(Color.BLACK);
 			btnMember.setBackground(new Color(255, 255, 255));
 			btnMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -105,24 +115,18 @@ public class FirstPage extends JDialog {
 				}
 			});
 			btnMember.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			btnMember.setBounds(25, 279, 150, 120);
+			btnMember.setBounds(324, 307, 150, 120);
 			contentPanel.add(btnMember);
 		}
 		{
-			JLabel lblNewLabel = new JLabel("New label");
-			lblNewLabel.setIcon(new ImageIcon(FirstPage.class.getResource("/com/javalec/image/로고 .png")));
-			lblNewLabel.setBounds(376, 47, 500, 500);
-			contentPanel.add(lblNewLabel);
-		}
-		{
-			JLabel lblNewLabel_1 = new JLabel("신발가게");
-			lblNewLabel_1.setFont(new Font("Lucida Grande", Font.BOLD, 33));
-			lblNewLabel_1.setBounds(125, 148, 271, 86);
+			JLabel lblNewLabel_1 = new JLabel("JUmp With NEw Shoes.");
+			lblNewLabel_1.setFont(new Font("Libian SC", Font.ITALIC, 23));
+			lblNewLabel_1.setBounds(290, 260, 244, 53);
 			contentPanel.add(lblNewLabel_1);
 		}
 		{
 			JButton btnPremiumMember = new JButton("회원 가입");
-			btnPremiumMember.setForeground(Color.ORANGE);
+			btnPremiumMember.setForeground(Color.BLACK);
 			btnPremiumMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -133,8 +137,14 @@ public class FirstPage extends JDialog {
 				}
 			});
 			btnPremiumMember.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			btnPremiumMember.setBounds(195, 279, 166, 185);
+			btnPremiumMember.setBounds(486, 305, 166, 120);
 			contentPanel.add(btnPremiumMember);
+		}
+		{
+			JLabel lblNewLabel = new JLabel("");
+			lblNewLabel.setIcon(new ImageIcon(FirstPage.class.getResource("/com/javalec/image/FirstPageBack.jpeg")));
+			lblNewLabel.setBounds(0, 24, 800, 515);
+			contentPanel.add(lblNewLabel);
 		}
 	}
 	

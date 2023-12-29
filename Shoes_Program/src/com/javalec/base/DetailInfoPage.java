@@ -163,6 +163,7 @@ public class DetailInfoPage extends JDialog {
 			btnBucket2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					bucketClick();
+					System.out.println(0);
 				}
 			});
 			btnBucket2.setBounds(150, 465, 200, 50);
@@ -477,6 +478,11 @@ public class DetailInfoPage extends JDialog {
 
 	// 장바구니 버튼을 눌렀을 때 다이얼로그를 띄워서 장바구니 페이지로 갈지 안갈지 확인
 	private void bucketClick() {
+		
+		
+		System.out.println(ShareVar.userID);
+		
+		
 		if (ShareVar.userID.equals("")) {
 			JOptionPane.showMessageDialog(null, "로그인이 필요합니다."); // 로그인이 되어있지 않다면 구매 불가
 		} else if (cbQty.getSelectedIndex() == 0) {

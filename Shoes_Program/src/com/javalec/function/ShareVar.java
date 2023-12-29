@@ -25,13 +25,14 @@ public class ShareVar {
 	
 	
 	
-	public static String userID = "";
+	public static String userID = "123";
 	/// Window setting
 	public static int position_window_x = 600;
 	public static int position_window_y = 250;
 	public static int window_size_x = 800;
 	public static int window_size_y = 600;
 	
+	//********** 각 다이얼로그에 다음 두 줄을 추가 혹은 수정하시오 ******************
 	// setBounds(ShareVar.position_window_x, ShareVar.position_window_y, ShareVar.window_size_x, ShareVar.window_size_y);
 	// contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 	

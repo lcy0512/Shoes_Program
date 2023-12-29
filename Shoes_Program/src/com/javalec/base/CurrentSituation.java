@@ -1,6 +1,7 @@
 package com.javalec.base;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.table.TableColumn;
 import com.javalec.function.Dao_pjh_CurrentSituation;
 import com.javalec.function.Dto;
 import com.javalec.function.Dto_pjh_CurrentSituation;
+import com.javalec.function.ShareVar;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -30,6 +32,21 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class CurrentSituation extends JDialog {
+	
+	
+	
+	
+	
+	/*
+	 * Description : 매출 현황 페이지  
+	 * Date : 2023.12.29 
+	 * Author : 박지환 
+	 * Update :
+	 * 		1. page 중앙이동 및 색깔 통합  update by pdg
+	 * 		2. 다른 화면 페이지 아이콘 추가 by pdg
+	 * 		3. 뒤로가기 버튼  수정, exit 버튼 없앰. 
+	 * 
+	 */
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -70,10 +87,11 @@ public class CurrentSituation extends JDialog {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				exitAction();
+		
 			}
 		});
-		setBounds(100, 100, 800, 600);
+		setBounds(ShareVar.position_window_x,ShareVar.position_window_y, ShareVar.window_size_x,ShareVar.window_size_x);
+		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -197,23 +215,27 @@ public class CurrentSituation extends JDialog {
 
 	}
 
-	private void exitAction() {
-		dispose();
-		this.setVisible(false);
-		ManagerPage_ window =new ManagerPage_();
-		window.setVisible(true);
-		
-	}
+
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("뒤로가기");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-				exitAction();
+				backToManagerPage();
 				}
 			});
 			btnNewButton.setBounds(44, 45, 117, 29);
 		}
 		return btnNewButton;
+	}
+	
+	
+	private void backToManagerPage() {
+		
+		
+		ManagerPage managerPage = new ManagerPage();
+		
+		managerPage.setVisible(true);
+		this.setVisible(false);
 	}
 }// end

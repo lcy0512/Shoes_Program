@@ -143,10 +143,11 @@ public class ManagerPage extends JDialog {
 			cbSelection = new JComboBox();
 			cbSelection.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					selectAction();
+					selectWhat();
 				}
+
 			});
-			cbSelection.setModel(new DefaultComboBoxModel(new String[] { "모든품목", "입고내역", "제품명", "입고일" }));
+			cbSelection.setModel(new DefaultComboBoxModel(new String[] { "모든품목", "브랜드", "제품명", "사이즈" }));
 			cbSelection.setBounds(20, 55, 104, 27);
 		}
 		return cbSelection;
@@ -225,7 +226,6 @@ public class ManagerPage extends JDialog {
 			btnSearch = new JButton("검색");
 			btnSearch.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					shootAction();
 				}
 			});
 			btnSearch.setBounds(302, 54, 117, 29);
@@ -245,7 +245,7 @@ public class ManagerPage extends JDialog {
 	private JLabel getLblImage() {
 		if (lblImage == null) {
 			lblImage = new JLabel("");
-			lblImage.setIcon(new ImageIcon(ManagerPage.class.getResource("/com/javalec/image/금지.jpeg")));
+			lblImage.setIcon(new ImageIcon(ManagerPage.class.getResource("/com/javalec/image/사진.png")));
 			lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 			lblImage.setBounds(523, 326, 255, 158);
 		}
@@ -437,9 +437,8 @@ public class ManagerPage extends JDialog {
 		outerTable.addColumn("색상 ");
 		outerTable.addColumn("재고 ");
 		outerTable.addColumn("size ");
-		outerTable.addColumn("입고일");
 
-		outerTable.setColumnCount(8);
+		outerTable.setColumnCount(7);
 		// 컬럼 크기 정하기
 		int colNo = 0;
 		TableColumn col = inner_Table.getColumnModel().getColumn(colNo);
@@ -447,11 +446,11 @@ public class ManagerPage extends JDialog {
 		col.setPreferredWidth(width);
 		colNo = 1;
 		col = inner_Table.getColumnModel().getColumn(colNo);
-		width = 50;
+		width = 100;
 		col.setPreferredWidth(width);
 		colNo = 2;
 		col = inner_Table.getColumnModel().getColumn(colNo);
-		width = 70;
+		width = 80;
 		col.setPreferredWidth(width);
 		colNo = 3;
 		col = inner_Table.getColumnModel().getColumn(colNo);
@@ -467,12 +466,7 @@ public class ManagerPage extends JDialog {
 		col.setPreferredWidth(width);
 		colNo = 6;
 		col = inner_Table.getColumnModel().getColumn(colNo);
-		width = 60;
-		col.setPreferredWidth(width);
-		colNo = 7;
-		col = inner_Table.getColumnModel().getColumn(colNo);
-		width = 100;
-		col.setPreferredWidth(width);
+		width = 50;
 
 		inner_Table.setAutoResizeMode(inner_Table.AUTO_RESIZE_OFF);
 
@@ -494,7 +488,7 @@ public class ManagerPage extends JDialog {
 		for (int i = 0; i < listCount; i++) {
 			String temp = Integer.toString(dtoList.get(i).getP_seq());
 			String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
-					dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize(), dtoList.get(i).getDate()};
+					dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
 			outerTable.addRow(qTxt);
 		}
 
@@ -506,10 +500,9 @@ public class ManagerPage extends JDialog {
 		if (rbSearch.isSelected()) {
 			screenPartition();
 			tableInit();
-			shootAction();
 			clearColumn();
 		}
-			
+
 		// 입력일 경우
 		if (rbInsert.isSelected()) {
 			int i_chk = insertFieldCheck();
@@ -568,9 +561,20 @@ public class ManagerPage extends JDialog {
 			lblImage.setEnabled(true);
 
 		}
+		// 입력 버튼 선택후 클리어 컬럼
 
-		// 입력,수정 일 경우
-		if (rbInsert.isSelected() || rbUpdate.isSelected()) {
+		if (rbInsert.isSelected()) {
+			btnOK.setVisible(true);
+			tfBrand.setEditable(true);
+			tfName.setEditable(true);
+			tfPrice.setEditable(true);
+			tfColor.setEditable(true);
+			cbSelection1.setEditable(true);
+			lblImage.setEnabled(true);
+			clearColumn();
+		}
+		// 수정 일 경우
+		if (rbUpdate.isSelected()) {
 			btnOK.setVisible(true);
 			tfBrand.setEditable(true);
 			tfName.setEditable(true);
@@ -620,23 +624,21 @@ public class ManagerPage extends JDialog {
 
 	private void insertAction() {
 		String brand = tfBrand.getText().trim();
- 		String name = tfName.getText().trim();
+		String name = tfName.getText().trim();
 		String price = tfPrice.getText().trim();
 		String color = tfColor.getText().trim();
 		String qty = tfQty.getText().trim();
 		String size = cbSelection1.getSelectedItem().toString();
-		
-		
+
 		FileInputStream input = null;
 		File file = new File(tfFilePath.getText());
 		try {
 			input = new FileInputStream(file);
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 
-		
 		Dao_pjm dao = new Dao_pjm(brand, name, price, color, qty, size, input);
 		boolean result = dao.insertAction();
 
@@ -722,12 +724,13 @@ public class ManagerPage extends JDialog {
 		tfQty.setText("");
 		cbSelection1.setSelectedItem("");
 		tfFilePath.setText("");
-		lblImage.setIcon(new ImageIcon(ManagerPage.class.getResource("/com/javalec/image/금지.jpeg")));
-		
+		lblImage.setIcon(new ImageIcon(ManagerPage.class.getResource("/com/javalec/image/사진.png")));
+
 	}
+
 	private void filePath() {
 		JFileChooser chooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG","PNG", "BMP","JPEG");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG", "PNG", "BMP", "JPEG");
 		chooser.setFileFilter(filter);
 
 		int ret = chooser.showOpenDialog(null);
@@ -740,15 +743,27 @@ public class ManagerPage extends JDialog {
 		tfFilePath.setText(filePath);
 		lblImage.setIcon(new ImageIcon(filePath));
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
-		
-	}
-	
-	private void shootAction() {
-		
 
 	}
-	private void selectAction() {
-		
+
+	private void searchName() {
+		Dao_pjm dao = new Dao_pjm();
+		ArrayList<Dto> dtoList = dao.searchName();
+
+		int listCount = dtoList.size();
+
+		for (int i = 0; i < listCount; i++) {
+			String temp = Integer.toString(dtoList.get(i).getP_seq());
+			String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
+					dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
+			outerTable.addRow(qTxt);
+		}
+
 	}
 
+	private void selectWhat() {
+		
+			
+
+	}
 }// End

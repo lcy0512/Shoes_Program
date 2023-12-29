@@ -482,15 +482,15 @@ public class DetailInfoPage extends JDialog {
 		} else if (cbQty.getSelectedIndex() == 0) {
 			JOptionPane.showMessageDialog(null, "수량을 선택해주세요.");
 		} else {
+			int sap_seq = searchPseq(); // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+			String sapcustomer_id = lblId.getText(); // id 가져옴
+			int saveQty = (cbQty.getItemCount() - 1);
+			Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id, saveQty);
+			dao_wdh.insertAction(); // 임시저장 Entity에 넣어줌
 			int result = JOptionPane.showConfirmDialog(null, "장바구니로 이동할까요?", "", JOptionPane.YES_NO_OPTION);
 			// 로그인이 되어 있다면 장바구니 메세지 출력
 			if (result == JOptionPane.CLOSED_OPTION) {
 			} else if (result == JOptionPane.YES_OPTION) {
-				int sap_seq = searchPseq(); // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
-				String sapcustomer_id = lblId.getText(); // id 가져옴
-				int saveQty = (cbQty.getItemCount() - 1);
-				Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id, saveQty);
-				dao_wdh.insertAction(); // 임시저장 Entity에 넣어줌
 				JOptionPane.showMessageDialog(null, "상품을 장바구니에 저장하였습니다"); // 메세지 출력
 				dispose(); // 화면 종료는 dispose();로 해주면 됨
 				this.setVisible(false); // 화면 종료

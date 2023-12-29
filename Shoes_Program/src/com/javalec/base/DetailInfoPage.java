@@ -204,7 +204,7 @@ public class DetailInfoPage extends JDialog {
 		if (lblNewLabel_2_1 == null) {
 			lblNewLabel_2_1 = new JLabel("수량 :");
 			lblNewLabel_2_1.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblNewLabel_2_1.setBounds(424, 160, 100, 30);
+			lblNewLabel_2_1.setBounds(424, 280, 100, 30);
 		}
 		return lblNewLabel_2_1;
 	}
@@ -216,7 +216,7 @@ public class DetailInfoPage extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
-			cbQty.setBounds(536, 163, 61, 25);
+			cbQty.setBounds(536, 283, 61, 25);
 		}
 		return cbQty;
 	}
@@ -225,7 +225,7 @@ public class DetailInfoPage extends JDialog {
 		if (lblNewLabel_2_1_1 == null) {
 			lblNewLabel_2_1_1 = new JLabel("색상 :");
 			lblNewLabel_2_1_1.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblNewLabel_2_1_1.setBounds(424, 220, 100, 30);
+			lblNewLabel_2_1_1.setBounds(424, 160, 100, 30);
 		}
 		return lblNewLabel_2_1_1;
 	}
@@ -244,7 +244,7 @@ public class DetailInfoPage extends JDialog {
 				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				}
 			});
-			cbColor.setBounds(536, 223, 112, 25);
+			cbColor.setBounds(536, 163, 94, 25);
 		}
 		return cbColor;
 	}
@@ -253,7 +253,7 @@ public class DetailInfoPage extends JDialog {
 		if (lblNewLabel_2_1_2 == null) {
 			lblNewLabel_2_1_2 = new JLabel("사이즈 :");
 			lblNewLabel_2_1_2.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblNewLabel_2_1_2.setBounds(424, 280, 100, 30);
+			lblNewLabel_2_1_2.setBounds(424, 220, 100, 30);
 		}
 		return lblNewLabel_2_1_2;
 	}
@@ -270,7 +270,7 @@ public class DetailInfoPage extends JDialog {
 				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				}
 			});
-			cbSize.setBounds(536, 283, 82, 25);
+			cbSize.setBounds(536, 223, 94, 25);
 		}
 		return cbSize;
 	}
@@ -304,12 +304,13 @@ public class DetailInfoPage extends JDialog {
 //		System.out.println(dao_wdh.viewDetailInfo());	// 잘 가져오는지 실험
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
 //		System.out.println(dto_wdh.getPname());			// 잘 출력하는지 실험
-
+		
 		tfName.setText(dto_wdh.getPname()); // 제품명 출력
 		cbQtyNum(); // 수량 넣기
 		cbColorColumn(); // 색깔 넣기
-		
+		cbColor.setSelectedItem(dto_wdh.getPcolor());
 		cbSizeColumn(); // 사이즈 넣기
+		cbSize.setSelectedItem(dto_wdh.getPsize());
 		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
 
 		// Image File
@@ -382,7 +383,6 @@ public class DetailInfoPage extends JDialog {
 	private void cbSizeColumn() {
 		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
-		dao_wdh.productSize(); // productColor Method 사용
 //		System.out.println(dao_wdh.productSize());	// ArrayList 잘 되었는지 확인
 		for (int i = 0; i < dao_wdh.productSize().size(); i++) {
 			cbSize.addItem(dao_wdh.productSize().get(i));
@@ -438,7 +438,7 @@ public class DetailInfoPage extends JDialog {
 
 	}
 
-	// cbColor의 색상을 통해 제품명, 색상, 사이즈를 통해 제품코드를 search
+	// 제품명, 색상, 사이즈를 통해 제품코드를 search
 	private int searchPseq() {
 		String pName = tfName.getText();
 		System.out.println(pName); // 이름 가져오기
@@ -453,7 +453,7 @@ public class DetailInfoPage extends JDialog {
 
 	// 바로구매 눌렀을 때 창에서 가져올 것들
 	private void getWindow() {
-		int sp_seq = currentSeq(); // sp_seq
+		int sp_seq = searchPseq(); // sp_seq
 		String scustomer_id = lblId.getText(); // scustomer_id
 		int sprice = Integer.parseInt(tfPrice.getText()); // sprice
 		String sdate = LocalDate.now().toString(); // sdate
@@ -473,7 +473,7 @@ public class DetailInfoPage extends JDialog {
 			if (result == JOptionPane.CLOSED_OPTION) {
 
 			} else if (result == JOptionPane.YES_OPTION) {
-				int sap_seq = currentSeq(); // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+				int sap_seq = searchPseq(); // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 				String sapcustomer_id = lblId.getText();	// id 가져옴
 				int saveQty = (cbQty.getItemCount()-1);
 				Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id, saveQty);
@@ -499,12 +499,6 @@ public class DetailInfoPage extends JDialog {
 			cbSize.addItem(dao_wdh.productSizeSearch(pName, pColor).get(i));
 		}
 
-	}
-	
-	private int currentSeq() {
-		int seq = MainView_Info.clickSeq;
-		searchPseq();
-		return seq;
 	}
 
 	

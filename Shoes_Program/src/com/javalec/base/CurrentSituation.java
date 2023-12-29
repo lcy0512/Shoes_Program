@@ -200,7 +200,7 @@ public class CurrentSituation extends JDialog {
 	private void exitAction() {
 		dispose();
 		this.setVisible(false);
-		ManagerPage window =new ManagerPage();
+		ManagerPage_ window =new ManagerPage_();
 		window.setVisible(true);
 		
 	}

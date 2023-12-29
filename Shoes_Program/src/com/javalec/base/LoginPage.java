@@ -178,6 +178,7 @@ public class LoginPage extends JDialog {
 	
 		}
 
+	// Login 버튼 실행시 
 	private void pressLogIn() {
 		
 		if(rbPattern1.isSelected()&&rbPattern2.isSelected()&&rbPattern3.isSelected()) {
@@ -198,7 +199,7 @@ public class LoginPage extends JDialog {
 			
 			if(id.equals("admin") && rbPattern1.isSelected()&&rbPattern2.isSelected()&&rbPattern3.isSelected() ) {
 				ShareVar.userID =id;
-				JOptionPane.showMessageDialog(null, "관리자 페이지로 이동합니다. ");
+				//JOptionPane.showMessageDialog(null, "관리자 페이지로 이동합니다. ");
 				goManagerPage();
 			}
 			

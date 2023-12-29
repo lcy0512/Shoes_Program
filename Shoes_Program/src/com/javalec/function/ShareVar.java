@@ -9,9 +9,18 @@ public class ShareVar {
 	
 	
 	public static String userID = "";
+	
+	public static int position_window_x = 500;
+	public static int position_window_y = 300;
+	
+	public static int RGB_red = 247;
+	public static int RGB_green= 246;
+	public static int RGB_blue= 248;
+	
+			
 
 	/*
-	 * Descritipon"
+	 * Descritipon"500	, 300
 	 * Author
 	 * Date :
 	 * update:

@@ -1,11 +1,9 @@
 package com.javalec.base;
 
 import java.awt.BorderLayout;
-//import java.awt.Container;
-//import java.awt.FlowLayout;
+import java.awt.Color;
 
 import javax.swing.ImageIcon;
-//import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -16,8 +14,6 @@ import javax.swing.table.TableColumn;
 
 import com.javalec.function.Dao_lcy;
 import com.javalec.function.Dto_lcy;
-//import com.javalec.function.ShareVar;
-//import com.mysql.cj.result.LocalDateTimeValueFactory;
 import com.javalec.function.ShareVar;
 
 import javax.swing.JScrollPane;
@@ -27,8 +23,6 @@ import javax.swing.SwingConstants;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//import java.io.File;
-//import java.sql.Date;
 import java.util.ArrayList;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -90,17 +84,18 @@ public class BuyList extends JDialog {
 	private JTextField tfSelectedProductName;
 	private JLabel lblNewLabel_3_1_2_1_1;
 	private JComboBox cbSelectedQty;
-	
-	
-	static BuyList buyDialog = new BuyList();
 	private JButton btnMoveMainView;
 	
 	
 	
 	
+	static BuyList buyDialog = new BuyList();
+	
 	public static void main(String[] args) {
 		try {
 			buyDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			buyDialog.setLocation(ShareVar.position_window_x,ShareVar.position_window_y);
+			buyDialog.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 			buyDialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,10 +111,11 @@ public class BuyList extends JDialog {
 			}
 		});
 		setTitle("장바구니");
-		setBounds(100, 100, 800, 600);
+		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, 800, 600);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 		contentPanel.setLayout(null);
 		contentPanel.add(getScrollPane());
 		contentPanel.add(getBtnDeleteList());
@@ -169,6 +165,7 @@ public class BuyList extends JDialog {
 				}
 				
 			});	
+			innerTable.setRowHeight(30);
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
 		}
@@ -237,7 +234,7 @@ public class BuyList extends JDialog {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("목록");
 			lblNewLabel_1.setFont(new Font("Lucida Grande", Font.BOLD, 40));
-			lblNewLabel_1.setBounds(360, 10, 200, 80);
+			lblNewLabel_1.setBounds(360, 6, 200, 80);
 		}
 		return lblNewLabel_1;
 	}
@@ -256,7 +253,7 @@ public class BuyList extends JDialog {
 		if (lblProductImage == null) {
 			lblProductImage = new JLabel("");
 			lblProductImage.setHorizontalAlignment(SwingConstants.CENTER);
-			lblProductImage.setBounds(43, 239, 206, 228);
+			lblProductImage.setBounds(43, 239, 220, 250);
 		}
 		return lblProductImage;
 	}
@@ -385,7 +382,7 @@ public class BuyList extends JDialog {
 	}
 	private JLabel getLblNewLabel_3_1_2_1_1() {
 		if (lblNewLabel_3_1_2_1_1 == null) {
-			lblNewLabel_3_1_2_1_1 = new JLabel("수량  :");
+			lblNewLabel_3_1_2_1_1 = new JLabel("선택 수량  :");
 			lblNewLabel_3_1_2_1_1.setBounds(551, 405, 61, 16);
 		}
 		return lblNewLabel_3_1_2_1_1;
@@ -397,7 +394,7 @@ public class BuyList extends JDialog {
 				public void popupMenuCanceled(PopupMenuEvent e) {
 				}
 				public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-//					calcPrice();
+					calcPrice();
 				}
 				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				}
@@ -440,12 +437,12 @@ public class BuyList extends JDialog {
 		// Table Column 크기 설정
 		int colNo = 0;
 		TableColumn col = innerTable.getColumnModel().getColumn(colNo);
-		int width = 100;
+		int width = 90;
 		col.setPreferredWidth(width);
 		
 		colNo = 1;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 120;
+		width = 100;
 		col.setPreferredWidth(width);
 		
 		colNo = 2;
@@ -455,22 +452,22 @@ public class BuyList extends JDialog {
 		
 		colNo = 3;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 100;
+		width = 120;
 		col.setPreferredWidth(width);
 		
 		colNo = 4;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 100;
+		width = 90;
 		col.setPreferredWidth(width);
 		
 		colNo = 5;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 100;
+		width = 110;
 		col.setPreferredWidth(width);
 		
 		colNo = 6;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 100;
+		width = 76;
 		col.setPreferredWidth(width);
 		
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
@@ -494,8 +491,8 @@ public class BuyList extends JDialog {
 								   dtoList.get(i).getName(), 
 								   dtoList.get(i).getPrice(), 
 								   dtoList.get(i).getColor(), 
-								   dtoList.get(i).getSize(),
-								   dtoList.get(i).getSaveQty()
+								   Integer.toString(dtoList.get(i).getSize()),
+								   Integer.toString(dtoList.get(i).getSaveQty())
 			};
 				outerTable.addRow(qTxt);
 		}
@@ -514,8 +511,8 @@ public class BuyList extends JDialog {
 		tfSelectedProductName.setText(dto.getName());
 		tfSelectedProductColor.setText(dto.getColor());
 		tfSelectedProductPrice.setText(dto.getPrice());
-		tfSelectedProductSize.setText(dto.getSize());
-		tfSelectedProductRemainQty.setText(dto.getQty());
+		tfSelectedProductSize.setText(Integer.toString(dto.getSize()));
+		tfSelectedProductRemainQty.setText(Integer.toString(dto.getSaveQty()));
 		tfSelectedAllPrice.setText("0");
 		
 		String filePath = Integer.toString(ShareVar.filename);
@@ -526,9 +523,8 @@ public class BuyList extends JDialog {
 		File file = new File(filePath);
 		file.delete();
 
-		int saveSelectedQty =	Integer.parseInt(dto.getSaveQty());
+		int saveSelectedQty = dto.getQty();
 		int selectedProductRemainQty = Integer.parseInt(tfSelectedProductRemainQty.getText());
-		
 		cbSelectedQty.removeAllItems(); // cb remove
 		for (int j = 0; j <= selectedProductRemainQty; j++) { 
 			cbSelectedQty.addItem(j); // cb item add
@@ -543,7 +539,7 @@ public class BuyList extends JDialog {
 		boolean result = dao.deleteAction();
 		
 		if(result == true) {
-			JOptionPane.showMessageDialog(null, "[사용자명]님의 목록이 삭제되었습니다.");
+			JOptionPane.showMessageDialog(null, "목록이 삭제되었습니다.");
 		}
 		else {
 			JOptionPane.showMessageDialog(null, "삭제 중 문제가 발생하였습니다.");
@@ -551,21 +547,32 @@ public class BuyList extends JDialog {
 	}
 	
 	private void buyAction() { // 장바구니에서 구매 확정 버튼을 눌렀을때 
+		
 		if(cbSelectedQty.getSelectedItem().toString().equals("")) { 
 			JOptionPane.showMessageDialog(null, "수량이 입력되지 않았습니다.");
 		}
 		else {
 //			product_p_seq, customer_customer_id, price , qty
+			String inputString = tfSelectedProductPrice.getText().toString();
+			String input = inputString.replaceAll(",", "");
+			int x = Integer.parseInt(input);
+			// x - ProductPrice
+			// cbSelectedQty.getSelectedItem().toString() - 몇 개 구입하려는 수량
 			Dao_lcy dao = new Dao_lcy(Integer.parseInt(tfSelectedProductSeqNo.getText()),
-									  "qpdlql512",
-									  tfSelectedProductPrice.getText().toString(),
-									  cbSelectedQty.getSelectedItem().toString());
-			boolean result = dao.buyAction();
+									  ShareVar.userID,
+									  x,
+									  Integer.parseInt(cbSelectedQty.getSelectedItem().toString()));
+			boolean result = dao.buyAction(); // sale로 insert
+			
 			
 			if(result == true) {
-				dao.deleteAction();
-				JOptionPane.showMessageDialog(null, "선택한 제품이 구매되었습니다.");
 				dao = new Dao_lcy(Integer.parseInt(tfSelectedProductSeqNo.getText()));
+				dao.deleteAction(); // save에서 삭제
+				dao = new Dao_lcy(Integer.parseInt(tfSelectedProductSeqNo.getText()),
+								  Integer.parseInt(tfSelectedProductRemainQty.getText()),
+								  Integer.parseInt(cbSelectedQty.getSelectedItem().toString()));
+				dao.updateAction();
+				JOptionPane.showMessageDialog(null, "선택한 제품이 구매되었습니다.");
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "구매 중 문제가 발생하였습니다.");
@@ -607,7 +614,6 @@ public class BuyList extends JDialog {
 			buyAction();
 			searchAction();
 			clearColumn();
-			System.out.println(innerTable.getRowCount());
 			if(innerTable.getRowCount()==0) {
 				buyDialog.setVisible(false);
 				MainView mainView  = new MainView();
@@ -615,20 +621,34 @@ public class BuyList extends JDialog {
 			}
 		}
 	}
+	
+//	private void deleteReConfirm() {
+//		int result = JOptionPane.showConfirmDialog(null, "정말로 삭제하시겠습니까?","목록 삭제",JOptionPane.YES_NO_OPTION);
+//		if(result == JOptionPane.YES_OPTION) {
+//			listDeleteAction();
+//			searchAction();
+//			clearColumn();
+//			if(innerTable.getRowCount()==0) {
+//				buyDialog.setVisible(false);
+//				MainView mainView  = new MainView();
+//				mainView.setVisible(true);
+//			}
+//		}
+//	}
 	
 	private void deleteReConfirm() {
-		int result = JOptionPane.showConfirmDialog(null, "정말로 삭제하시겠습니까?","목록 삭제",JOptionPane.YES_NO_OPTION);
-		if(result == JOptionPane.YES_OPTION) {
-			listDeleteAction();
-			searchAction();
-			clearColumn();
-			if(innerTable.getRowCount()==0) {
-				buyDialog.setVisible(false);
-				MainView mainView  = new MainView();
-				mainView.setVisible(true);
-			}
-		}
+	    int result = JOptionPane.showConfirmDialog(null, "정말로 삭제하시겠습니까?", "목록 삭제", JOptionPane.YES_NO_OPTION);
+	    if (result == JOptionPane.YES_OPTION) {
+	        listDeleteAction();
+	        searchAction();
+	        clearColumn();
+	        if (innerTable.getRowCount() == 0) {
+	            JOptionPane.showMessageDialog(null, "삭제되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+	            buyDialog.setVisible(false);
+	            MainView mainView = new MainView();
+	            mainView.setVisible(true);
+	        }
+	    }
 	}
-	
 	
 } // End

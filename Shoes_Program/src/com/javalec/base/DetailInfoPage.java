@@ -308,6 +308,7 @@ public class DetailInfoPage extends JDialog {
 		tfName.setText(dto_wdh.getPname()); // 제품명 출력
 		cbQtyNum(); // 수량 넣기
 		cbColorColumn(); // 색깔 넣기
+		
 		cbSizeColumn(); // 사이즈 넣기
 		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
 

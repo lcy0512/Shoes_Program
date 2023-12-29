@@ -17,6 +17,7 @@ public class Dto_lcy {
 	String color;
 	String qty;
 	String size;
+	String saveqty;
 //	FileInputStream file;
 	
 	
@@ -46,6 +47,18 @@ public class Dto_lcy {
 		this.color = color;
 		this.qty = qty;
 		this.size = size;
+	}
+
+	public Dto_lcy(int p_seq, String brand, String name, String price, String color, String size, String qty, String saveqty) {
+		super();
+		this.p_seq = p_seq;
+		this.brand = brand;
+		this.name = name;
+		this.price = price;
+		this.color = color;
+		this.qty = qty;
+		this.size = size;
+		this.saveqty = saveqty;
 	}
 
 
@@ -119,6 +132,15 @@ public class Dto_lcy {
 		this.size = size;
 	}
 
-	
+
+	public String getSaveQty() {
+		return saveqty;
+	}
+
+
+	public void setSaveQty(String saveqty) {
+		this.saveqty = saveqty;
+	}
+
 	
 }

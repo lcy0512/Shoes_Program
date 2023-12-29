@@ -51,6 +51,7 @@ public class Dao_wdh {
 	int saseq;
 	int sap_seq;
 	String sacustomer_id;
+	int saveqty;
 
 	//
 	int stock;
@@ -72,10 +73,11 @@ public class Dao_wdh {
 		this.stock = stock;
 	}
 
-	public Dao_wdh(int sap_seq, String sacustomer_id) {
+	public Dao_wdh(int sap_seq, String sacustomer_id, int saveqty) {
 		super();
 		this.sap_seq = sap_seq;
 		this.sacustomer_id = sacustomer_id;
+		this.saveqty = saveqty;
 	}
 
 	public Dao_wdh(String pname, String pcolor, int psize) {
@@ -199,11 +201,12 @@ public class Dao_wdh {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 
-			String insert = "insert into save (p_seq, customer_id) values (?, ?)";
+			String insert = "insert into save (p_seq, customer_id, saveQty) values (?, ?, ?)";
 
 			ps = conn_mysql.prepareStatement(insert);
 			ps.setInt(1, sap_seq);
 			ps.setString(2, sacustomer_id);
+			ps.setInt(3, saveqty);
 			ps.executeUpdate(); // 무조건 executeUpdate를 해줄것!!!!!!!!!!!!
 
 			conn_mysql.close();

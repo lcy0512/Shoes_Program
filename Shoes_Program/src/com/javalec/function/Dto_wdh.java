@@ -38,6 +38,8 @@ public class Dto_wdh {
 	int saseq;
 	int sap_seq;
 	String sacustomer_id;
+	int saveQty;
+
 	
 	// Constructor
 	
@@ -129,6 +131,18 @@ public class Dto_wdh {
 	}
 
 	public void setFile(FileInputStream pimage) {
+		this.pimage = pimage;
+	}
+
+	public int getSaveQty() {
+		return saveQty;
+	}
+
+	public void setSaveQty(int saveQty) {
+		this.saveQty = saveQty;
+	}
+
+	public void setPimage(FileInputStream pimage) {
 		this.pimage = pimage;
 	}
 

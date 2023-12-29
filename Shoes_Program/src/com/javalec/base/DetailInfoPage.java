@@ -261,6 +261,15 @@ public class DetailInfoPage extends JDialog {
 	private JComboBox getCbSize() {
 		if (cbSize == null) {
 			cbSize = new JComboBox();
+			cbSize.addPopupMenuListener(new PopupMenuListener() {
+				public void popupMenuCanceled(PopupMenuEvent e) {
+				}
+				public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+					sizeChange();
+				}
+				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				}
+			});
 			cbSize.setBounds(536, 283, 82, 25);
 		}
 		return cbSize;
@@ -382,13 +391,39 @@ public class DetailInfoPage extends JDialog {
 	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시 search
 	private void colorChange() {
 		cbSize.removeAllItems();
-//		cbQty.removeAllItems();
+		cbQty.removeAllItems();
+		
 		searchSizeCb();
+		Dao_wdh dao_wdh = new Dao_wdh(searchPseq()); // Dao에 seq를 보냄
+		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
+		
+		for (int i = 0; i <= dao_wdh.viewDetailInfo().getPqty(); i++) {		// 수량 콤보박스를 만듬
+			cbQty.addItem(i);
+		}
+
+		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
+
+		// Image File
+		String filePath = Integer.toString(ShareVar_wdh.image);
+
+		lblImage.setIcon(new ImageIcon(filePath));
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+
+		File file = new File(filePath);
+		file.delete();
+	}
+	
+	// cbSize의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시 search
+	private void sizeChange() {
+		cbQty.removeAllItems();
 		
 		Dao_wdh dao_wdh = new Dao_wdh(searchPseq()); // Dao에 seq를 보냄
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
+		
+		for (int i = 0; i <= dao_wdh.viewDetailInfo().getPqty(); i++) {		// 수량 콤보박스를 만듬
+			cbQty.addItem(i);
+		}
 
-		cbQtyNum(); // 수량 넣기
 		tfPrice.setText(Integer.toString(dto_wdh.getPprice())); // 제품 가격 출력
 
 		// Image File
@@ -440,7 +475,8 @@ public class DetailInfoPage extends JDialog {
 				int sap_seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를
 														// 가져옴
 				String sapcustomer_id = lblId.getText();	// id 가져옴
-				Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id);
+				int saveQty = (cbQty.getItemCount()-1);
+				Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id, saveQty);
 				dao_wdh.insertAction();	// 임시저장 Entity에 넣어줌
 				JOptionPane.showMessageDialog(null, "상품을 장바구니에 저장하였습니다");	// 메세지 출력
 				dispose(); // 화면 종료는 dispose();로 해주면 됨

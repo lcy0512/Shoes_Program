@@ -14,8 +14,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.mysql.cj.result.LocalDateTimeValueFactory;
-
 public class Dao_lcy {
 	
 	// Field
@@ -27,10 +25,11 @@ public class Dao_lcy {
 	int p_seq;
 	String brand;
 	String name;
-	String price;
+	int price;
 	String color;
-	String qty;
-	String size;
+	int qty;
+	int size;
+	int saveqty;
 	FileInputStream file;
 	
 	// [customer]
@@ -42,17 +41,20 @@ public class Dao_lcy {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Dao_lcy(String qty) {
-		super();
-		this.qty = qty;
-	}
-	
 	public Dao_lcy(int p_seq) {
 		super();
 		this.p_seq = p_seq;
 	}
 	
-	public Dao_lcy(int p_seq, String brand, String name, String price, String color, String qty, String size,
+	public Dao_lcy(int p_seq, int qty, int saveqty) {
+		super();
+		this.p_seq = p_seq;
+		this.qty = qty;
+		this.saveqty = saveqty;
+	}
+	
+	
+	public Dao_lcy(int p_seq, String brand, String name, int price, String color, int qty, int size,
 			String customer_id) {
 		super();
 		this.p_seq = p_seq;
@@ -65,7 +67,7 @@ public class Dao_lcy {
 		this.customer_id = customer_id;
 	}
 
-	public Dao_lcy(int p_seq, String customer_id, String price, String qty) {
+	public Dao_lcy(int p_seq, String customer_id, int price, int qty) {
 		super();
 		this.p_seq = p_seq;
 		this.customer_id = customer_id;
@@ -73,7 +75,7 @@ public class Dao_lcy {
 		this.qty = qty;
 	}
 	
-	public Dao_lcy(int p_seq, String brand, String name, String price, String color, String size, String qty,
+	public Dao_lcy(int p_seq, String brand, String name, int price, String color, int size, int qty,
 			FileInputStream file) {
 		super();
 		this.p_seq = p_seq;
@@ -87,10 +89,9 @@ public class Dao_lcy {
 	}
 	
 
-
 	// Method 
 
-
+// =============================================================[BuyList]===================================================================
 	// 검색 결과를 Table로 보내기
 	public ArrayList<Dto_lcy> selectList() { 
 		ArrayList<Dto_lcy> Dto_lcyList = new ArrayList<Dto_lcy>();
@@ -111,10 +112,10 @@ public class Dao_lcy {
 				String wkName = rs.getString(3);
 				String wkPrice = String.format("%,3d", Integer.parseInt(rs.getString(4)));
 				String wkColor = rs.getString(5);
-				String wkSize = rs.getString(6);
-				String wkSaveQty = rs.getString(7);
-				String wkqty = "";
-				Dto_lcy dto = new Dto_lcy(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkqty, wkSize, wkSaveQty);
+				int wkSize = rs.getInt(6);
+				int wkSaveQty = rs.getInt(7);
+				int wkqty = 1;
+				Dto_lcy dto = new Dto_lcy(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkSize, wkSaveQty, wkqty);
 				Dto_lcyList.add(dto);
 			}
 			
@@ -146,9 +147,9 @@ public class Dao_lcy {
 				String wkName = rs.getString(3);
 				String wkPrice = String.format("%,3d",Integer.parseInt(rs.getString(4)));
 				String wkColor = rs.getString(5);
-				String wkSize = rs.getString(6);
-				String wkQty = rs.getString(7);
-				String wkSaveQty = rs.getString(9);
+				int wkSize = rs.getInt(6);
+				int wkQty = rs.getInt(7);
+				int wkSaveQty = rs.getInt(9);
 				
 				// file(Image)
 				ShareVar.filename = ShareVar.filename + 1;
@@ -172,7 +173,7 @@ public class Dao_lcy {
 		return Dto_lcy;
 	} 
 	
-	// 구매확정
+	// 구매 확정
 	public boolean buyAction() {
 		PreparedStatement ps = null;
 		boolean result;
@@ -180,17 +181,20 @@ public class Dao_lcy {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-//			Statement stmt_mysql = conn_mysql.createStatement();
+			Statement stmt_mysql = conn_mysql.createStatement();
 			
-			String A = "insert into sale (product_p_seq, customer_customer_id, price , date ,qty)";
+			String A = "insert into sale (product_p_seq, customer_customer_id, price, date, qty)";
 			String B = " values (?,?,?,CAST(now() as date),?)";
 			
+			
+			String input = Integer.toString(price).replaceAll(",", ""); // 쉼표(,) 제거
+			price = Integer.parseInt(input);
+			
 			ps = conn_mysql.prepareStatement(A+B);
-			// 
 			ps.setInt(1,p_seq);
-			ps.setString(2, customer_id);
-			ps.setString(3, price);
-			ps.setInt(4, Integer.parseInt(qty));
+			ps.setString(2, "qpdlql512");
+			ps.setInt(3, price);
+			ps.setInt(4, qty);
 			ps.executeUpdate();
 			
 			conn_mysql.close();
@@ -203,7 +207,7 @@ public class Dao_lcy {
 	}
 
 	
-	// 목록삭제
+	// save에서 목록 삭제
 	public boolean deleteAction() {
 		PreparedStatement ps = null;
 		boolean result;
@@ -227,5 +231,77 @@ public class Dao_lcy {
 		return result;
 	}
 
+	// 재고 변경
+	public boolean updateAction() {
+		PreparedStatement ps = null;
+		boolean result;
+		
+		String where = "update product set qty = ? where p_seq = ?";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			ps = conn_mysql.prepareStatement(where);
+			ps.setInt(1,qty-saveqty);
+			ps.setInt(2, p_seq);
+			
+			ps.executeUpdate();
+			
+			conn_mysql.close();
+			
+		}catch(Exception e) {
+			System.out.println("update error");
+			result = false;
+		}
+		result = true;
+		return result;
+	}
 
+	
+	
+	
+	
+	// ===========================================================[OrderList]==============================================================
+	
+	
+	// 검색 결과를 Table로 보내기
+		public ArrayList<Dto_lcy> showOrderList() { 
+			ArrayList<Dto_lcy> Dto_lcyList = new ArrayList<Dto_lcy>();
+			String whereDefault = "select p.p_seq, p.brand, p.name, p.price, p.color, p.size, sale.qty, sale.date";
+			String where1 = " from product as p, sale";
+			String where2 = " where (p.p_seq = sale.product_p_seq) and customer_customer_id = " + "'qpdlql512'";
+//			===================================================================================[ShareVar.userId]================================
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+				Statement stmt_mysql = conn_mysql.createStatement();
+				
+				ResultSet rs = stmt_mysql.executeQuery(whereDefault+where1+where2);
+				
+				while(rs.next()) {
+					int wkSeq = rs.getInt(1);
+					String wkBrand = rs.getString(2);
+					String wkName = rs.getString(3);
+					String wkPrice = String.format("%,3d", Integer.parseInt(rs.getString(4)));
+					String wkColor = rs.getString(5);
+					int wkSize = rs.getInt(6);
+					int wkSaveQty = rs.getInt(7);
+					Date wkDate = rs.getDate(8);
+					Dto_lcy dto = new Dto_lcy(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkSize, wkSaveQty, wkDate);
+					Dto_lcyList.add(dto);
+				}
+				
+				conn_mysql.close();
+				
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			return Dto_lcyList;
+		} 
+	
+		
+		
+		
 }

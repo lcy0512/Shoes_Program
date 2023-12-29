@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.javalec.function.Dao_wdh;
 import com.javalec.function.Dto_wdh;
+import com.javalec.function.ShareVar;
 import com.javalec.function.ShareVar_wdh;
 import com.javalec.product.MainView_Info;
 
@@ -95,8 +96,9 @@ public class DetailInfoPage extends JDialog {
 				deactivatedScreen();
 			}
 		});
-		setBounds(100, 100, 800, 600);
+		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, 800, 600);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -264,9 +266,11 @@ public class DetailInfoPage extends JDialog {
 			cbSize.addPopupMenuListener(new PopupMenuListener() {
 				public void popupMenuCanceled(PopupMenuEvent e) {
 				}
+
 				public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 					sizeChange();
 				}
+
 				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				}
 			});
@@ -304,7 +308,7 @@ public class DetailInfoPage extends JDialog {
 //		System.out.println(dao_wdh.viewDetailInfo());	// 잘 가져오는지 실험
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
 //		System.out.println(dto_wdh.getPname());			// 잘 출력하는지 실험
-		
+
 		tfName.setText(dto_wdh.getPname()); // 제품명 출력
 		cbQtyNum(); // 수량 넣기
 		cbColorColumn(); // 색깔 넣기
@@ -343,26 +347,9 @@ public class DetailInfoPage extends JDialog {
 		}
 	}
 
-	// 즉시 구매 버튼을 눌렀을 때
-	private void buyClick() {
-		if (lblId.getText().equals("로그인이 필요합니다.")) {
-			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");
-		} else {
-			int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
-			String num = cbQty.getSelectedItem().toString();
-			int stock = currentStock() - Integer.parseInt(num);
-			Dao_wdh dao_wdh = new Dao_wdh(seq, stock);
-			dao_wdh.updateAction();
-			getWindow();
-			deactivatedScreen();
-			activatedScreen();
-			JOptionPane.showMessageDialog(null, "구매를 완료하였습니다.");
-		}
-	}
-
 	// 현재 재고가 몇개인지 나타내는 function
 	private int currentStock() {
-		int seq = MainView_Info.clickSeq; // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+		int seq = searchPseq(); // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
 		Dao_wdh dao_wdh = new Dao_wdh(seq); // Dao에 seq를 보냄
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
 		int cStock = dto_wdh.getPqty();
@@ -389,16 +376,17 @@ public class DetailInfoPage extends JDialog {
 		}
 	}
 
-	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시 search
+	// cbColor의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시
+	// search
 	private void colorChange() {
 		cbSize.removeAllItems();
 		cbQty.removeAllItems();
-		
+
 		searchSizeCb();
 		Dao_wdh dao_wdh = new Dao_wdh(searchPseq()); // Dao에 seq를 보냄
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
-		
-		for (int i = 0; i <= dao_wdh.viewDetailInfo().getPqty(); i++) {		// 수량 콤보박스를 만듬
+
+		for (int i = 0; i <= dao_wdh.viewDetailInfo().getPqty(); i++) { // 수량 콤보박스를 만듬
 			cbQty.addItem(i);
 		}
 
@@ -413,15 +401,15 @@ public class DetailInfoPage extends JDialog {
 		File file = new File(filePath);
 		file.delete();
 	}
-	
+
 	// cbSize의 색상을 바꾸면 제품명, 색상, 사이즈를 통해 제품코드를 search 한 후, 제품코드를 통해 나머지 정보를 다시 search
 	private void sizeChange() {
 		cbQty.removeAllItems();
-		
+
 		Dao_wdh dao_wdh = new Dao_wdh(searchPseq()); // Dao에 seq를 보냄
 		Dto_wdh dto_wdh = dao_wdh.viewDetailInfo();
-		
-		for (int i = 0; i <= dao_wdh.viewDetailInfo().getPqty(); i++) {		// 수량 콤보박스를 만듬
+
+		for (int i = 0; i <= dao_wdh.viewDetailInfo().getPqty(); i++) { // 수량 콤보박스를 만듬
 			cbQty.addItem(i);
 		}
 
@@ -451,6 +439,29 @@ public class DetailInfoPage extends JDialog {
 		return dao_wdh.searchSeq();
 	}
 
+	// 바로구매 버튼을 눌렀을 때
+	private void buyClick() {
+		if (ShareVar.userID.equals("")) {
+			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");
+		} else if (cbQty.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(null, "수량을 선택해주세요.");
+		} else {
+			int seq = searchPseq(); // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
+			String num = cbQty.getSelectedItem().toString();
+			int stock = currentStock() - Integer.parseInt(num);
+			Dao_wdh dao_wdh = new Dao_wdh(seq, stock);
+			dao_wdh.updateAction();
+			getWindow();
+			deactivatedScreen();
+			activatedScreen();
+			JOptionPane.showMessageDialog(null, "구매를 완료하였습니다.");
+			dispose(); // 화면 종료는 dispose();로 해주면 됨
+			this.setVisible(false); // 화면 종료
+			MainView window = new MainView(); // BuyList화면 켜줌
+			window.setVisible(true);
+		}
+	}
+
 	// 바로구매 눌렀을 때 창에서 가져올 것들
 	private void getWindow() {
 		int sp_seq = searchPseq(); // sp_seq
@@ -461,27 +472,29 @@ public class DetailInfoPage extends JDialog {
 
 		Dao_wdh dao_wdh = new Dao_wdh(sp_seq, scustomer_id, sdate, sprice, sqty);
 		dao_wdh.saleInsertAction();
+
 	}
 
 	// 장바구니 버튼을 눌렀을 때 다이얼로그를 띄워서 장바구니 페이지로 갈지 안갈지 확인
 	private void bucketClick() {
-		if (lblId.getText().equals("로그인이 필요합니다.")) {
-			JOptionPane.showMessageDialog(null, "로그인이 필요합니다.");	// 로그인이 되어있지 않다면 구매 불가
+		if (ShareVar.userID.equals("")) {
+			JOptionPane.showMessageDialog(null, "로그인이 필요합니다."); // 로그인이 되어있지 않다면 구매 불가
+		} else if (cbQty.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(null, "수량을 선택해주세요.");
 		} else {
-
-			int result = JOptionPane.showConfirmDialog(null, "계속할것입니까?", "Confirm", JOptionPane.YES_NO_OPTION);	// 로그인이 되어 있다면 장바구니 메세지 출력
+			int result = JOptionPane.showConfirmDialog(null, "장바구니로 이동할까요?", "", JOptionPane.YES_NO_OPTION);
+			// 로그인이 되어 있다면 장바구니 메세지 출력
 			if (result == JOptionPane.CLOSED_OPTION) {
-
 			} else if (result == JOptionPane.YES_OPTION) {
 				int sap_seq = searchPseq(); // seq라는 숫자의 데이터 값 = MainView_Info에서 clickSeq(제품번호)라는 static int를 가져옴
-				String sapcustomer_id = lblId.getText();	// id 가져옴
-				int saveQty = (cbQty.getItemCount()-1);
+				String sapcustomer_id = lblId.getText(); // id 가져옴
+				int saveQty = (cbQty.getItemCount() - 1);
 				Dao_wdh dao_wdh = new Dao_wdh(sap_seq, sapcustomer_id, saveQty);
-				dao_wdh.insertAction();	// 임시저장 Entity에 넣어줌
-				JOptionPane.showMessageDialog(null, "상품을 장바구니에 저장하였습니다");	// 메세지 출력
+				dao_wdh.insertAction(); // 임시저장 Entity에 넣어줌
+				JOptionPane.showMessageDialog(null, "상품을 장바구니에 저장하였습니다"); // 메세지 출력
 				dispose(); // 화면 종료는 dispose();로 해주면 됨
-				this.setVisible(false);		// 화면 종료
-				BuyList window = new BuyList();		// BuyList화면 켜줌
+				this.setVisible(false); // 화면 종료
+				BuyList window = new BuyList(); // BuyList화면 켜줌
 				window.setVisible(true);
 			} else {
 
@@ -501,17 +514,4 @@ public class DetailInfoPage extends JDialog {
 
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 } // End

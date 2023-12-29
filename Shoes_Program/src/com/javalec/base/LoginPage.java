@@ -20,13 +20,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JRadioButton;
 
 public class LoginPage extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField tfID;
-	private JPasswordField pfPassword;
+	private JPasswordField pfPassword ;
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
 	
@@ -49,9 +52,75 @@ public class LoginPage extends JDialog {
 	
 	static LoginPage login_dialog =new LoginPage();
 	private JComboBox cbExample;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
+	private JLabel imageUser;
+	private JLabel imagePass;
+	private JLabel lblPasswrodPress;
+	private JLabel lblPassword;
+	private JRadioButton rbPattern1;
+	private JRadioButton rbPattern2;
+	private JRadioButton rbPattern3;
+	private JRadioButton rbPattern4;
 	
+	private JPasswordField getPfPassword() {
+		if (pfPassword == null) {
+			pfPassword = new JPasswordField();
+			pfPassword.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					
+					lblPassword.setVisible(false);
+					
+				}
+			});
+			
+			pfPassword.setBounds(292, 242, 213, 50);
+		}
+		return pfPassword;
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("로그인");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// Login btn press
+					
+					pressLogIn();
+				}
+			});
+			btnNewButton.setBounds(346, 311, 117, 47);
+		}
+		return btnNewButton;
+	}
+	private JButton getBtnNewButton_1() {
+		if (btnNewButton_1 == null) {
+			btnNewButton_1 = new JButton("");
+			btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					goHome();
+				}
+			});
+			btnNewButton_1.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/goToFirstPage.png")));
+			btnNewButton_1.setBounds(723, 25, 35, 29);
+		}
+		return btnNewButton_1;
+	}
+	private JLabel getImageUser() {
+		if (imageUser == null) {
+			imageUser = new JLabel("New label");
+			imageUser.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/login_new.png")));
+			imageUser.setBounds(247, 203, 35, 35);
+		}
+		return imageUser;
+	}
+	private JLabel getImagePass() {
+		if (imagePass == null) {
+			imagePass = new JLabel("");
+			imagePass.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/Password_new.png")));
+			imagePass.setBounds(250, 250, 35, 28);
+		}
+		return imagePass;
+	}
+
 
 	/**
 	 * Launch the application.
@@ -77,140 +146,86 @@ public class LoginPage extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		{
-			JLabel lblNewLabel = new JLabel("아이디를 입력하세요.");
-			lblNewLabel.setForeground(Color.GRAY);
-			lblNewLabel.setBounds(312, 212, 107, 16);
-			contentPanel.add(lblNewLabel);
-		}
+			contentPanel.add(getLblPassword());
+		
+			contentPanel.add(getPfPassword());
+		
+		JLabel lblIdPress = new JLabel("아이디를 입력하세요.");
+		lblIdPress.setForeground(Color.GRAY);
+		lblIdPress.setBounds(312, 212, 107, 16);
+		contentPanel.add(lblIdPress);
+		
 		{
 			tfID = new JTextField();
+			tfID.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					lblIdPress.setVisible(false);
+				}
+			});
 			tfID.setBounds(292, 195, 213, 50);
 			contentPanel.add(tfID);
 			tfID.setColumns(10);
 		}
-		{
-			JLabel lblMemberPassword = new JLabel("패스워드를 입력하세요.");
-			lblMemberPassword.setForeground(Color.GRAY);
-			lblMemberPassword.setBounds(312, 257, 141, 21);
-			contentPanel.add(lblMemberPassword);
-		}
-		contentPanel.add(getPfPassword());
 		contentPanel.add(getBtnNewButton());
 		contentPanel.add(getBtnNewButton_1());
-		contentPanel.add(getLblNewLabel_1());
-		contentPanel.add(getLblNewLabel_2());
+		contentPanel.add(getImageUser());
+		contentPanel.add(getImagePass());
+		contentPanel.add(getRbPattern1());
+		contentPanel.add(getRbPattern2());
+		contentPanel.add(getRbPattern3());
+		contentPanel.add(getRbPattern4());
 	
-	}
-	private JPasswordField getPfPassword() {
-		if (pfPassword == null) {
-			pfPassword = new JPasswordField();
-			pfPassword.setBounds(292, 242, 213, 50);
 		}
-		return pfPassword;
-	}
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("로그인");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					pressLogIn();
-				}
-			});
-			btnNewButton.setBounds(346, 311, 117, 47);
-		}
-		return btnNewButton;
-	}
-	
-	
+
 	private void pressLogIn() {
 		
+		if(rbPattern1.isSelected()&&rbPattern2.isSelected()&&rbPattern3.isSelected()) {
+			// Manager Page open!!
+			
+		}
 		String id = tfID.getText();
 		char[] pw = pfPassword.getPassword();
 		String passString = new String(pw);
-		
 		Dao_pdg dao = new Dao_pdg(id,passString);
-		
 		boolean isExist = dao.idPwCheck();
 		
 		if(isExist) {
-			
 			// login pass 후 메인화면 으로 이동 !
-			
 //			JOptionPane.showMessageDialog(null, .");
-			
 			
 			ShareVar.userID =id;
 			
-			goMainView();
+			if(id.equals("admin") && rbPattern1.isSelected()&&rbPattern2.isSelected()&&rbPattern3.isSelected() ) {
+				ShareVar.userID =id;
+				JOptionPane.showMessageDialog(null, "관리자 페이지로 이동합니다. ");
+				goManagerPage();
+			}
 			
+			else goMainView();
 			
 		}else {
-			
-			JOptionPane.showMessageDialog(null, "회원이 아닙니다.");
-			
+			JOptionPane.showMessageDialog(null, "아이디와 패스워드를 다시 입력해주세요.");
 			//  text field 지움
 			tfID.setText("");
 			pfPassword.setText("");
-			
 		}
-		
-		
 	}
-	private JButton getBtnNewButton_1() {
-		if (btnNewButton_1 == null) {
-			btnNewButton_1 = new JButton("");
-			btnNewButton_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					goHome();
-						
-					
-					
-				}
-			});
-			btnNewButton_1.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/goToFirstPage.png")));
-			btnNewButton_1.setBounds(723, 25, 35, 29);
-		}
-		return btnNewButton_1;
-	}
-	
 	
 	private void goHome() {
-		
-		
 		FirstPage first = new FirstPage();
-		
 		login_dialog.setVisible(false);
-
-		
 		first.setVisible(true);
-		
 		dispose();
 		this.setVisible(false);
-				
-		
 	}
-	
 
 	private void goMainView() {
-		
-		
-		UserUpdatePage1 userupdate = new UserUpdatePage1();
-		 
+		MainView mainView = new MainView();
 		login_dialog.setVisible(false);
-
-		
-		userupdate.setVisible(true);
-		
+		mainView.setVisible(true);
 		dispose();
 		this.setVisible(false);
-	 
-		
-		
-		
-		
 //		
 //		MainView mainView = new MainView();
 //		
@@ -224,21 +239,55 @@ public class LoginPage extends JDialog {
 		
 	}
 	
-	
-	private JLabel getLblNewLabel_1() {
-		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("New label");
-			lblNewLabel_1.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/login_new.png")));
-			lblNewLabel_1.setBounds(247, 203, 35, 35);
-		}
-		return lblNewLabel_1;
+	private void goManagerPage() {
+		ManagerPage_ managerPage_ = new ManagerPage_();
+		login_dialog.setVisible(false);
+		managerPage_.setVisible(true);
+		dispose();
+		this.setVisible(false);
+		
+		
 	}
-	private JLabel getLblNewLabel_2() {
-		if (lblNewLabel_2 == null) {
-			lblNewLabel_2 = new JLabel("");
-			lblNewLabel_2.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/Password_new.png")));
-			lblNewLabel_2.setBounds(250, 250, 35, 28);
+
+
+
+
+
+
+	private JLabel getLblPassword() {
+		if (lblPassword == null) {
+			lblPassword = new JLabel("패스워드를 입력하세요. ");
+			lblPassword.setForeground(Color.GRAY);
+			lblPassword.setBounds(312, 259, 122, 16);
 		}
-		return lblNewLabel_2;
+		return lblPassword;
+	}
+	private JRadioButton getRbPattern1() {
+		if (rbPattern1 == null) {
+			rbPattern1 = new JRadioButton("");
+			rbPattern1.setBounds(6, 6, 28, 23);
+		}
+		return rbPattern1;
+	}
+	private JRadioButton getRbPattern2() {
+		if (rbPattern2 == null) {
+			rbPattern2 = new JRadioButton("");
+			rbPattern2.setBounds(6, 543, 28, 23);
+		}
+		return rbPattern2;
+	}
+	private JRadioButton getRbPattern3() {
+		if (rbPattern3 == null) {
+			rbPattern3 = new JRadioButton("");
+			rbPattern3.setBounds(766, 543, 28, 23);
+		}
+		return rbPattern3;
+	}
+	private JRadioButton getRbPattern4() {
+		if (rbPattern4 == null) {
+			rbPattern4 = new JRadioButton("");
+			rbPattern4.setBounds(770, 6, 28, 23);
+		}
+		return rbPattern4;
 	}
 } // END

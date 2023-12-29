@@ -3,6 +3,21 @@ package com.javalec.function;
 import java.awt.Color;
 
 public class ShareVar {
+	
+	
+	
+	
+	/*
+	* Descritipon"500	, 300
+	* Author
+	* Date :
+	* update:
+	* 1.position 통일
+	* 2. 색상통일
+	* 3. 게시판 통일
+	* 4. 게시판 다시 안보기 기능 사용
+
+	*/
 
 	public static String dbName = "jdbc:mysql://127.0.0.1:3306/shoe_program?serverTimezone=UTC&characterEncoding=utf8&useSSL=FALSE";
 	public static String dbUser = "root";
@@ -21,7 +36,7 @@ public class ShareVar {
 	// contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 	
 	// Bulletin setting
-	public static int bulletin_x = 800;
+	public static int bulletin_x = 700;
 	public static int bulletin_y = 350;
 	
 	// Window color setting
@@ -29,21 +44,17 @@ public class ShareVar {
 	public static int RGB_green = 246;
 	public static int RGB_blue= 248;
 	
-			
+	
+	//
+	
+	public static boolean noticeSee = false; // 한번도 보지않았을경우, 다시보지 않기에 체크하지 않았을 경우 
+	
 
-	/*
-	 * Descritipon"500	, 300
-	 * Author
-	 * Date :
-	 * update:
-	 *  		1. db 에 접근할 것이다. 
-	 *  		2. login 은 static 을 쓸것이다. 
-	 *  		
-	 */
 	
 
 	// image ( 만약 고객 이미지 업로드가 필요할 경우 사용!
 	public static int filename = 0;
+	public static int image = 0;
 	
 	
 	

@@ -31,7 +31,7 @@ public class Dao_lcy {
 	String color;
 	String qty;
 	String size;
-//	FileInputStream file;
+	FileInputStream file;
 	
 	// [customer]
 	String customer_id;
@@ -51,7 +51,6 @@ public class Dao_lcy {
 		super();
 		this.p_seq = p_seq;
 	}
-	
 	
 	public Dao_lcy(int p_seq, String brand, String name, String price, String color, String qty, String size,
 			String customer_id) {
@@ -74,15 +73,28 @@ public class Dao_lcy {
 		this.qty = qty;
 	}
 	
+	public Dao_lcy(int p_seq, String brand, String name, String price, String color, String size, String qty,
+			FileInputStream file) {
+		super();
+		this.p_seq = p_seq;
+		this.brand = brand;
+		this.name = name;
+		this.price = price;
+		this.color = color;
+		this.size = size;
+		this.qty = qty;
+		this.file = file;
+	}
 	
-	
-	
+
+
 	// Method 
+
 
 	// 검색 결과를 Table로 보내기
 	public ArrayList<Dto_lcy> selectList() { 
 		ArrayList<Dto_lcy> Dto_lcyList = new ArrayList<Dto_lcy>();
-		String whereDefault = "select p.p_seq, p.brand, p.name, p.price, p.color, p.size";
+		String whereDefault = "select p.p_seq, p.brand, p.name, p.price, p.color, p.size, s.saveQty";
 		String where1 = " from product as p, save as s";
 		String where2 = " where p.p_seq = s.p_seq";
 		
@@ -97,11 +109,12 @@ public class Dao_lcy {
 				int wkSeq = rs.getInt(1);
 				String wkBrand = rs.getString(2);
 				String wkName = rs.getString(3);
-				String wkPrice = rs.getString(4);
+				String wkPrice = String.format("%,3d", Integer.parseInt(rs.getString(4)));
 				String wkColor = rs.getString(5);
 				String wkSize = rs.getString(6);
-				
-				Dto_lcy dto = new Dto_lcy(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkSize);
+				String wkSaveQty = rs.getString(7);
+				String wkqty = "";
+				Dto_lcy dto = new Dto_lcy(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkqty, wkSize, wkSaveQty);
 				Dto_lcyList.add(dto);
 			}
 			
@@ -117,7 +130,7 @@ public class Dao_lcy {
 	// Table을 Click 했을 때
 	public Dto_lcy tableClick() {
 		Dto_lcy Dto_lcy = null;
-		String where1 = "select p.p_seq, p.brand, p.name, p.price, p.color, p.size, p.qty";
+		String where1 = "select p.p_seq, p.brand, p.name, p.price, p.color, p.size, p.qty, p.image, s.saveQty";
 		String where2 = " from product as p, save as s";
 		String where3 = " where p.p_seq = s.p_seq and p.p_seq = " + p_seq;
 		try {
@@ -131,23 +144,24 @@ public class Dao_lcy {
 				int wkSeq = rs.getInt(1);
 				String wkBrand = rs.getString(2);
 				String wkName = rs.getString(3);
-				String wkPrice = rs.getString(4);
+				String wkPrice = String.format("%,3d",Integer.parseInt(rs.getString(4)));
 				String wkColor = rs.getString(5);
 				String wkSize = rs.getString(6);
 				String wkQty = rs.getString(7);
+				String wkSaveQty = rs.getString(9);
 				
-//				// file(Image)
-//				ShareVar.filename = ShareVar.filename + 1;
-//				File file = new File(Integer.toString(ShareVar.filename));
-//				FileOutputStream output = new FileOutputStream(file);
-//				InputStream input = rs.getBinaryStream(7);
-//				byte[] buffer = new byte[1024];
-//				
-//				while(input.read(buffer) > 0) {
-//					output.write(buffer);
-//				}
+				// file(Image)
+				ShareVar.filename = ShareVar.filename + 1;
+				File file = new File(Integer.toString(ShareVar.filename));
+				FileOutputStream output = new FileOutputStream(file);
+				InputStream input = rs.getBinaryStream(8);
+				byte[] buffer = new byte[1024];
 				
-				Dto_lcy = new Dto_lcy(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkSize, wkQty);
+				while(input.read(buffer) > 0) {
+					output.write(buffer);
+				}
+				
+				Dto_lcy = new Dto_lcy(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkSize, wkQty, wkSaveQty);
 			}
 			
 			conn_mysql.close();
@@ -166,7 +180,7 @@ public class Dao_lcy {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			Statement stmt_mysql = conn_mysql.createStatement();
+//			Statement stmt_mysql = conn_mysql.createStatement();
 			
 			String A = "insert into sale (product_p_seq, customer_customer_id, price , date ,qty)";
 			String B = " values (?,?,?,CAST(now() as date),?)";
@@ -189,7 +203,7 @@ public class Dao_lcy {
 	}
 
 	
-	// 삭제
+	// 목록삭제
 	public boolean deleteAction() {
 		PreparedStatement ps = null;
 		boolean result;

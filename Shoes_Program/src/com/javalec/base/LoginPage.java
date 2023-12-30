@@ -37,14 +37,16 @@ public class LoginPage extends JDialog {
 	/*
 	 * Description :  로그인 페이지 
 	 * Date : 20203.12.27
-	 * Author : Dong Geun Forrest Park
-	 * Update : 
-	 *  o   1. 아이디 패스워드를  커스터머ㄷ 디비에서 불러와서 있으면 -> 메인 페이지
+	 * Author : Dong Geun Forrest Park (PDG)
+	 * Update 2023.12.29 by PDG : 
+	 *  o   0. 아이디 패스워드를  커스터머ㄷ 디비에서 불러와서 있으면 -> 메인 페이지
 	 * 			없으면 회원가입하십시요 
 	 * 	o	1. 아이디 비밀번호 찾기 페이지 
 	 *  o	2. 입력 받은 것으로 db 에 등록하기
 	 *  o	3. 로그인창이 가운데로오게 share bar 에서 위치 가져옴. 
-	 * 		4. 회원가입이랑 비슷하게 수
+	 * 	o	4.  UI 회원가입이랑 비슷하게 수정 
+	 *  Update 2023.12.30 by PDG:
+	 *  	1.  winodow 로 키면 그림들이 안보임. 체크박스도 없어보임 -> 대거 수정
 	 */
 	
 	
@@ -57,9 +59,7 @@ public class LoginPage extends JDialog {
 	private JLabel lblPasswrodPress;
 	private JLabel lblPassword;
 	private JRadioButton rbPattern1;
-	private JRadioButton rbPattern2;
-	private JRadioButton rbPattern3;
-	private JRadioButton rbPattern4;
+	private JButton btnNewButton_1_1;
 	
 	private JPasswordField getPfPassword() {
 		if (pfPassword == null) {
@@ -100,7 +100,7 @@ public class LoginPage extends JDialog {
 				}
 			});
 			btnNewButton_1.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/goToFirstPage.png")));
-			btnNewButton_1.setBounds(723, 25, 35, 29);
+			btnNewButton_1.setBounds(684, 31, 35, 29);
 		}
 		return btnNewButton_1;
 	}
@@ -152,7 +152,7 @@ public class LoginPage extends JDialog {
 		
 		JLabel lblIdPress = new JLabel("아이디를 입력하세요.");
 		lblIdPress.setForeground(Color.GRAY);
-		lblIdPress.setBounds(312, 212, 107, 16);
+		lblIdPress.setBounds(312, 212, 135, 16);
 		contentPanel.add(lblIdPress);
 		
 		{
@@ -172,19 +172,14 @@ public class LoginPage extends JDialog {
 		contentPanel.add(getImageUser());
 		contentPanel.add(getImagePass());
 		contentPanel.add(getRbPattern1());
-		contentPanel.add(getRbPattern2());
-		contentPanel.add(getRbPattern3());
-		contentPanel.add(getRbPattern4());
+		contentPanel.add(getBtnNewButton_1_1());
 	
 		}
 
 	// Login 버튼 실행시 
 	private void pressLogIn() {
 		
-		if(rbPattern1.isSelected()&&rbPattern2.isSelected()&&rbPattern3.isSelected()) {
-			// Manager Page open!!
-			
-		}
+
 		String id = tfID.getText();
 		char[] pw = pfPassword.getPassword();
 		String passString = new String(pw);
@@ -197,7 +192,7 @@ public class LoginPage extends JDialog {
 			
 			ShareVar.userID =id;
 			
-			if(id.equals("admin") && rbPattern1.isSelected()&&rbPattern2.isSelected()&&rbPattern3.isSelected() ) {
+			if(id.equals("admin") && rbPattern1.isSelected() ) {
 				ShareVar.userID =id;
 				//JOptionPane.showMessageDialog(null, "관리자 페이지로 이동합니다. ");
 				goManagerPage();
@@ -259,36 +254,48 @@ public class LoginPage extends JDialog {
 		if (lblPassword == null) {
 			lblPassword = new JLabel("패스워드를 입력하세요. ");
 			lblPassword.setForeground(Color.GRAY);
-			lblPassword.setBounds(312, 259, 122, 16);
+			lblPassword.setBounds(312, 259, 151, 16);
 		}
 		return lblPassword;
 	}
 	private JRadioButton getRbPattern1() {
 		if (rbPattern1 == null) {
 			rbPattern1 = new JRadioButton("");
-			rbPattern1.setBounds(6, 6, 28, 23);
+			rbPattern1.setBounds(735, 6, 28, 23);
 		}
 		return rbPattern1;
 	}
-	private JRadioButton getRbPattern2() {
-		if (rbPattern2 == null) {
-			rbPattern2 = new JRadioButton("");
-			rbPattern2.setBounds(6, 543, 28, 23);
+	private JButton getBtnNewButton_1_1() {
+		if (btnNewButton_1_1 == null) {
+			btnNewButton_1_1 = new JButton("");
+			btnNewButton_1_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					KeyBoardUpDown();
+					
+				}
+			});
+			btnNewButton_1_1.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/keyBoard.png")));
+			btnNewButton_1_1.setBounds(386, 368, 35, 29);
 		}
-		return rbPattern2;
+		return btnNewButton_1_1;
 	}
-	private JRadioButton getRbPattern3() {
-		if (rbPattern3 == null) {
-			rbPattern3 = new JRadioButton("");
-			rbPattern3.setBounds(766, 543, 28, 23);
+	
+	
+	private void KeyBoardUpDown() {
+		
+		Keyboard keyboard = new Keyboard();
+		keyboard.keyboadOnOff(!ShareVar.keyboard);
+		
+		if(tfID.isCursorSet()) {
+			keyboard.keyReturn();
+			
 		}
-		return rbPattern3;
+		
+		
+		
 	}
-	private JRadioButton getRbPattern4() {
-		if (rbPattern4 == null) {
-			rbPattern4 = new JRadioButton("");
-			rbPattern4.setBounds(770, 6, 28, 23);
-		}
-		return rbPattern4;
-	}
+	
+	
+	
+	
 } // END

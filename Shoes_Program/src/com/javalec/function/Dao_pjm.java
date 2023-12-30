@@ -29,17 +29,17 @@ public class Dao_pjm {
 	int size;
 	FileInputStream image;
 	String searchAll;
+
 	// Construct
 	public Dao_pjm() {
 
 	}
-	
-	
+
 	public Dao_pjm(int p_seq) {
 		super();
 		this.p_seq = p_seq;
 	}
-	
+
 	public Dao_pjm(int p_seq, String brand, String name, int price, String color, int qty, int size) {
 		super();
 		this.p_seq = p_seq;
@@ -51,8 +51,7 @@ public class Dao_pjm {
 		this.size = size;
 	}
 
-	public Dao_pjm(String brand, String name, int price, String color, int qty, int size,
-			FileInputStream image) {
+	public Dao_pjm(String brand, String name, int price, String color, int qty, int size, FileInputStream image) {
 		super();
 		this.brand = brand;
 		this.name = name;
@@ -62,13 +61,11 @@ public class Dao_pjm {
 		this.size = size;
 		this.image = image;
 	}
-	
 
 	public Dao_pjm(String searchAll) {
 		super();
 		this.searchAll = searchAll;
 	}
-
 
 	// Method
 	// 검색결과를 Table 로 보내자
@@ -249,7 +246,6 @@ public class Dao_pjm {
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement stmt_mysql = conn_mysql.createStatement();
 
-			
 			ResultSet rs = stmt_mysql.executeQuery(whereName);
 			// 처리 결과 보여주기
 			while (rs.next()) {
@@ -260,11 +256,9 @@ public class Dao_pjm {
 				String wkColor = rs.getString(5);
 				int wkQty = Integer.parseInt(rs.getString(6));
 				int wkSize = Integer.parseInt(rs.getString(7));
-				
 
-					
-					Dto_pjm dto = new Dto_pjm(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
-					dtoList.add(dto);
+				Dto_pjm dto = new Dto_pjm(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
+				dtoList.add(dto);
 			}
 			conn_mysql.close();
 		} catch (Exception e) {
@@ -273,20 +267,18 @@ public class Dao_pjm {
 		return dtoList;
 	}
 
-
 	public ArrayList<Dto_pjm> brandSearch() {
 		ArrayList<Dto_pjm> nowSearch = new ArrayList<Dto_pjm>();
-		
-		
+
 		String query1 = "Select p_seq, brand, name, price, color, qty, size from product where ";
 		String query2 = " brand like ? '%" + searchAll + "%'";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql); // 연결한때 어느 id pw로할꺼
-			Statement stmt_mysql = conn_mysql.createStatement(); // db에서 데이터ㄱ가져오는게 statement
+			Statement stmt_mysql = conn_mysql.createStatement(); // db에서 데이터 가져오는게 statement
 
-			ResultSet rs = stmt_mysql.executeQuery(query1+ query2);//
-			while(rs.next()) {
+			ResultSet rs = stmt_mysql.executeQuery(query1 + query2);//
+			while (rs.next()) {
 				int wkSeq = rs.getInt(1);
 				String wkBrand = rs.getString(2);
 				String wkName = rs.getString(3);
@@ -294,7 +286,7 @@ public class Dao_pjm {
 				String wkColor = rs.getString(5);
 				int wkQty = Integer.parseInt(rs.getString(6));
 				int wkSize = Integer.parseInt(rs.getString(7));
-				
+
 				Dto_pjm dto = new Dto_pjm(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
 				nowSearch.add(dto);
 			}
@@ -304,67 +296,110 @@ public class Dao_pjm {
 		}
 		return nowSearch;
 	}
+
 	public ArrayList<Dto_pjm> nameSearch() {
 		ArrayList<Dto_pjm> nowSearch = new ArrayList<Dto_pjm>();
-		
-		
-		String query1 = "Select p_seq, brand, name, price, color, qty, size from product where ";
-		String query2 = " brand like '%" + searchAll + "%'";
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql); // 연결한때 어느 id pw로할꺼
-			Statement stmt_mysql = conn_mysql.createStatement(); // db에서 데이터ㄱ가져오는게 statement
-			
-			ResultSet rs = stmt_mysql.executeQuery(query1+ query2);//
-			while(rs.next()) {
-				int wkSeq = rs.getInt(1);
-				String wkBrand = rs.getString(2);
-				String wkName = rs.getString(3);
-				int wkPrice = Integer.parseInt(rs.getString(4));
-				String wkColor = rs.getString(5);
-				int wkQty = Integer.parseInt(rs.getString(6));
-				int wkSize = Integer.parseInt(rs.getString(7));
-				
-				Dto_pjm dto = new Dto_pjm(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
-				nowSearch.add(dto);
-			}
-			conn_mysql.close(); // 접속자가기본 5명이라 바로끊어줘야함
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return nowSearch;
-	}
-	public ArrayList<Dto_pjm> sizeSearch() {
-		ArrayList<Dto_pjm> nowSearch = new ArrayList<Dto_pjm>();
-		
-		
-		String query1 = "Select p_seq, brand, name, price, color, qty, size from product where ";
-		String query2 = " brand like '%" + searchAll + "%'";
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql); // 연결한때 어느 id pw로할꺼
-			Statement stmt_mysql = conn_mysql.createStatement(); // db에서 데이터ㄱ가져오는게 statement
-			
-			ResultSet rs = stmt_mysql.executeQuery(query1+ query2);//
-			while(rs.next()) {
-				int wkSeq = rs.getInt(1);
-				String wkBrand = rs.getString(2);
-				String wkName = rs.getString(3);
-				int wkPrice = Integer.parseInt(rs.getString(4));
-				String wkColor = rs.getString(5);
-				int wkQty = Integer.parseInt(rs.getString(6));
-				int wkSize = Integer.parseInt(rs.getString(7));
-				
-				Dto_pjm dto = new Dto_pjm(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
-				nowSearch.add(dto);
-			}
-			conn_mysql.close(); // 접속자가기본 5명이라 바로끊어줘야함
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return nowSearch;
-	}
-	
 
+		String query1 = "Select p_seq, brand, name, price, color, qty, size from product where ";
+		String query2 = " brand like '%" + searchAll + "%'";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql); // 연결한때 어느 id pw로할꺼
+			Statement stmt_mysql = conn_mysql.createStatement(); // db에서 데이터ㄱ가져오는게 statement
+
+			ResultSet rs = stmt_mysql.executeQuery(query1 + query2);//
+			while (rs.next()) {
+				int wkSeq = rs.getInt(1);
+				String wkBrand = rs.getString(2);
+				String wkName = rs.getString(3);
+				int wkPrice = Integer.parseInt(rs.getString(4));
+				String wkColor = rs.getString(5);
+				int wkQty = Integer.parseInt(rs.getString(6));
+				int wkSize = Integer.parseInt(rs.getString(7));
+
+				Dto_pjm dto = new Dto_pjm(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
+				nowSearch.add(dto);
+			}
+			conn_mysql.close(); // 접속자가기본 5명이라 바로끊어줘야함
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nowSearch;
+	}
+
+//	public ArrayList<Dto_pjm> sizeSearch() {
+//		ArrayList<Dto_pjm> nowSearch = new ArrayList<Dto_pjm>();
+//		
+//		
+//		String query1 = "Select p_seq, brand, name, price, color, qty, size from product where ";
+//		String query2 = " brand like '%" + searchAll + "%'";
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql); // 연결한때 어느 id pw로할꺼
+//			Statement stmt_mysql = conn_mysql.createStatement(); // db에서 데이터ㄱ가져오는게 statement
+//			
+//			ResultSet rs = stmt_mysql.executeQuery(query1+ query2);//
+//			while(rs.next()) {
+//				int wkSeq = rs.getInt(1);
+//				String wkBrand = rs.getString(2);
+//				String wkName = rs.getString(3);
+//				int wkPrice = Integer.parseInt(rs.getString(4));
+//				String wkColor = rs.getString(5);
+//				int wkQty = Integer.parseInt(rs.getString(6));
+//				int wkSize = Integer.parseInt(rs.getString(7));
+//				
+//				Dto_pjm dto = new Dto_pjm(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
+//				nowSearch.add(dto);
+//			}
+//			conn_mysql.close(); // 접속자가기본 5명이라 바로끊어줘야함
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return nowSearch;
+//	}
+	public ArrayList<Dto_pjm> allSearchAction(String selectedProduct, String searchText) {
+		ArrayList<Dto_pjm> resultList = new ArrayList<Dto_pjm>();
+
+		String query = "SELECT p_seq, brand, name, price, color, qty, size FROM product WHERE ";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+			
+			if ("브랜드".equals(selectedProduct)) {
+				query += "brand LIKE '%" + searchText + "%'";
+			} else if ("제품명".equals(selectedProduct)) {
+				query += "name LIKE '%" + searchText + "%'";
+			} else if ("사이즈".equals(selectedProduct)) {
+				query += "size like'%" + searchText + "%'";
+			}
+
+			stmt_mysql = conn_mysql.prepareStatement(query);
+
+
+			ResultSet rs = stmt_mysql.executeQuery(query);
+			while (rs.next()) {
+				int wkSeq = rs.getInt(1);
+				String wkBrand = rs.getString(2);
+				String wkName = rs.getString(3);
+				int wkPrice = Integer.parseInt(rs.getString(4));
+				String wkColor = rs.getString(5);
+				int wkQty = Integer.parseInt(rs.getString(6));
+				int wkSize = Integer.parseInt(rs.getString(7));
+
+				Dto_pjm dto = new Dto_pjm(wkSeq, wkBrand, wkName, wkPrice, wkColor, wkQty, wkSize);
+				resultList.add(dto);
+			}
+
+			rs.close();
+			stmt_mysql.close();
+			conn_mysql.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return resultList;
+	}
 
 }

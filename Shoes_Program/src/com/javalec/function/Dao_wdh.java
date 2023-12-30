@@ -163,7 +163,7 @@ public class Dao_wdh {
 		return true;
 
 	}
-	
+
 	// 바로구매를 눌렀을 때 sale Entity에 insert 하는 Method
 	public boolean saleInsertAction() {
 		PreparedStatement ps = null;
@@ -191,7 +191,6 @@ public class Dao_wdh {
 		return true;
 
 	}
-
 
 	// 장바구니를 눌렀을 때 임시저장에 insert
 	public boolean insertAction() {
@@ -222,7 +221,7 @@ public class Dao_wdh {
 	// sql에서 name을 통해 color를 가져옴
 	public ArrayList<String> productColor() {
 		String pname = viewDetailInfo().getPname();
-		
+
 		ArrayList<String> productColor = new ArrayList<String>();
 
 		String where = "select color from product where name = '" + pname + "' group by color";
@@ -245,15 +244,16 @@ public class Dao_wdh {
 		}
 		return productColor;
 	}
-	
+
 	// sql에서 name, color를 통해 size를 가져옴
 	public ArrayList<Integer> productSize() {
 		String pname = viewDetailInfo().getPname();
 		String pcolor = viewDetailInfo().getPcolor();
-		
+
 		ArrayList<Integer> productSize = new ArrayList<Integer>();
 
-		String where = "select size from product where name = '" + pname + "' and color = '" + pcolor + "' group by size order by size asc";
+		String where = "select size from product where name = '" + pname + "' and color = '" + pcolor
+				+ "' group by size order by size asc";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -273,12 +273,13 @@ public class Dao_wdh {
 		}
 		return productSize;
 	}
-	
+
 	// 제품명, 색깔, 사이즈를 통해 제품번호를 추적
 	public int searchSeq() {
 //		Dto_wdh dto_wdh = null;
 		int wkSeq = 0;
-		String where = "select p_seq from product where name = '" + pname + "' and color = '" + pcolor + "' and size = " + psize;
+		String where = "select p_seq from product where name = '" + pname + "' and color = '" + pcolor + "' and size = "
+				+ psize;
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -298,15 +299,16 @@ public class Dao_wdh {
 			e.printStackTrace();
 		}
 		return wkSeq;
-		
+
 	}
-	
+
 	// 현재 제품명과 색깔을 통해 사이즈를 추적
 	public ArrayList<Integer> productSizeSearch(String currentName, String currentColor) {
-		
+
 		ArrayList<Integer> productSize = new ArrayList<Integer>();
 
-		String where = "select size from product where name = '" + currentName + "' and color = '" + currentColor + "' group by size order by size asc";
+		String where = "select size from product where name = '" + currentName + "' and color = '" + currentColor
+				+ "' group by size order by size asc";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -327,15 +329,55 @@ public class Dao_wdh {
 		return productSize;
 	}
 
+	// save에서 userID의 p_seq 가져오기
+	public ArrayList<Integer> searchP_seqFromSave() {
+
+		ArrayList<Integer> savePseq = new ArrayList<Integer>();
+
+		String where = "select p_seq from save where customer_id= '" + ShareVar.userID + "' order by p_seq";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(where);
+			while (rs.next()) {
+				int wkPseq = rs.getInt(1);
+				savePseq.add(wkPseq);
+			}
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return savePseq;
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-} // End
+	// 장바구니 버튼을 눌렀을 때 현재 페이지의 p_seq가 장바구니 품목에 있는 p_seq와 겹칠경우 update
+	public boolean searchP_seqAndUpdate() {
+		PreparedStatement ps = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+
+			String where = "update save set saveQty = saveQty + ? where p_seq = ?";
+
+			ps = conn_mysql.prepareStatement(where);
+			ps.setInt(1, stock);
+			ps.setInt(2, p_seq);
+			ps.executeUpdate();
+
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return true;
+
+	}
+
+
+}  // End

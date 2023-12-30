@@ -41,6 +41,15 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
+
+/*
+* Descritipon : 관리자 페이지
+* Author : PJM
+* Date : 23.12.30
+* update : 23.12.30 15:45
+*/
 
 public class ManagerPage_ extends JDialog {
 
@@ -51,7 +60,6 @@ public class ManagerPage_ extends JDialog {
 	private JRadioButton rbInsert;
 	private JTable inner_Table;
 	private JRadioButton rbUpdate;
-	private JRadioButton rbDelete;
 	private JButton btnSearch;
 	private JTextField tfSelection;
 	private JLabel lblImage;
@@ -81,12 +89,13 @@ public class ManagerPage_ extends JDialog {
 	private JButton btnMainView;
 	static ManagerPage_ managerDialog = new ManagerPage_();
 	private JButton btnCurrentSituation;
+
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			
+
 			managerDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			managerDialog.setVisible(true);
 		} catch (Exception e) {
@@ -97,8 +106,8 @@ public class ManagerPage_ extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	
-	///PDG adding images and icon 
+
+	/// PDG adding images and icon
 	public ManagerPage_() {
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -109,10 +118,11 @@ public class ManagerPage_ extends JDialog {
 		});
 		setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		setTitle("관리자 페이지");
-		//setBounds(100, 100, 800, 600);
-		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, ShareVar.window_size_x, ShareVar.window_size_y);
+		// setBounds(100, 100, 800, 600);
+		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, ShareVar.window_size_x,
+				ShareVar.window_size_y);
 		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
-		
+
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -121,7 +131,6 @@ public class ManagerPage_ extends JDialog {
 		contentPanel.add(getScrollPane());
 		contentPanel.add(getRbInsert());
 		contentPanel.add(getRbUpdate());
-		contentPanel.add(getRbDelete());
 		contentPanel.add(getBtnSearch());
 		contentPanel.add(getTfSelection());
 		contentPanel.add(getLblImage());
@@ -147,9 +156,19 @@ public class ManagerPage_ extends JDialog {
 		contentPanel.add(getBtnMainView());
 		contentPanel.add(getBtnCurrentSituation());
 	}
+
 	private JComboBox getCbSelection() {
 		if (cbSelection == null) {
 			cbSelection = new JComboBox();
+			cbSelection.addPopupMenuListener(new PopupMenuListener() {
+				public void popupMenuCanceled(PopupMenuEvent e) {
+				}
+				public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+					allProduct();
+				}
+				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				}
+			});
 			cbSelection.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
@@ -160,6 +179,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return cbSelection;
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -168,6 +188,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return scrollPane;
 	}
+
 	private JRadioButton getRbInsert() {
 		if (rbInsert == null) {
 			rbInsert = new JRadioButton("등록");
@@ -182,6 +203,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return rbInsert;
 	}
+
 	private JTable getInner_Table() {
 		if (inner_Table == null) {
 			inner_Table = new JTable();
@@ -196,6 +218,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return inner_Table;
 	}
+
 	private JRadioButton getRbUpdate() {
 		if (rbUpdate == null) {
 			rbUpdate = new JRadioButton("수정");
@@ -209,31 +232,20 @@ public class ManagerPage_ extends JDialog {
 		}
 		return rbUpdate;
 	}
-	private JRadioButton getRbDelete() {
-		if (rbDelete == null) {
-			rbDelete = new JRadioButton("삭제");
-			rbDelete.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					screenPartition();
-				}
-			});
-			buttonGroup.add(rbDelete);
-			rbDelete.setForeground(Color.RED);
-			rbDelete.setBounds(169, 20, 62, 23);
-		}
-		return rbDelete;
-	}
+
 	private JButton getBtnSearch() {
 		if (btnSearch == null) {
 			btnSearch = new JButton("검색");
 			btnSearch.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					allSearchAction();
 				}
 			});
 			btnSearch.setBounds(302, 54, 117, 29);
 		}
 		return btnSearch;
 	}
+
 	private JTextField getTfSelection() {
 		if (tfSelection == null) {
 			tfSelection = new JTextField();
@@ -242,6 +254,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return tfSelection;
 	}
+
 	private JLabel getLblImage() {
 		if (lblImage == null) {
 			lblImage = new JLabel("");
@@ -251,6 +264,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return lblImage;
 	}
+
 	private JButton getBtnOK() {
 		if (btnOK == null) {
 			btnOK = new JButton("완료");
@@ -263,6 +277,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return btnOK;
 	}
+
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("제품번호");
@@ -270,6 +285,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return lblNewLabel_1;
 	}
+
 	private JTextField getTfSeqno() {
 		if (tfSeqno == null) {
 			tfSeqno = new JTextField();
@@ -279,6 +295,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return tfSeqno;
 	}
+
 	private JLabel getLblNewLabel_1_1() {
 		if (lblNewLabel_1_1 == null) {
 			lblNewLabel_1_1 = new JLabel("브랜드명");
@@ -286,6 +303,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return lblNewLabel_1_1;
 	}
+
 	private JTextField getTfBrand() {
 		if (tfBrand == null) {
 			tfBrand = new JTextField();
@@ -294,6 +312,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return tfBrand;
 	}
+
 	private JLabel getLblNewLabel_1_2() {
 		if (lblNewLabel_1_2 == null) {
 			lblNewLabel_1_2 = new JLabel("제품명");
@@ -301,6 +320,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return lblNewLabel_1_2;
 	}
+
 	private JTextField getTfName() {
 		if (tfName == null) {
 			tfName = new JTextField();
@@ -309,6 +329,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return tfName;
 	}
+
 	private JLabel getLblNewLabel_1_3() {
 		if (lblNewLabel_1_3 == null) {
 			lblNewLabel_1_3 = new JLabel("가격");
@@ -316,6 +337,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return lblNewLabel_1_3;
 	}
+
 	private JTextField getTfPrice() {
 		if (tfPrice == null) {
 			tfPrice = new JTextField();
@@ -324,6 +346,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return tfPrice;
 	}
+
 	private JLabel getLblNewLabel_1_4() {
 		if (lblNewLabel_1_4 == null) {
 			lblNewLabel_1_4 = new JLabel("색상");
@@ -331,6 +354,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return lblNewLabel_1_4;
 	}
+
 	private JTextField getTfColor() {
 		if (tfColor == null) {
 			tfColor = new JTextField();
@@ -339,6 +363,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return tfColor;
 	}
+
 	private JLabel getLblNewLabel_1_5() {
 		if (lblNewLabel_1_5 == null) {
 			lblNewLabel_1_5 = new JLabel("재고");
@@ -346,6 +371,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return lblNewLabel_1_5;
 	}
+
 	private JTextField getTfQty() {
 		if (tfQty == null) {
 			tfQty = new JTextField();
@@ -354,6 +380,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return tfQty;
 	}
+
 	private JLabel getLblNewLabel_1_6() {
 		if (lblNewLabel_1_6 == null) {
 			lblNewLabel_1_6 = new JLabel("사이즈");
@@ -361,6 +388,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return lblNewLabel_1_6;
 	}
+
 	private JComboBox getCbSelection1() {
 		if (cbSelection1 == null) {
 			cbSelection1 = new JComboBox();
@@ -374,6 +402,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return cbSelection1;
 	}
+
 	private JRadioButton getRbSearch() {
 		if (rbSearch == null) {
 			rbSearch = new JRadioButton("검색");
@@ -383,10 +412,11 @@ public class ManagerPage_ extends JDialog {
 				}
 			});
 			buttonGroup.add(rbSearch);
-			rbSearch.setBounds(242, 20, 62, 23);
+			rbSearch.setBounds(169, 20, 62, 23);
 		}
 		return rbSearch;
 	}
+
 	private JTextField getTfFilePath() {
 		if (tfFilePath == null) {
 			tfFilePath = new JTextField();
@@ -450,9 +480,8 @@ public class ManagerPage_ extends JDialog {
 		return btnFilePath;
 	}
 
-	
 	// Function ---- pdg add
-	
+
 	private void goHome() {
 		FirstPage first = new FirstPage();
 		managerDialog.setVisible(false);
@@ -460,26 +489,18 @@ public class ManagerPage_ extends JDialog {
 		dispose();
 		this.setVisible(false);
 	}
+
 	private void goCurrentSituation() {
-		
-		
+
 		CurrentSituation currentSituation = new CurrentSituation();
 		currentSituation.setVisible(false);
 		currentSituation.setVisible(true);
 		dispose();
 		this.setVisible(false);
-		
-		
-		
+
 	}
 
-	
-	
-	
-	
-	
-	
-	// -----Function----- 박정민 
+	// -----Function----- 박정민
 	private void tableInit() {
 		// 컬럼 정하기
 		outerTable.addColumn("제품번호 ");
@@ -530,6 +551,7 @@ public class ManagerPage_ extends JDialog {
 		}
 
 	}
+	// 프로그램 실행시 기본적으로 윈도우에 보여주는 기능
 	private void searchAction() {
 		Dao_pjm dao = new Dao_pjm();
 		ArrayList<Dto_pjm> dtoList = dao.selectList();
@@ -545,7 +567,7 @@ public class ManagerPage_ extends JDialog {
 		}
 
 	}
-
+	// 라디오 버튼을 누르고 검색버튼을 눌렀을때 등록 수정 검색 테이블을 비워주는  기능
 	private void actionPartition() {
 
 		// 검색일 경우
@@ -587,19 +609,8 @@ public class ManagerPage_ extends JDialog {
 			screenPartition();
 		}
 		// 삭제일 경우
-		if (rbDelete.isSelected()) {
-			int i_chk = insertFieldCheck();
-			if (i_chk == 0) {
-				tableInit();
-				searchAction();
-				clearColumn();
-			} else {
-				JOptionPane.showMessageDialog(null, "데이터를 확인하세요3");
-			}
-			screenPartition();
-		}
 	}
-
+	// 등록 수정 검색버튼을 눌렀을때 화면에 보여주는 기능
 	private void screenPartition() {
 		if (rbSearch.isSelected() == true) {
 			btnOK.setVisible(false);
@@ -635,18 +646,9 @@ public class ManagerPage_ extends JDialog {
 			lblImage.setEnabled(true);
 		}
 		// 삭제일 경우
-		if (rbDelete.isSelected()) {
-			btnOK.setVisible(true);
-			tfBrand.setEditable(false);
-			tfName.setEditable(false);
-			tfPrice.setEditable(false);
-			tfColor.setEditable(false);
-			tfFilePath.setEditable(false);
-			cbSelection1.setEditable(false);
-		}
 
 	}
-
+	// innertable 클릭시 table 안에있는 데이터 부여주기
 	private void tableClick() {
 		int i = inner_Table.getSelectedRow();
 		String tkSequence = (String) inner_Table.getValueAt(i, 0);
@@ -672,7 +674,7 @@ public class ManagerPage_ extends JDialog {
 		file.delete();
 
 	}
-
+	// 등록 기능
 	private void insertAction() {
 		String brand = tfBrand.getText().trim();
 		String name = tfName.getText().trim();
@@ -701,7 +703,7 @@ public class ManagerPage_ extends JDialog {
 		}
 
 	}
-
+	// 수정 기능
 	private void updateAction() {
 		int seqno = Integer.parseInt(tfSeqno.getText());
 		String brand = tfBrand.getText().trim();
@@ -721,9 +723,7 @@ public class ManagerPage_ extends JDialog {
 		}
 
 	}
-
-
-
+	// 등록할때 비어있으면 안돼게
 	private int insertFieldCheck() {
 		int i = 0;
 		if (tfBrand.getText().trim().length() == 0) {
@@ -752,7 +752,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		return i;
 	}
-
+	// 칼럼 클리어
 	private void clearColumn() {
 		tfSeqno.setText("");
 		tfBrand.setText("");
@@ -765,7 +765,7 @@ public class ManagerPage_ extends JDialog {
 		lblImage.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/사진.png")));
 
 	}
-
+	// 파일 찾아오는 기능
 	private void filePath() {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG", "PNG", "BMP", "JPEG");
@@ -783,55 +783,15 @@ public class ManagerPage_ extends JDialog {
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 
 	}
-
-
-	// 콤보박스에서 선택해서 검색
-//	private void searchName(String searchName) {
-//		Dao_pjm dao = new Dao_pjm();
-//		ArrayList<Dto_pjm> dtoList = dao.searchName();
-//
-//		int listCount = dtoList.size();
-//		if (cbSelection.getSelectedItem().toString().equals("제품명")) {
-//			dao.searchName();
-//
-//			for (int i = 0; i < listCount; i++) {
-//				String temp = Integer.toString(dtoList.get(i).getP_seq());
-//				String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
-//						dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
-//				outerTable.addRow(qTxt);
-//			}
-//
-//
-//		}
-//	}
-
-	
-
-
-	
-	private void eachSearchAction() {
-		if (rbSearch.isSelected()) {
-			switch (cbSelection.getSelectedIndex()) {
-			case 1:
-				brandSearch();
-				break;
-			case 2:
-				nameSearch();
-				break;
-			case 3:
-				sizeSearch();
-				break;
-			default:
-			}
-		}
-	}
-
-	private void brandSearch() {
-		tableInit();
-		if (cbSelection.getSelectedItem().toString().equals("브랜드")) {
-			String searchAll = tfSelection.getText();
+	// 콤보박스 안에 있는아이템을 선택하고 그 아이템에 맞는 브랜드 품목 사이즈 검색 기능
+	private void allSearchAction() {
+			tableInit();
+			String selectedProduct = cbSelection.getSelectedItem().toString();
+			String searchText = tfSelection.getText();
+			
+			
 			Dao_pjm dao = new Dao_pjm();
-			ArrayList<Dto_pjm> dtoList = dao.brandSearch();
+			ArrayList<Dto_pjm> dtoList = dao.allSearchAction(selectedProduct, searchText);
 
 			int listCount = dtoList.size();
 
@@ -842,52 +802,18 @@ public class ManagerPage_ extends JDialog {
 						Integer.toString(dtoList.get(i).getQty()), Integer.toString(dtoList.get(i).getSize()) };
 				outerTable.addRow(qTxt);
 			}
-		}
 
+		}
+	// 콤보 박스에서 모든 제품 선택시 모든 제품 보여주기
+	private void allProduct() {
+		if(cbSelection.getSelectedIndex() == 0) {
+			tableInit();
+			searchAction();
+		}
+		
 	}
 
-	private void nameSearch() {
-		tableInit();
-		if (cbSelection.getSelectedItem().toString().equals("브랜드")) {
-			String searchAll = tfSelection.getText();
-			Dao_pjm dao = new Dao_pjm();
-			ArrayList<Dto_pjm> dtoList = dao.brandSearch();
 
-			int listCount = dtoList.size();
+	}// End
 
-			for (int i = 0; i < listCount; i++) {
-				String temp = Integer.toString(dtoList.get(i).getP_seq());
-				String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(),
-						Integer.toString(dtoList.get(i).getPrice()), dtoList.get(i).getColor(),
-						Integer.toString(dtoList.get(i).getQty()), Integer.toString(dtoList.get(i).getSize()) };
-				outerTable.addRow(qTxt);
-			}
-		}
 
-	}
-	private void sizeSearch() {
-		tableInit();
-		if (cbSelection.getSelectedItem().toString().equals("브랜드")) {
-			String searchAll = tfSelection.getText();
-			Dao_pjm dao = new Dao_pjm();
-			ArrayList<Dto_pjm> dtoList = dao.brandSearch();
-
-			int listCount = dtoList.size();
-
-			for (int i = 0; i < listCount; i++) {
-				String temp = Integer.toString(dtoList.get(i).getP_seq());
-				String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(),
-						Integer.toString(dtoList.get(i).getPrice()), dtoList.get(i).getColor(),
-						Integer.toString(dtoList.get(i).getQty()), Integer.toString(dtoList.get(i).getSize()) };
-				outerTable.addRow(qTxt);
-			}
-		}
-
-	}
-	
-}//End
-
-	
-	
-	
-	

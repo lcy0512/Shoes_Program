@@ -44,6 +44,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
 
+/*
+* Descritipon : 관리자 페이지
+* Author : PJM
+* Date : 23.12.30
+* update : 23.12.30 15:45
+*/
+
 public class ManagerPage_ extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -805,6 +812,7 @@ public class ManagerPage_ extends JDialog {
 		}
 		
 	}
+
 
 	}// End
 

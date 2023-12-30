@@ -1,39 +1,27 @@
 package com.javalec.function;
 
-public class Dto {
+
+public class Dto_pjm {
 	// Field
 	int p_seq;
 	String brand;
 	String name;
-	String price;
+	int price;
 	String color;
-	String qty;
-	String size;
-	String date;
+	int qty;
+	int size;
 
 	// Construct
-	public Dto() {
+	public Dto_pjm() {
 
 	}
 
-	public Dto(int p_seq) {
+	public Dto_pjm(int p_seq) {
 		super();
 		this.p_seq = p_seq;
 	}
 
-	public Dto(int p_seq, String brand, String name, String price, String color, String qty, String size, String date) {
-		super();
-		this.p_seq = p_seq;
-		this.brand = brand;
-		this.name = name;
-		this.price = price;
-		this.color = color;
-		this.qty = qty;
-		this.size = size;
-		this.date = date;
-	}
-
-	public Dto(int p_seq, String brand, String name, String price, String color, String qty, String size) {
+	public Dto_pjm(int p_seq, String brand, String name, int price, String color, int qty, int size ) {
 		super();
 		this.p_seq = p_seq;
 		this.brand = brand;
@@ -42,7 +30,6 @@ public class Dto {
 		this.color = color;
 		this.qty = qty;
 		this.size = size;
-
 	}
 	// Method
 
@@ -70,11 +57,11 @@ public class Dto {
 		this.name = name;
 	}
 
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 
@@ -86,28 +73,24 @@ public class Dto {
 		this.color = color;
 	}
 
-	public String getQty() {
+	public int getQty() {
 		return qty;
 	}
 
-	public void setQty(String qty) {
+	public void setQty(int qty) {
 		this.qty = qty;
 	}
 
-	public String getSize() {
+	public int getSize() {
 		return size;
 	}
 
-	public void setSize(String size) {
+	public void setSize(int size) {
 		this.size = size;
 	}
 
-	public String getDate() {
-		return date;
-	}
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+
+
 
 }

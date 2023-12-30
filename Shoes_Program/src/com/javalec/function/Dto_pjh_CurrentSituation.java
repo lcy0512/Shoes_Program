@@ -3,6 +3,15 @@ package com.javalec.function;
 import java.io.FileInputStream;
 
 public class Dto_pjh_CurrentSituation {
+	
+	/*
+	 * Description : 매출 현황 Dto
+	 * Date : 2023.12.31 
+	 * Author : 박지환 
+	 * Update :
+	 * 		1. 현황 페이지 상품별 매출현황 cConstructor추가
+	 * 		
+	 */
 	// Field
 	int p_seq;
 	String pbrand;
@@ -36,10 +45,11 @@ public class Dto_pjh_CurrentSituation {
 	// save
 	int saseq;
 	int sap_seq;
-
+	int totalprice;
+	
 	// --------------------------------Constructor----------------------
 
-	// 관리자 페이지 일별매출가
+	// 현황 페이지 일별매출,웖별매출,일주일별매출
 	public Dto_pjh_CurrentSituation(String sdate, int sprice) {
 		super();
 		this.sdate = sdate;
@@ -47,9 +57,22 @@ public class Dto_pjh_CurrentSituation {
 
 	}
 	
-	//
 	
 	
+	// 현황 페이지 상품별 매출현황
+	public Dto_pjh_CurrentSituation(String pbrand, String pname, int pprice, int sqty,int totalprice) {
+		super();
+		this.pbrand = pbrand;
+		this.pname = pname;
+		this.pprice = pprice;
+		this.sqty = sqty;
+		this.totalprice = totalprice;
+		
+	}
+
+
+
+
 	//날짜 검색
 	public Dto_pjh_CurrentSituation(String sdate) {
 		super();
@@ -274,6 +297,34 @@ public class Dto_pjh_CurrentSituation {
 
 	public void setSap_seq(int sap_seq) {
 		this.sap_seq = sap_seq;
+	}
+
+
+
+
+	public int getSqty() {
+		return sqty;
+	}
+
+
+
+
+	public void setSqty(int sqty) {
+		this.sqty = sqty;
+	}
+
+
+
+
+	public int getTotalprice() {
+		return totalprice;
+	}
+
+
+
+
+	public void setTotalprice(int totalprice) {
+		this.totalprice = totalprice;
 	}
 
 }

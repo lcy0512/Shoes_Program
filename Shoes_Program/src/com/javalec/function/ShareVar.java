@@ -53,7 +53,9 @@ public class ShareVar {
 	public static boolean noticeSee = false; // 한번도 보지않았을경우, 다시보지 않기에 체크하지 않았을 경우 
 	
 
+	//keyboard on/off
 	
+	public static boolean keyboard = false; // when true => keyboard will up!
 
 	// image ( 만약 고객 이미지 업로드가 필요할 경우 사용!
 	public static int filename = 0;

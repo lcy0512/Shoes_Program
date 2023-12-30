@@ -34,9 +34,13 @@ public class FirstPage extends JDialog {
 	 * Update : 
 	 * 		1.  관리자용 페이지 버튼 입력되었을 경우
 	 * 		
-	 * Update 2023.12.29
+	 * Update 2023.12.29 by PDG
 	 * 		1. share bar 를 통해 윈도우 이 동 
 	 * 		2. 배경화면 바꿈 
+	 * 
+	 * Update 2023.12.30 by PDG
+	 * 
+	 * 		1. 첫 화면 윈도우 앱에서는 줄이 다 안나오고 짤림. => 한칸 띔 < html 사용
 	 */
 	
 	
@@ -80,7 +84,7 @@ public class FirstPage extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JButton btnNotMember = new JButton("일반 고객 입장");
+			JButton btnNotMember = new JButton("<html><center>일반 고객<br> 입장</center></html>");
 			btnNotMember.setForeground(Color.DARK_GRAY);
 			btnNotMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -103,13 +107,13 @@ public class FirstPage extends JDialog {
 			contentPanel.add(btnNotMember);
 		}
 		{
-			JButton btnMember = new JButton("멤버쉽회원 입장");
+			JButton btnMember = new JButton("<html><center>멤버쉽 회원 <br>  입장</center></html>");
 			btnMember.setForeground(Color.BLACK);
 			btnMember.setBackground(new Color(255, 255, 255));
 			btnMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					normalCustomerLogin();
+					memberLogin();
 					
 					
 				}
@@ -125,7 +129,7 @@ public class FirstPage extends JDialog {
 			contentPanel.add(lblNewLabel_1);
 		}
 		{
-			JButton btnPremiumMember = new JButton("회원 가입");
+			JButton btnPremiumMember = new JButton("<html><center>회원 가입</center></html>");
 			btnPremiumMember.setForeground(Color.BLACK);
 			btnPremiumMember.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -148,7 +152,9 @@ public class FirstPage extends JDialog {
 		}
 	}
 	
-	private void normalCustomerLogin() {
+	
+	//1. 멤버쉽 회원 입장 
+	private void memberLogin() {
 		
 		
 
@@ -160,7 +166,7 @@ public class FirstPage extends JDialog {
 		//dispose();
 		
 	}
-	
+	//2. 회원가입 페이지로 
 	private void joinPageAction() {
 		firstdialog.setVisible(false);
 
@@ -170,7 +176,7 @@ public class FirstPage extends JDialog {
 		this.setVisible(false);
 		
 	}
-	
+	//3. 일반(비회원) 입장 => sql 에 비회원 아이디 있어야 함.
 	private void goToMainView() {
 		
 		firstdialog.setVisible(false);

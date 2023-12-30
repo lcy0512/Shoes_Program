@@ -12,7 +12,7 @@ public class Dto_Mainview {
 	String pcolor;
 	int pqty;
 	int psize;
-	FileInputStream imgae;
+	String fake_filename;
 
 	// Constructor
 	public Dto_Mainview() {
@@ -21,26 +21,20 @@ public class Dto_Mainview {
 
 	
 	//제품목록 부르기 위한 생성자
-	public Dto_Mainview(String pbrand, String pname, int pprice/*, FileInputStream imgae*/) {
+	public Dto_Mainview(String pbrand, String pname, int pprice, String fake_filename) {
 		super();
 		this.pbrand = pbrand;
 		this.pname = pname;
 		this.pprice = pprice;
-//		this.imgae = imgae;
+		this.fake_filename = fake_filename;
 	}
-	
-	
-
-
 
 
 	// Method
 	public int getP_seq() {
 		return p_seq;
 	}
-
-
-
+	
 	public void setP_seq(int p_seq) {
 		this.p_seq = p_seq;
 	}
@@ -94,14 +88,16 @@ public class Dto_Mainview {
 	}
 
 
-	public FileInputStream getImgae() {
-		return imgae;
+	public String getFake_filename() {
+		return fake_filename;
 	}
 
 
-	public void setImgae(FileInputStream imgae) {
-		this.imgae = imgae;
+	public void setFake_filename(String fake_filename) {
+		this.fake_filename = fake_filename;
 	}
 
+
+	
 
 }

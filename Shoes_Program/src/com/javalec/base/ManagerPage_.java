@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import com.javalec.function.Dao_pjm;
-import com.javalec.function.Dto;
+import com.javalec.function.Dto_pjm;
 import com.javalec.function.ShareVar;
 
 import javax.swing.JComboBox;
@@ -105,7 +105,6 @@ public class ManagerPage_ extends JDialog {
 			public void windowActivated(WindowEvent e) {
 				tableInit();
 				searchAction();
-				screenPartition();
 			}
 		});
 		setFont(new Font("Lucida Grande", Font.BOLD, 13));
@@ -153,7 +152,6 @@ public class ManagerPage_ extends JDialog {
 			cbSelection = new JComboBox();
 			cbSelection.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					selectWhat();
 				}
 
 			});
@@ -397,6 +395,47 @@ public class ManagerPage_ extends JDialog {
 		}
 		return tfFilePath;
 	}
+
+	private JButton getBtnLogOut() {
+		if (btnLogOut == null) {
+			btnLogOut = new JButton("");
+			btnLogOut.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					goHome();
+				}
+			});
+			btnLogOut.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/logout_new.png")));
+			btnLogOut.setBounds(730, 33, 45, 45);
+		}
+		return btnLogOut;
+	}
+
+	private JButton getBtnMainView() {
+		if (btnMainView == null) {
+			btnMainView = new JButton("");
+			btnMainView.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/메인가기.png")));
+			btnMainView.setBounds(618, 33, 48, 45);
+		}
+		return btnMainView;
+	}
+
+	private JButton getBtnCurrentSituation() {
+		if (btnCurrentSituation == null) {
+			btnCurrentSituation = new JButton("");
+			btnCurrentSituation.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					goCurrentSituation();
+
+				}
+			});
+			btnCurrentSituation.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/현황.png")));
+			btnCurrentSituation.setBounds(673, 33, 45, 45);
+		}
+		return btnCurrentSituation;
+	}
+
 	private JButton getBtnFilePath() {
 		if (btnFilePath == null) {
 			btnFilePath = new JButton("파일 첨부");
@@ -411,6 +450,35 @@ public class ManagerPage_ extends JDialog {
 		return btnFilePath;
 	}
 
+	
+	// Function ---- pdg add
+	
+	private void goHome() {
+		FirstPage first = new FirstPage();
+		managerDialog.setVisible(false);
+		first.setVisible(true);
+		dispose();
+		this.setVisible(false);
+	}
+	private void goCurrentSituation() {
+		
+		
+		CurrentSituation currentSituation = new CurrentSituation();
+		currentSituation.setVisible(false);
+		currentSituation.setVisible(true);
+		dispose();
+		this.setVisible(false);
+		
+		
+		
+	}
+
+	
+	
+	
+	
+	
+	
 	// -----Function----- 박정민 
 	private void tableInit() {
 		// 컬럼 정하기
@@ -464,14 +532,15 @@ public class ManagerPage_ extends JDialog {
 	}
 	private void searchAction() {
 		Dao_pjm dao = new Dao_pjm();
-		ArrayList<Dto> dtoList = dao.selectList();
+		ArrayList<Dto_pjm> dtoList = dao.selectList();
 
 		int listCount = dtoList.size();
 
 		for (int i = 0; i < listCount; i++) {
 			String temp = Integer.toString(dtoList.get(i).getP_seq());
-			String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
-					dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
+			String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(),
+					Integer.toString(dtoList.get(i).getPrice()), dtoList.get(i).getColor(),
+					Integer.toString(dtoList.get(i).getQty()), Integer.toString(dtoList.get(i).getSize()) };
 			outerTable.addRow(qTxt);
 		}
 
@@ -521,7 +590,6 @@ public class ManagerPage_ extends JDialog {
 		if (rbDelete.isSelected()) {
 			int i_chk = insertFieldCheck();
 			if (i_chk == 0) {
-				deleteAction();
 				tableInit();
 				searchAction();
 				clearColumn();
@@ -585,14 +653,14 @@ public class ManagerPage_ extends JDialog {
 		int wkSequence = Integer.parseInt(tkSequence);
 
 		Dao_pjm dao = new Dao_pjm(wkSequence);
-		Dto dto = dao.tableClick();
+		Dto_pjm dto = dao.tableClick();
 
 		tfSeqno.setText(Integer.toString(dto.getP_seq()));
 		tfBrand.setText(dto.getBrand());
 		tfName.setText(dto.getName());
-		tfPrice.setText(dto.getPrice());
+		tfPrice.setText(Integer.toString(dto.getPrice()));
 		tfColor.setText(dto.getColor());
-		tfQty.setText(dto.getQty());
+		tfQty.setText(Integer.toString(dto.getQty()));
 		cbSelection1.setSelectedItem(dto.getSize());
 //		 Image 처리 : filename 이 틀려야 보여주기가 가능
 		String filePath = Integer.toString(ShareVar.filename);
@@ -608,10 +676,10 @@ public class ManagerPage_ extends JDialog {
 	private void insertAction() {
 		String brand = tfBrand.getText().trim();
 		String name = tfName.getText().trim();
-		String price = tfPrice.getText().trim();
+		int price = Integer.parseInt(tfPrice.getText());
 		String color = tfColor.getText().trim();
-		String qty = tfQty.getText().trim();
-		String size = cbSelection1.getSelectedItem().toString();
+		int qty = Integer.parseInt(tfQty.getText());
+		int size = Integer.parseInt(cbSelection1.getSelectedItem().toString().trim());
 
 		FileInputStream input = null;
 		File file = new File(tfFilePath.getText());
@@ -638,14 +706,13 @@ public class ManagerPage_ extends JDialog {
 		int seqno = Integer.parseInt(tfSeqno.getText());
 		String brand = tfBrand.getText().trim();
 		String name = tfName.getText().trim();
-		String price = tfPrice.getText().trim();
+		int price = Integer.parseInt(tfPrice.getText());
 		String color = tfColor.getText().trim();
-		String qty = tfQty.getText().trim();
-		String size = cbSelection1.getSelectedItem().toString().trim();
+		int qty = Integer.parseInt(tfQty.getText());
+		int size = Integer.parseInt(cbSelection1.getSelectedItem().toString().trim());
 
 		Dao_pjm dao = new Dao_pjm(seqno, brand, name, price, color, qty, size);
 		boolean result = dao.updateAction();
-
 		if (result == true) {
 			JOptionPane.showMessageDialog(null, tfName.getText() + "님의 정보가 수정되었습니다.");
 		} else {
@@ -655,19 +722,7 @@ public class ManagerPage_ extends JDialog {
 
 	}
 
-	private void deleteAction() {
 
-		Dao_pjm dao = new Dao_pjm(Integer.parseInt(tfSeqno.getText()));
-		boolean result = dao.deleteAction();
-
-		if (result == true) {
-			JOptionPane.showMessageDialog(null, tfName.getText() + "님의 정보가 삭제되었습니다.");
-		} else {
-			JOptionPane.showMessageDialog(null, "삭제 중 문제가 발생하였습니다.");
-
-		}
-
-	}
 
 	private int insertFieldCheck() {
 		int i = 0;
@@ -731,146 +786,108 @@ public class ManagerPage_ extends JDialog {
 
 
 	// 콤보박스에서 선택해서 검색
-	private void searchName(String searchName) {
-		Dao_pjm dao = new Dao_pjm();
-		ArrayList<Dto_pjm> dtoList = dao.searchName();
+//	private void searchName(String searchName) {
+//		Dao_pjm dao = new Dao_pjm();
+//		ArrayList<Dto_pjm> dtoList = dao.searchName();
+//
+//		int listCount = dtoList.size();
+//		if (cbSelection.getSelectedItem().toString().equals("제품명")) {
+//			dao.searchName();
+//
+//			for (int i = 0; i < listCount; i++) {
+//				String temp = Integer.toString(dtoList.get(i).getP_seq());
+//				String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
+//						dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
+//				outerTable.addRow(qTxt);
+//			}
+//
+//
+//		}
+//	}
 
-		int listCount = dtoList.size();
-		if (cbSelection.getSelectedItem().toString().equals("제품명")) {
-			dao.searchName();
+	
+
+
+	
+	private void eachSearchAction() {
+		if (rbSearch.isSelected()) {
+			switch (cbSelection.getSelectedIndex()) {
+			case 1:
+				brandSearch();
+				break;
+			case 2:
+				nameSearch();
+				break;
+			case 3:
+				sizeSearch();
+				break;
+			default:
+			}
+		}
+	}
+
+	private void brandSearch() {
+		tableInit();
+		if (cbSelection.getSelectedItem().toString().equals("브랜드")) {
+			String searchAll = tfSelection.getText();
+			Dao_pjm dao = new Dao_pjm();
+			ArrayList<Dto_pjm> dtoList = dao.brandSearch();
+
+			int listCount = dtoList.size();
 
 			for (int i = 0; i < listCount; i++) {
 				String temp = Integer.toString(dtoList.get(i).getP_seq());
-				String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
-						dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
+				String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(),
+						Integer.toString(dtoList.get(i).getPrice()), dtoList.get(i).getColor(),
+						Integer.toString(dtoList.get(i).getQty()), Integer.toString(dtoList.get(i).getSize()) };
 				outerTable.addRow(qTxt);
 			}
-
-
 		}
+
 	}
-		private void brandSearch() {
-			tableInit();
-			
-			if(cbSelection.getSelectedItem().toString().equals("브랜드")) {
-				String searchAll = tfSelection.getText();
-				Dao_pjm dao = new Dao_pjm();
-				ArrayList<Dto_pjm> dtoList = dao.brandSearch();
 
-				int listCount = dtoList.size();
+	private void nameSearch() {
+		tableInit();
+		if (cbSelection.getSelectedItem().toString().equals("브랜드")) {
+			String searchAll = tfSelection.getText();
+			Dao_pjm dao = new Dao_pjm();
+			ArrayList<Dto_pjm> dtoList = dao.brandSearch();
 
-				for (int i = 0; i < listCount; i++) {
-					String temp = Integer.toString(dtoList.get(i).getP_seq());
-					String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
-							dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
-					outerTable.addRow(qTxt);
-				}
+			int listCount = dtoList.size();
+
+			for (int i = 0; i < listCount; i++) {
+				String temp = Integer.toString(dtoList.get(i).getP_seq());
+				String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(),
+						Integer.toString(dtoList.get(i).getPrice()), dtoList.get(i).getColor(),
+						Integer.toString(dtoList.get(i).getQty()), Integer.toString(dtoList.get(i).getSize()) };
+				outerTable.addRow(qTxt);
 			}
+		}
 
 	}
-		private void nameSearch() {
-			tableInit();
-			
-			if(cbSelection.getSelectedItem().toString().equals("브랜드")) {
-				String searchAll = tfSelection.getText();
-				Dao_pjm dao = new Dao_pjm();
-				ArrayList<Dto_pjm> dtoList = dao.brandSearch();
+	private void sizeSearch() {
+		tableInit();
+		if (cbSelection.getSelectedItem().toString().equals("브랜드")) {
+			String searchAll = tfSelection.getText();
+			Dao_pjm dao = new Dao_pjm();
+			ArrayList<Dto_pjm> dtoList = dao.brandSearch();
 
-				int listCount = dtoList.size();
+			int listCount = dtoList.size();
 
-				for (int i = 0; i < listCount; i++) {
-					String temp = Integer.toString(dtoList.get(i).getP_seq());
-					String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
-							dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
-					outerTable.addRow(qTxt);
-				}
+			for (int i = 0; i < listCount; i++) {
+				String temp = Integer.toString(dtoList.get(i).getP_seq());
+				String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(),
+						Integer.toString(dtoList.get(i).getPrice()), dtoList.get(i).getColor(),
+						Integer.toString(dtoList.get(i).getQty()), Integer.toString(dtoList.get(i).getSize()) };
+				outerTable.addRow(qTxt);
 			}
-
-	}
-		private void sizeSearch() {
-			tableInit();
-			
-			if(cbSelection.getSelectedItem().toString().equals("브랜드")) {
-				String searchAll = tfSelection.getText();
-				Dao_pjm dao = new Dao_pjm();
-				ArrayList<Dto_pjm> dtoList = dao.brandSearch();
-
-				int listCount = dtoList.size();
-
-				for (int i = 0; i < listCount; i++) {
-					String temp = Integer.toString(dtoList.get(i).getP_seq());
-					String[] qTxt = { temp, dtoList.get(i).getBrand(), dtoList.get(i).getName(), dtoList.get(i).getPrice(),
-							dtoList.get(i).getColor(), dtoList.get(i).getQty(), dtoList.get(i).getSize() };
-					outerTable.addRow(qTxt);
-				}
-			}
-
-	}
-	
-	
-	// Function ---- pdg add
-	
-	private void goHome() {
-		FirstPage first = new FirstPage();
-		managerDialog.setVisible(false);
-		first.setVisible(true);
-		dispose();
-		this.setVisible(false);
-	}
-	private void goCurrentSituation() {
-		
-		
-		CurrentSituation currentSituation = new CurrentSituation();
-		currentSituation.setVisible(false);
-		currentSituation.setVisible(true);
-		dispose();
-		this.setVisible(false);
-		
-		
-		
-	}
-	
-	private JButton getBtnLogOut() {
-		if (btnLogOut == null) {
-			btnLogOut = new JButton("");
-			btnLogOut.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					goHome();
-				}
-			});
-			btnLogOut.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/logout_new.png")));
-			btnLogOut.setBounds(730, 33, 45, 45);
 		}
-		return btnLogOut;
-	}
-	private JButton getBtnMainView() {
-		if (btnMainView == null) {
-			btnMainView = new JButton("");
-			btnMainView.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/메인가기.png")));
-			btnMainView.setBounds(618, 33, 48, 45);
-		}
-		return btnMainView;
-	}
-	private JButton getBtnCurrentSituation() {
-		if (btnCurrentSituation == null) {
-			btnCurrentSituation = new JButton("");
-			btnCurrentSituation.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					goCurrentSituation();
-					
-					
-					
-				}
-			});
-			btnCurrentSituation.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/현황.png")));
-			btnCurrentSituation.setBounds(673, 33, 45, 45);
-		}
-		return btnCurrentSituation;
+
 	}
 	
+}//End
+
 	
 	
 	
-}// End
+	

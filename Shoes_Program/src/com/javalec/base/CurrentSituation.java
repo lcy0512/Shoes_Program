@@ -13,7 +13,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import com.javalec.function.Dao_pjh_CurrentSituation;
-import com.javalec.function.Dto;
 import com.javalec.function.Dto_pjh_CurrentSituation;
 import com.javalec.function.ShareVar;
 
@@ -233,7 +232,7 @@ public class CurrentSituation extends JDialog {
 	private void backToManagerPage() {
 		
 		
-		ManagerPage managerPage = new ManagerPage();
+		ManagerPage_ managerPage = new ManagerPage_();
 		
 		managerPage.setVisible(true);
 		this.setVisible(false);

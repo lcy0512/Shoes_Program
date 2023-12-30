@@ -109,6 +109,7 @@ public class ManagerPage_ extends JDialog {
 
 	/// PDG adding images and icon
 	public ManagerPage_() {
+		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {

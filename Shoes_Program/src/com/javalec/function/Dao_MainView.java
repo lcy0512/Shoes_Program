@@ -1,0 +1,112 @@
+package com.javalec.function;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class Dao_MainView {
+	
+
+	// Field
+	
+	//sql  설정
+	private final String url_mysql = ShareVar.dbName;
+	private final String id_mysql = ShareVar.dbUser;
+	private final String pw_mysql = ShareVar.dbPass;
+	// product variable
+	int p_seq;
+	String pbrand;
+	String pname;
+	int pprice;
+	String pcolor;
+	int pqty;
+	int psize;
+	FileInputStream file;
+
+	// Constructor
+	
+	public Dao_MainView() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
+	
+	
+	
+	
+	public Dao_MainView(String pbrand, String pname, int pprice, FileInputStream file) {
+		super();
+		this.pbrand = pbrand;
+		this.pname = pname;
+		this.pprice = pprice;
+		this.file = file;
+	}
+
+
+
+
+
+
+
+	//Method
+	//1. 초기 Table에 사진,브랜드,이름,가격 넣기
+	public ArrayList<Dto_Mainview> dao_pjh_AllProductMainviews() {
+		ArrayList<Dto_Mainview> dtoAllProductTablelist = new ArrayList<Dto_Mainview>();
+		String fetchAllProductQuery = "select brand, name, price,image from product";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+			
+			ResultSet rs = stmt_mysql.executeQuery(fetchAllProductQuery);
+
+			while (rs.next()) {
+				String sqlbrand = rs.getString(1);
+				String sqlname = rs.getString(2);
+				int sqlprice = rs.getInt(3);
+				String currentRow_fake_filename = rs.getString(2)+"_image";
+            	
+            	// File
+            	
+            	File image = new File("./"+ currentRow_fake_filename);
+            	FileOutputStream writingFileOnHardware = new FileOutputStream(image);
+            	InputStream loadOnTheFileWithFetchedImage = rs.getBinaryStream(4);
+            	
+            	byte[] buffer  =new byte[1024];
+            	while (loadOnTheFileWithFetchedImage.read(buffer)>0) {
+            		writingFileOnHardware.write(buffer);
+            		
+            	}
+
+				Dto_Mainview dtoAllImageProduct = 
+						new Dto_Mainview(sqlbrand, sqlname, sqlprice, currentRow_fake_filename);
+				
+				
+				
+				
+				dtoAllProductTablelist.add(dtoAllImageProduct);
+
+			}
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return dtoAllProductTablelist;
+
+	}
+	
+	
+	
+	
+
+}

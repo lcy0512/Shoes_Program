@@ -260,6 +260,11 @@ public class Dao_lcy {
 
 	
 	
+<<<<<<< HEAD
+=======
+	
+	
+>>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	// ===========================================================[OrderList]==============================================================
 	
 	
@@ -268,7 +273,7 @@ public class Dao_lcy {
 			ArrayList<Dto_lcy> Dto_lcyList = new ArrayList<Dto_lcy>();
 			String whereDefault = "select p.p_seq, p.brand, p.name, p.price, p.color, p.size, sale.qty, sale.date";
 			String where1 = " from product as p, sale";
-			String where2 = " where (p.p_seq = sale.product_p_seq) and customer_customer_id = " + "'qpdlql512'";
+			String where2 = " where (p.p_seq = sale.product_p_seq) and customer_customer_id = " + ShareVar.userId;
 //			===================================================================================[ShareVar.userId]================================
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");

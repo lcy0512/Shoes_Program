@@ -4,6 +4,16 @@ import java.io.FileInputStream;
 
 public class Dto_Mainview {
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Description : 메인뷰 페이지 dto
+	 * Date : 2023.12.31 
+	 * Author : 박지환 
+	 * Update :
+	 * 		1. Constructor 추가
+	 */
+>>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	// Field
 	int p_seq;
 	String pbrand;

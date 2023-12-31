@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
 
 import com.javalec.function.Dao_pdg;
 import com.javalec.function.ShareVar;
@@ -16,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
@@ -23,8 +25,10 @@ import javax.swing.JComboBox;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JRadioButton;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
-public class LoginPage extends JDialog {
+public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -46,7 +50,12 @@ public class LoginPage extends JDialog {
 	 *  o	3. 로그인창이 가운데로오게 share bar 에서 위치 가져옴. 
 	 * 	o	4.  UI 회원가입이랑 비슷하게 수정 
 	 *  Update 2023.12.30 by PDG:
-	 *  	1.  winodow 로 키면 그림들이 안보임. 체크박스도 없어보임 -> 대거 수정
+	 *  O	1.  winodow 로 키면 그림들이 안보임. 체크박스도 없어보임 -> 대거 수정
+	 *  
+	 *  Update 2023.12.31 by PDG:
+	 *  
+	 *  		1. 키보드에서 친 글자들이 로그인 창의 ID 나 pw 창에 뜨게하고싶은데 share var 를 이용해도 실시간으로 글이 안써짐. 
+	 *  		2. 아싸리 키보드를 인터페이스로 구현한뒤 키보드의 기능을 클래스에서 끌어와 쓰면 편할것 같음. 
 	 */
 	
 	
@@ -59,7 +68,7 @@ public class LoginPage extends JDialog {
 	private JLabel lblPasswrodPress;
 	private JLabel lblPassword;
 	private JRadioButton rbPattern1;
-	private JButton btnNewButton_1_1;
+	private JButton btnKeyboard;
 	
 	private JPasswordField getPfPassword() {
 		if (pfPassword == null) {
@@ -139,6 +148,8 @@ public class LoginPage extends JDialog {
 	 * Create the dialog.
 	 */
 	public LoginPage() {
+		
+		
 		setTitle("로그인");
 		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, 800, 600);
 		getContentPane().setLayout(new BorderLayout());
@@ -157,6 +168,12 @@ public class LoginPage extends JDialog {
 		
 		{
 			tfID = new JTextField();
+			tfID.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					ShareVar.currentTF =tfID;
+				}
+			});
 			tfID.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -172,7 +189,7 @@ public class LoginPage extends JDialog {
 		contentPanel.add(getImageUser());
 		contentPanel.add(getImagePass());
 		contentPanel.add(getRbPattern1());
-		contentPanel.add(getBtnNewButton_1_1());
+		contentPanel.add(getBtnKeyboard());
 	
 		}
 
@@ -265,31 +282,49 @@ public class LoginPage extends JDialog {
 		}
 		return rbPattern1;
 	}
-	private JButton getBtnNewButton_1_1() {
-		if (btnNewButton_1_1 == null) {
-			btnNewButton_1_1 = new JButton("");
-			btnNewButton_1_1.addActionListener(new ActionListener() {
+	private JButton getBtnKeyboard() {
+		if (btnKeyboard == null) {
+			btnKeyboard = new JButton("");
+			btnKeyboard.setVisible(false);
+			
+			btnKeyboard.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					//JTextField.getCaretPosition()
+					//Cursor cursor = null; 
+			
+
 					KeyBoardUpDown();
 					
 				}
 			});
-			btnNewButton_1_1.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/keyBoard.png")));
-			btnNewButton_1_1.setBounds(386, 368, 35, 29);
+			btnKeyboard.setIcon(new ImageIcon(LoginPage.class.getResource("/com/javalec/image/keyBoard.png")));
+			btnKeyboard.setBounds(386, 368, 35, 29);
 		}
-		return btnNewButton_1_1;
+		return btnKeyboard;
 	}
 	
 	
-	private void KeyBoardUpDown() {
+	private void KeyBoardUpDown( ) {
+
+		
+		
 		
 		Keyboard keyboard = new Keyboard();
-		keyboard.keyboadOnOff(!ShareVar.keyboard);
+		keyboard.keyboardUPDOWN(!ShareVar.keyboard);
+		//keyboard.KeyInput();
 		
-		if(tfID.isCursorSet()) {
-			keyboard.keyReturn();
+		//keyboard.keyboadOnOff(!ShareVar.keyboard);
+		//tfID.requestFocus();
+		ShareVar.currentTF.setText(ShareVar.typedContents);
+		System.out.println(ShareVar.currentTF);
+		
+		
+//		if(tfID.isCursorSet()) {
 			
-		}
+//			//tfID.setText(ShareVar.typedContents);
+//	
+//			
+//		}
 		
 		
 		

@@ -4,16 +4,13 @@ import java.io.FileInputStream;
 
 public class Dto_Mainview {
 
-<<<<<<< HEAD
-=======
 	/*
 	 * Description : 메인뷰 페이지 dto
-	 * Date : 2023.12.31 
-	 * Author : 박지환 
+	 * Date : 2023.12.31
+	 * Author : 박지환
 	 * Update :
 	 * 		1. Constructor 추가
 	 */
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	// Field
 	int p_seq;
 	String pbrand;
@@ -29,7 +26,7 @@ public class Dto_Mainview {
 		// TODO Auto-generated constructor stub
 	}
 
-	
+
 	//제품목록 부르기 위한 생성자
 	public Dto_Mainview(String pbrand, String pname, int pprice, String fake_filename) {
 		super();
@@ -44,7 +41,7 @@ public class Dto_Mainview {
 	public int getP_seq() {
 		return p_seq;
 	}
-	
+
 	public void setP_seq(int p_seq) {
 		this.p_seq = p_seq;
 	}
@@ -108,6 +105,6 @@ public class Dto_Mainview {
 	}
 
 
-	
+
 
 }

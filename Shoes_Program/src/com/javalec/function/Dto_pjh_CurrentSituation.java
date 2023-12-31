@@ -3,18 +3,15 @@ package com.javalec.function;
 import java.io.FileInputStream;
 
 public class Dto_pjh_CurrentSituation {
-<<<<<<< HEAD
-=======
-	
+
 	/*
 	 * Description : 매출 현황 Dto
-	 * Date : 2023.12.31 
-	 * Author : 박지환 
+	 * Date : 2023.12.31
+	 * Author : 박지환
 	 * Update :
 	 * 		1. 현황 페이지 상품별 매출현황 cConstructor추가
-	 * 		
+	 *
 	 */
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	// Field
 	int p_seq;
 	String pbrand;
@@ -48,32 +45,20 @@ public class Dto_pjh_CurrentSituation {
 	// save
 	int saseq;
 	int sap_seq;
-<<<<<<< HEAD
-
-	// --------------------------------Constructor----------------------
-
-	// 관리자 페이지 일별매출가
-=======
 	int totalprice;
-	
+
 	// --------------------------------Constructor----------------------
 
 	// 현황 페이지 일별매출,웖별매출,일주일별매출
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	public Dto_pjh_CurrentSituation(String sdate, int sprice) {
 		super();
 		this.sdate = sdate;
 		this.sprice = sprice;
 
 	}
-	
-<<<<<<< HEAD
-	//
-	
-	
-=======
-	
-	
+
+
+
 	// 현황 페이지 상품별 매출현황
 	public Dto_pjh_CurrentSituation(String pbrand, String pname, int pprice, int sqty,int totalprice) {
 		super();
@@ -82,20 +67,19 @@ public class Dto_pjh_CurrentSituation {
 		this.pprice = pprice;
 		this.sqty = sqty;
 		this.totalprice = totalprice;
-		
+
 	}
 
 
 
 
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	//날짜 검색
 	public Dto_pjh_CurrentSituation(String sdate) {
 		super();
 		this.sdate = sdate;
 	}
-	
-	
+
+
 
 	// --------------------------------method-------------------------
 	public int getP_seq() {
@@ -315,8 +299,6 @@ public class Dto_pjh_CurrentSituation {
 		this.sap_seq = sap_seq;
 	}
 
-<<<<<<< HEAD
-=======
 
 
 
@@ -345,5 +327,4 @@ public class Dto_pjh_CurrentSituation {
 		this.totalprice = totalprice;
 	}
 
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 }

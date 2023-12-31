@@ -11,26 +11,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Dao_MainView {
-<<<<<<< HEAD
-	
-
-	// Field
-	
-	//sql  설정
-=======
 	/*
-	 * Description : 메인뷰 페이지 
-	 * Date : 2023.12.31 
-	 * Author : 박지환 
+	 * Description : 메인뷰 페이지
+	 * Date : 2023.12.31
+	 * Author : 박지환
 	 * Update : 1. 브랜드, 이름별로 검색기능추가
 	 * 			2. 테이블 눌렀을때 SEQ받는 메소드 추가 by wdh
-	 * 
+	 *
 	 */
 
 	// Field
 
 	// sql 설정
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	private final String url_mysql = ShareVar.dbName;
 	private final String id_mysql = ShareVar.dbUser;
 	private final String pw_mysql = ShareVar.dbPass;
@@ -43,21 +35,6 @@ public class Dao_MainView {
 	int pqty;
 	int psize;
 	FileInputStream file;
-<<<<<<< HEAD
-
-	// Constructor
-	
-	public Dao_MainView() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	
-	
-	
-	
-	
-	
-=======
 	String searchText;
 	// Constructor
 
@@ -65,31 +42,17 @@ public class Dao_MainView {
 		// TODO Auto-generated constructor stub
 	}
 
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	public Dao_MainView(String pbrand, String pname, int pprice, FileInputStream file) {
 		super();
 		this.pbrand = pbrand;
 		this.pname = pname;
 		this.pprice = pprice;
 		this.file = file;
-<<<<<<< HEAD
-	}
-
-
-
-
-
-
-
-	//Method
-	//1. 초기 Table에 사진,브랜드,이름,가격 넣기
-=======
 
 	}
 
 	// Method
 	// 1. 초기 Table에 사진,브랜드,이름,가격 넣기
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 	public ArrayList<Dto_Mainview> dao_pjh_AllProductMainviews() {
 		ArrayList<Dto_Mainview> dtoAllProductTablelist = new ArrayList<Dto_Mainview>();
 		String fetchAllProductQuery = "select brand, name, price,image from product";
@@ -98,39 +61,13 @@ public class Dao_MainView {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement stmt_mysql = conn_mysql.createStatement();
-<<<<<<< HEAD
-			
-=======
 
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 			ResultSet rs = stmt_mysql.executeQuery(fetchAllProductQuery);
 
 			while (rs.next()) {
 				String sqlbrand = rs.getString(1);
 				String sqlname = rs.getString(2);
 				int sqlprice = rs.getInt(3);
-<<<<<<< HEAD
-				String currentRow_fake_filename = rs.getString(2)+"_image";
-            	
-            	// File
-            	
-            	File image = new File("./"+ currentRow_fake_filename);
-            	FileOutputStream writingFileOnHardware = new FileOutputStream(image);
-            	InputStream loadOnTheFileWithFetchedImage = rs.getBinaryStream(4);
-            	
-            	byte[] buffer  =new byte[1024];
-            	while (loadOnTheFileWithFetchedImage.read(buffer)>0) {
-            		writingFileOnHardware.write(buffer);
-            		
-            	}
-
-				Dto_Mainview dtoAllImageProduct = 
-						new Dto_Mainview(sqlbrand, sqlname, sqlprice, currentRow_fake_filename);
-				
-				
-				
-				
-=======
 				String currentRow_fake_filename = rs.getString(2) + "_image";
 
 				// File
@@ -148,7 +85,6 @@ public class Dao_MainView {
 				Dto_Mainview dtoAllImageProduct = new Dto_Mainview(sqlbrand, sqlname, sqlprice,
 						currentRow_fake_filename);
 
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 				dtoAllProductTablelist.add(dtoAllImageProduct);
 
 			}
@@ -161,12 +97,6 @@ public class Dao_MainView {
 		return dtoAllProductTablelist;
 
 	}
-<<<<<<< HEAD
-	
-	
-	
-	
-=======
 
 	// 2. 브랜드 별로 검색하기(일요일날 브랜드, 이름도 메인에버 받아서 브랜드 이름 하나로 합치기)
 	public ArrayList<Dto_Mainview> dao_pjh_BrandSearchProductMainviews(String searchText) {
@@ -291,6 +221,5 @@ public class Dao_MainView {
 		return p_seqArrayList;
 
 	}
->>>>>>> b011fe67131965f76060f500d4de6f5f9e80d4db
 
 }

@@ -32,14 +32,14 @@ import com.javalec.product.MainView_Info;
 
 public class MainView extends JDialog {
 	/*
-	 * Description : 메인뷰 페이지 
-	 * Date : 2023.12.31 
-	 * Author : 박지환 
+	 * Description : 메인뷰 페이지
+	 * Date : 2023.12.31
+	 * Author : 박지환
 	 * Update :
 	 * 		1. 브랜드 이름별 검색기능 추가
 	 * 		2. 테이블크기 확장
 	 */
-	
+
 	//테이블안에 글씨 중앙정렬 기능 추가필요
 	//상세페이지랑 연결필요->내일 상세페이지 맡은사람한테 실행되나 물어보기
 	private static final long serialVersionUID = 1L;

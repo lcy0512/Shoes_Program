@@ -12,12 +12,12 @@ import java.util.ArrayList;
 
 public class Dao_MainView {
 	/*
-	 * Description : 메인뷰 페이지 
-	 * Date : 2023.12.31 
-	 * Author : 박지환 
+	 * Description : 메인뷰 페이지
+	 * Date : 2023.12.31
+	 * Author : 박지환
 	 * Update : 1. 브랜드, 이름별로 검색기능추가
 	 * 			2. 테이블 눌렀을때 SEQ받는 메소드 추가 by wdh
-	 * 
+	 *
 	 */
 
 	// Field

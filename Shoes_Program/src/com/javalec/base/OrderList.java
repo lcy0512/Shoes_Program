@@ -3,10 +3,12 @@ package com.javalec.base;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -19,15 +21,10 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -36,26 +33,24 @@ import javax.swing.JLabel;
 public class OrderList extends JDialog {
 	
 	/*
-	 * Descritipon : 
+	 * Descritipon : 주문 내역을 보여주는 Class. 사용자에게는 확인하는 곳이기에 Only Read.
+	 * 				 Table을 통해 구매한 제품들의 상세내역을 보여준다.
 	 * 
 	 * Author : Lcy
 	 * 
-	 * Date : 2023-12-28 , 17:21
-	 *  		
-	 *  		
+	 * Date : 2023-12-30 , 16:27
 	 */
 	
 	private static final long serialVersionUID = 1L;
-	
 	private final JPanel contentPanel = new JPanel();
-	
 	private final DefaultTableModel outerTable = new DefaultTableModel();
 	private JScrollPane scrollPane;
 	private JTable innerTable;
 	private JLabel lblNewLabel_1;
 	private JButton btnMoveMainView;
-	
-	
+	private JButton btnMoveLogOut;
+	private JButton btnLogo;
+	static ManagerPage_ managerDialog = new ManagerPage_();
 	static OrderList buyDialog = new OrderList();
 	
 	public static void main(String[] args) {
@@ -87,12 +82,14 @@ public class OrderList extends JDialog {
 		contentPanel.add(getScrollPane());
 		contentPanel.add(getLblNewLabel_1());
 		contentPanel.add(getBtnMoveMainView());
+		contentPanel.add(getBtnMoveLogOut());
+		contentPanel.add(getBtnLogo());
 	}
 
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(43, 130, 711, 350);
+			scrollPane.setBounds(20, 105, 741, 350);
 			scrollPane.setViewportView(getInnerTable());
 		}
 		return scrollPane;
@@ -102,6 +99,12 @@ public class OrderList extends JDialog {
 		if (innerTable == null) {
 			innerTable = new JTable();
 			innerTable.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+			// Table내의 cell Data 오른쪽 정렬
+			DefaultTableCellRenderer cellAlignRight = new DefaultTableCellRenderer();
+			cellAlignRight.setHorizontalAlignment(SwingConstants.CENTER); 
+			for(int i=0; i<innerTable.getColumnCount(); i++) {
+				innerTable.getColumnModel().getColumn(i).setCellRenderer(cellAlignRight);
+			}
 			innerTable.setRowHeight(70);
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
@@ -110,28 +113,55 @@ public class OrderList extends JDialog {
 	}
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("주문 내역");
+			lblNewLabel_1 = new JLabel("History");
 			lblNewLabel_1.setFont(new Font("Lucida Grande", Font.BOLD, 40));
-			lblNewLabel_1.setBounds(310, 6, 200, 80);
+			lblNewLabel_1.setBounds(318, 10, 200, 80);
 		}
 		return lblNewLabel_1;
 	}
 	
 	private JButton getBtnMoveMainView() {
 		if (btnMoveMainView == null) {
-			btnMoveMainView = new JButton("Main");
+			btnMoveMainView = new JButton("");
+			btnMoveMainView.setIcon(new ImageIcon(OrderList.class.getResource("/com/javalec/image/메인가기.png")));
 			btnMoveMainView.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					buyDialog.setVisible(false);
-					MainView mainView  = new MainView();
-					mainView.setVisible(true);
+					goMain();
 				}
 			});
-			btnMoveMainView.setBounds(678, 22, 61, 46);
+			btnMoveMainView.setBounds(665, 19, 45, 45);
 		}
 		return btnMoveMainView;
 	}
-
+	
+	private JButton getBtnMoveLogOut() {
+		if (btnMoveLogOut == null) {
+			btnMoveLogOut = new JButton("");
+			btnMoveLogOut.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					goHome();
+				}
+			});
+			btnMoveLogOut.setBounds(715, 19, 45, 45);
+			btnMoveLogOut.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/logout_new.png")));
+		}
+		return btnMoveLogOut;
+	}
+	
+	private JButton getBtnLogo() {
+		if(btnLogo == null) {
+			btnLogo = new JButton("");
+			btnLogo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					goMain();
+				}
+			});
+			btnLogo.setBounds(20, 25, 225, 45);
+			btnLogo.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/JUNES_LOGO.png")));
+		}
+		return btnLogo;
+	}
+	
 	// ========= Functions ============
 	
 	private void tableInit() { // Table 초기화 
@@ -159,7 +189,7 @@ public class OrderList extends JDialog {
 		
 		colNo = 2;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 115;
+		width = 127;
 		col.setPreferredWidth(width);
 		
 		colNo = 3;
@@ -169,7 +199,7 @@ public class OrderList extends JDialog {
 		
 		colNo = 4;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 75;
+		width = 85;
 		col.setPreferredWidth(width);
 		
 		colNo = 5;
@@ -179,12 +209,12 @@ public class OrderList extends JDialog {
 		
 		colNo = 6;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 50;
+		width = 68;
 		col.setPreferredWidth(width);
 		
 		colNo = 7;
 		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 120;
+		width = 128;
 		col.setPreferredWidth(width);
 		
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
@@ -196,7 +226,7 @@ public class OrderList extends JDialog {
 		}
 	}
 	
-	private void searchActionInOrderList() { // 검색(Database에서 Table로 불러오기) 
+	private void searchActionInOrderList() { // 검색 (Database에서 Table로 불러오기) 
 		Dao_lcy dao = new Dao_lcy();
 		ArrayList<Dto_lcy> dtoList = dao.showOrderList(); 
 		int listCount = dtoList.size();
@@ -214,6 +244,20 @@ public class OrderList extends JDialog {
 			};
 				outerTable.addRow(qTxt);
 		}
+	}
+	
+	private void goHome() { // FirstPage로 이동 
+		FirstPage first = new FirstPage();
+		managerDialog.setVisible(false);
+		first.setVisible(true);
+		dispose();
+		this.setVisible(false);
+	}
+	
+	private void goMain() { // MainView로 이동 
+		buyDialog.setVisible(false);
+		MainView mainView = new MainView();
+		mainView.setVisible(true);
 	}
 	
 } // End

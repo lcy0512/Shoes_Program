@@ -50,7 +50,13 @@ external jar 올릴수있게 수정하자!
 <br>
 9.  관리자 페이지가 나온다
 <br>
-  ![image](https://github.com/BigDataTeam01/Shoes_Program/assets/149550771/66786ea0-c41b-4c15-85e9-9114803867cf)
+ ![image](https://github.com/BigDataTeam01/Shoes_Program/assets/149550771/875cf923-0a23-4d74-ab50-bf67d141f4b5)
+
+10. 회원정보를 수정한다.
+    
+
+
+  
 
 
 

@@ -123,9 +123,9 @@ public class FirstPage extends JDialog {
 			contentPanel.add(btnMember);
 		}
 		{
-			JLabel lblNewLabel_1 = new JLabel("JUmp With NEw Shoes.");
-			lblNewLabel_1.setFont(new Font("Libian SC", Font.ITALIC, 23));
-			lblNewLabel_1.setBounds(290, 260, 244, 53);
+			JLabel lblNewLabel_1 = new JLabel("Jump with new shoes.");
+			lblNewLabel_1.setFont(new Font("Harlow Solid Italic", Font.ITALIC, 28));
+			lblNewLabel_1.setBounds(294, 255, 343, 53);
 			contentPanel.add(lblNewLabel_1);
 		}
 		{

@@ -17,7 +17,6 @@ external jar 올릴수있게 수정하자!
 3.아이디 중복확인 기능 
 <br>
   ![image](https://github.com/BigDataTeam01/Shoes_Program/assets/149550771/7ddadd55-a092-44b7-9695-b6b6683b15b0)
-  <br>
   ![image](https://github.com/BigDataTeam01/Shoes_Program/assets/149550771/de2207e9-a771-4dfa-810a-2e119de08903)
 
 <br><br>

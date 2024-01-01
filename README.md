@@ -48,10 +48,14 @@
 <br>
 9.  관리자 페이지가 나온다
 <br>
- ![image](https://github.com/BigDataTeam01/Shoes_Program/assets/149550771/875cf923-0a23-4d74-ab50-bf67d141f4b5)
+![image](https://github.com/BigDataTeam01/Shoes_Program/assets/149550771/a2e8b712-2bd7-4048-814a-84721c47352f)
 
-10. 회원정보를 수정한다.
+<br> <br>
+10. 회원정보를 수정한다.<br>
     
+![image](https://github.com/BigDataTeam01/Shoes_Program/assets/149550771/1ce5fac1-0fb3-49bf-94d3-e6ec3f190bda)
+![image](https://github.com/BigDataTeam01/Shoes_Program/assets/149550771/919805fa-3db9-4398-8aa9-b8a73523feb0)
+
 
 
   

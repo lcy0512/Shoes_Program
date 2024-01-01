@@ -471,8 +471,9 @@ public class JoinPage extends JDialog {
 
 			String customer_id = tfID.getText();
 			char[] nameArray = pfPassword.getPassword();
-			String name = new String(nameArray);
-			String pw = tfName.getText();
+			String pw = new String(nameArray);
+			String name = tfName.getText();
+
 			String telno = tfTelno.getText();
 			String email = tfEmail.getText();
 

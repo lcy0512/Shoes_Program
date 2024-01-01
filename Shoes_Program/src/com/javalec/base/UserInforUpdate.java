@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.javalec.function.Dao_pdg;
+import com.javalec.function.Dto_PDG_CustomerTable;
 import com.javalec.function.ShareVar;
 
 import javax.swing.JLabel;
@@ -22,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,8 +35,10 @@ import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class JoinPage extends JDialog {
+public class UserInforUpdate extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -61,24 +65,15 @@ public class JoinPage extends JDialog {
 	private JButton btnNewButton_2;
 
 	/*
-	 * Description : 회원 가입 페이 Date : 20203.12.27 Author : Dong Geun Forrest Park
-	 * Update 2023.12.29  by PDG: 
-	 * o 		1. GUI design 
-	 * o		2. 입력 받은 것으로 db 에 등록하기 
-	 * o		3. id 길이가 너무 길면 쿼리가 안들어감.
-	 * o		4. 아이디 중복확인.
-	 * 			5. 아이디는 숫자와 영어로만 등록할수있습니다.
-	 * o		6. 비밀번호 확인 기능 필요 
-	 * o		7. 동의가 체크 되어야만 등록 되게 만들것 
-	 * o		8. 이미지 업로드 기능 추가할것.
+	 * Description : 회원정보 수정 페이지
+	 * Date : 2024.01.01
+	 * Author : Dong Geun Forrest Park
+	 * Update 2024.01.01  by PDG: 
+	 * 			1. sharevar 에서 현재 아이디를 가져와서 디비에서 회원정보를 검색함. 
 	 * 
-	 * Update 2023.12.31 by PDG
-	 * 
-	 * 			1. 홈버튼 이미지 예전 것임 새로운것으로 바꿀것
-	 * 			2. 팝업 위치 변경
-	 */
+	*/
 
-	static JoinPage joindialog = new JoinPage();
+	static UserInforUpdate joindialog = new UserInforUpdate();
 	private JLabel lblNewLabel_6_1;
 	private JRadioButton rbNormalMember;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
@@ -120,8 +115,18 @@ public class JoinPage extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public JoinPage() {
-		setTitle("회원가입");
+	public UserInforUpdate() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				
+				/// winodw activate 될때 쿼리로 회원정보를 바로 불러온다. 
+				
+				getUserInfoFromDB();
+				
+			}
+		});
+		setTitle("회원정보수정");
 		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, ShareVar.window_size_x,  ShareVar.window_size_y);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
@@ -224,7 +229,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_6() {
 		if (lblNewLabel_6 == null) {
 			lblNewLabel_6 = new JLabel("");
-			lblNewLabel_6.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/pw_new2.png")));
+			lblNewLabel_6.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/pw_new2.png")));
 			lblNewLabel_6.setBounds(230, 126, 35, 45);
 		}
 		return lblNewLabel_6;
@@ -258,7 +263,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_4() {
 		if (lblNewLabel_4 == null) {
 			lblNewLabel_4 = new JLabel("");
-			lblNewLabel_4.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/email_new1.png")));
+			lblNewLabel_4.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/email_new1.png")));
 			lblNewLabel_4.setBounds(230, 259, 35, 35);
 		}
 		return lblNewLabel_4;
@@ -267,7 +272,7 @@ public class JoinPage extends JDialog {
 	private JLabel getNameImage() {
 		if (nameImage == null) {
 			nameImage = new JLabel("");
-			nameImage.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/Name_new.png")));
+			nameImage.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/Name_new.png")));
 			nameImage.setBounds(230, 321, 35, 35);
 		}
 		return nameImage;
@@ -294,7 +299,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_6_1_1() {
 		if (lblNewLabel_6_1_1 == null) {
 			lblNewLabel_6_1_1 = new JLabel("");
-			lblNewLabel_6_1_1.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/login_new.png")));
+			lblNewLabel_6_1_1.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/login_new.png")));
 			lblNewLabel_6_1_1.setBounds(228, 77, 35, 35);
 		}
 		return lblNewLabel_6_1_1;
@@ -358,7 +363,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_6_1_2() {
 		if (lblNewLabel_6_1_2 == null) {
 			lblNewLabel_6_1_2 = new JLabel("");
-			lblNewLabel_6_1_2.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/tell_new.png")));
+			lblNewLabel_6_1_2.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/tell_new.png")));
 			lblNewLabel_6_1_2.setBounds(230, 386, 35, 35);
 		}
 		return lblNewLabel_6_1_2;
@@ -367,7 +372,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel_6_1() {
 		if (lblNewLabel_6_1 == null) {
 			lblNewLabel_6_1 = new JLabel("");
-			lblNewLabel_6_1.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/pw_new2.png")));
+			lblNewLabel_6_1.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/pw_new2.png")));
 			lblNewLabel_6_1.setBounds(230, 188, 35, 45);
 		}
 		return lblNewLabel_6_1;
@@ -394,7 +399,7 @@ public class JoinPage extends JDialog {
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
-			lblNewLabel.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/no_image.png")));
+			lblNewLabel.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/no_image.png")));
 			lblNewLabel.setBounds(69, 80, 115, 125);
 		}
 		return lblNewLabel;
@@ -403,7 +408,7 @@ public class JoinPage extends JDialog {
 	private JButton getBtnCamera() {
 		if (btnCamera == null) {
 			btnCamera = new JButton("");
-			btnCamera.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/camer_new.png")));
+			btnCamera.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/camer_new.png")));
 			btnCamera.setBounds(52, 217, 40, 40);
 		}
 		return btnCamera;
@@ -735,7 +740,7 @@ public class JoinPage extends JDialog {
 
 				}
 			});
-			btnNewButton_2.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/goToFirstPage.png")));
+			btnNewButton_2.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/goToFirstPage.png")));
 			btnNewButton_2.setBounds(713, 16, 35, 35);
 		}
 		return btnNewButton_2;
@@ -770,6 +775,32 @@ public class JoinPage extends JDialog {
 		
 	}
 	
+	// user 정보 검색
+	private void getUserInfoFromDB() {
+		
+		Dao_pdg dao = new Dao_pdg();
+		
+		ArrayList<Dto_PDG_CustomerTable> userInfoList = dao.fetchUserInfo(ShareVar.userID);
+		
+		System.out.println(userInfoList.get(0).getName());
+		
+		tfName.setText(userInfoList.get(0).getName());
+		lblName.setVisible(false);
+		tfID.setText(userInfoList.get(0).getCustomer_id());
+		lblID.setVisible(false);
+		tfTelno.setText(userInfoList.get(0).getTelno());
+		lblTelno.setVisible(false);
+		
+		tfEmail.setText(userInfoList.get(0).getEmail());
+		lblEmail.setVisible(false);
+	}
+	
+	
+	
+	
+	
+	
+	
 	private JButton getBtnIdKeyboard() {
 		if (btnIdKeyboard == null) {
 			btnIdKeyboard = new JButton("");
@@ -780,7 +811,7 @@ public class JoinPage extends JDialog {
 					KeyBoardUpDown(joindialog,tfID);
 				}
 			});
-			btnIdKeyboard.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/keyBoard.png")));
+			btnIdKeyboard.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/keyBoard.png")));
 			btnIdKeyboard.setBounds(538, 77, 35, 35);
 		}
 		return btnIdKeyboard;
@@ -795,7 +826,7 @@ public class JoinPage extends JDialog {
 					KeyBoardUpDown(joindialog,pfPassword);
 				}
 			});
-			btnPWKeyboard.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/keyBoard.png")));
+			btnPWKeyboard.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/keyBoard.png")));
 			btnPWKeyboard.setBounds(538, 133, 35, 35);
 		}
 		return btnPWKeyboard;
@@ -810,7 +841,7 @@ public class JoinPage extends JDialog {
 					KeyBoardUpDown(joindialog,pfPassword_Same);
 				}
 			});
-			btnPW2Keyboard.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/keyBoard.png")));
+			btnPW2Keyboard.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/keyBoard.png")));
 			btnPW2Keyboard.setBounds(538, 195, 35, 35);
 		}
 		return btnPW2Keyboard;
@@ -825,7 +856,7 @@ public class JoinPage extends JDialog {
 					KeyBoardUpDown(joindialog,tfEmail);
 				}
 			});
-			btnEmailKeyboard.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/keyBoard.png")));
+			btnEmailKeyboard.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/keyBoard.png")));
 			btnEmailKeyboard.setBounds(538, 258, 35, 35);
 		}
 		return btnEmailKeyboard;
@@ -840,7 +871,7 @@ public class JoinPage extends JDialog {
 					KeyBoardUpDown(joindialog,tfName);
 				}
 			});
-			btnNameKeyboard.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/keyBoard.png")));
+			btnNameKeyboard.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/keyBoard.png")));
 			btnNameKeyboard.setBounds(538, 321, 35, 35);
 		}
 		return btnNameKeyboard;
@@ -855,7 +886,7 @@ public class JoinPage extends JDialog {
 					KeyBoardUpDown(joindialog,tfTelno);
 				}
 			});
-			btnTellNokeyBoard.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/keyBoard.png")));
+			btnTellNokeyBoard.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/keyBoard.png")));
 			btnTellNokeyBoard.setBounds(538, 386, 35, 35);
 		}
 		return btnTellNokeyBoard;

@@ -52,6 +52,10 @@ public class Dao_pdg {
 	
 	// 2.  중복확인을 위한 생성자 .
 	
+	
+	
+	
+	
 	public Dao_pdg(String customer_id) {
 		super();
 		this.customer_id = customer_id;

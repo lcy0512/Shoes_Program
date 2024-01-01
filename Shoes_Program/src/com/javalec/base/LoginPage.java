@@ -333,8 +333,8 @@ public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
 		
 		JDialog KeyWin = new JDialog(parentDialog, "가상 키보드", true);
 		KeyWin.getContentPane().setLayout(new BorderLayout());
-		KeyWin.setBounds(ShareVar.position_window_x, ShareVar.position_window_y+435,
-        								ShareVar.window_size_x, 210);
+		KeyWin.setBounds(ShareVar.position_window_x, ShareVar.position_window_y+485,
+        								ShareVar.window_size_x, 230);
 		KeyWin.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 
         JPanel KeyboardPanel = new JPanel();
@@ -377,9 +377,12 @@ public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
         addButton(KeyWin,KeyboardPanel,"P",targetTextField,line_indent_gap+key_x_gap*9,key_y_gap*1);
         addButton(KeyWin,KeyboardPanel,"{",targetTextField,line_indent_gap+key_x_gap*10,key_y_gap*1);
         addButton(KeyWin,KeyboardPanel,"}",targetTextField,line_indent_gap+key_x_gap*11,key_y_gap*1);
-        addButton(KeyWin,KeyboardPanel,"|",targetTextField,line_indent_gap+key_x_gap*12,key_y_gap*1);
+        addButton(KeyWin,KeyboardPanel,"*",targetTextField,line_indent_gap+key_x_gap*12,key_y_gap*1);
         
         // 세번째 줄
+        
+        
+        addButton(KeyWin,KeyboardPanel,"@",targetTextField,line_indent_gap*0-15+key_x_gap*0,key_y_gap*2);
         addButton(KeyWin,KeyboardPanel,"A",targetTextField,line_indent_gap*2+key_x_gap*0,key_y_gap*2);
         addButton(KeyWin,KeyboardPanel,"S",targetTextField,line_indent_gap*2+key_x_gap*1,key_y_gap*2);
         addButton(KeyWin,KeyboardPanel,"D",targetTextField,line_indent_gap*2+key_x_gap*2,key_y_gap*2);
@@ -403,9 +406,11 @@ public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
         addButton(KeyWin,KeyboardPanel,"B",targetTextField,line_indent_gap*5+key_x_gap*4,key_y_gap*3);
         addButton(KeyWin,KeyboardPanel,"N",targetTextField,line_indent_gap*5+key_x_gap*5,key_y_gap*3);
         addButton(KeyWin,KeyboardPanel,"M",targetTextField,line_indent_gap*5+key_x_gap*6,key_y_gap*3);
-        addButton(KeyWin,KeyboardPanel,"<",targetTextField,line_indent_gap*5+key_x_gap*7,key_y_gap*3);
-        addButton(KeyWin,KeyboardPanel,">",targetTextField,line_indent_gap*5+key_x_gap*8,key_y_gap*3);
+        addButton(KeyWin,KeyboardPanel,",",targetTextField,line_indent_gap*5+key_x_gap*7,key_y_gap*3);
+        addButton(KeyWin,KeyboardPanel,".",targetTextField,line_indent_gap*5+key_x_gap*8,key_y_gap*3);
         addButton(KeyWin,KeyboardPanel,"?",targetTextField,line_indent_gap*5+key_x_gap*9,key_y_gap*3);
+        
+        addButton(KeyWin,KeyboardPanel,"space",targetTextField,line_indent_gap*5+key_x_gap*0,key_y_gap*4);
 
         
         addButton(KeyWin,KeyboardPanel,"Clear",targetTextField,line_indent_gap*5+key_x_gap*10,key_y_gap*3);
@@ -456,6 +461,14 @@ public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
                 		textField.setText(currentText.substring(0, currentText.length() - 1));
                 	}
                 }
+                else if(keyname.equals("space")){
+                	// Backspace 버튼을 클릭하면 텍스트 필드에서 마지막 글자를 지움
+                
+                	 textField.setText(textField.getText() + " ");
+                }
+                
+                
+                
                 else {
                 	if(keyAlphabetLowerOrUpper) {
                 		;
@@ -492,6 +505,18 @@ public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
             panel.add(button);
         	
         }
+        else if (keyname.equals("@")) {
+            button.setFont(new Font("굴림", Font.BOLD, 13));
+            button.setBounds(keyboardStartHorizontalLine+pos_x-15, keyboardStartVerticalLine+pos_y, 47, 32);
+            panel.add(button);
+        	
+        }
+        else if (keyname.equals("space")) {
+            button.setFont(new Font("굴림", Font.BOLD, 13));
+            button.setBounds(keyboardStartHorizontalLine+pos_x-15, keyboardStartVerticalLine+pos_y, 500, 32);
+            panel.add(button);
+        	
+        }
         
         
         else {
@@ -502,5 +527,7 @@ public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
         //dialog.add(button);
     }
 	
+
+
 
 } // END

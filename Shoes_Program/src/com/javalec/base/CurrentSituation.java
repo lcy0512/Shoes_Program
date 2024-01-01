@@ -31,20 +31,20 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class CurrentSituation extends JDialog {
-	
-	
-	
-	
-	
+
+
+
+
+
 	/*
-	 * Description : 매출 현황 페이지  
-	 * Date : 2023.12.31 
-	 * Author : 박지환 
+	 * Description : 매출 현황 페이지
+	 * Date : 2023.12.31
+	 * Author : 박지환
 	 * Update :
 	 * 		1. page 중앙이동 및 색깔 통합  update by pdg
 	 * 		2. 다른 화면 페이지 아이콘 추가 by pdg
-	 * 		3. 뒤로가기 버튼  수정, exit 버튼 없앰. 
-	 * 		4. 월별, 상품별, 브랜드별 매출현황 추가	
+	 * 		3. 뒤로가기 버튼  수정, exit 버튼 없앰.
+	 * 		4. 월별, 상품별, 브랜드별 매출현황 추가
 	 * 		5. innerTable Column갯수 변경
 	 */
 
@@ -87,7 +87,7 @@ public class CurrentSituation extends JDialog {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-		
+
 			}
 		});
 		setBounds(ShareVar.position_window_x,ShareVar.position_window_y, ShareVar.window_size_x,ShareVar.window_size_x);
@@ -150,31 +150,31 @@ public class CurrentSituation extends JDialog {
 
 	private void tableCulomn() {
 		tableInit();
-		
-		
+
+
 	}
-	
+
 	//테이블 컬럼 만들기(코몹박스별로 컬럼값 다르게줌)
 	private void tableInit() {
-		
+
 		if(cbSelection.getSelectedIndex() == 0) {
-	    	String[] newColumnNames1 = {"날짜", "가격"};
-            outerTable.setColumnIdentifiers(newColumnNames1);
-	    }else if (cbSelection.getSelectedIndex() == 1) {
-	    	String[] newColumnNames2 = {"날짜", "가격"};
-            outerTable.setColumnIdentifiers(newColumnNames2);	    	
+			String[] newColumnNames1 = {"날짜", "가격"};
+			outerTable.setColumnIdentifiers(newColumnNames1);
+		}else if (cbSelection.getSelectedIndex() == 1) {
+			String[] newColumnNames2 = {"날짜", "가격"};
+			outerTable.setColumnIdentifiers(newColumnNames2);
 		} else if (cbSelection.getSelectedIndex() == 2) {
-	    	String[] newColumnNames3 = {"날짜", "가격"};
-            outerTable.setColumnIdentifiers(newColumnNames3);	    	
+			String[] newColumnNames3 = {"날짜", "가격"};
+			outerTable.setColumnIdentifiers(newColumnNames3);
 		}else if (cbSelection.getSelectedIndex() == 3) {
-	    	String[] newColumnNames4 = {"브랜드", "상품이름","개당 가격","판매개수", "매출액"};
-            outerTable.setColumnIdentifiers(newColumnNames4);	    	
+			String[] newColumnNames4 = {"브랜드", "상품이름","개당 가격","판매개수", "매출액"};
+			outerTable.setColumnIdentifiers(newColumnNames4);
 		}else if (cbSelection.getSelectedIndex() == 4) {
-	    	String[] newColumnNames5 = {"브랜드", "매출액"};
-            outerTable.setColumnIdentifiers(newColumnNames5);	    	
+			String[] newColumnNames5 = {"브랜드", "매출액"};
+			outerTable.setColumnIdentifiers(newColumnNames5);
 		}
-	    
-	    
+
+
 		int i = outerTable.getRowCount();
 		for (int j = 1; j <= i; j++) {
 			outerTable.removeRow(0);
@@ -184,7 +184,7 @@ public class CurrentSituation extends JDialog {
 	}
 
 	//콤보박스 선택시 innerTable에 dao에서 불러온 값 넣기
-	private void brandSelectAction() { 
+	private void brandSelectAction() {
 		tableInit();
 		if (cbSelection.getSelectedItem().toString().equals("당일매출현황")) {
 			Dao_pjh_CurrentSituation daoPjh = new Dao_pjh_CurrentSituation();
@@ -221,9 +221,9 @@ public class CurrentSituation extends JDialog {
 
 			int listCount = dtoList.size();
 			for (int i = 0; i < listCount; i++) {
-				String[] qTxt = { 
-						dtoList.get(i).getPbrand(), 
-						dtoList.get(i).getPname(), 
+				String[] qTxt = {
+						dtoList.get(i).getPbrand(),
+						dtoList.get(i).getPname(),
 						Integer.toString(dtoList.get(i).getPprice()),
 						Integer.toString(dtoList.get(i).getSqty()),
 						Integer.toString(dtoList.get(i).getTotalprice())
@@ -249,20 +249,20 @@ public class CurrentSituation extends JDialog {
 			btnNewButton = new JButton("뒤로가기");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-				backToManagerPage();
+					backToManagerPage();
 				}
 			});
 			btnNewButton.setBounds(44, 45, 117, 29);
 		}
 		return btnNewButton;
 	}
-	
+
 	//뒤로가기버튼 클릭시 메니저 페이지로 이동
 	private void backToManagerPage() {
-		
-		
+
+
 		ManagerPage_ managerPage = new ManagerPage_();
-		
+
 		managerPage.setVisible(true);
 		this.setVisible(false);
 	}

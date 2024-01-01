@@ -6,8 +6,8 @@ public class Dto_Mainview {
 
 	/*
 	 * Description : 메인뷰 페이지 dto
-	 * Date : 2023.12.31 
-	 * Author : 박지환 
+	 * Date : 2023.12.31
+	 * Author : 박지환
 	 * Update :
 	 * 		1. Constructor 추가
 	 */
@@ -26,7 +26,7 @@ public class Dto_Mainview {
 		// TODO Auto-generated constructor stub
 	}
 
-	
+
 	//제품목록 부르기 위한 생성자
 	public Dto_Mainview(String pbrand, String pname, int pprice, String fake_filename) {
 		super();
@@ -41,7 +41,7 @@ public class Dto_Mainview {
 	public int getP_seq() {
 		return p_seq;
 	}
-	
+
 	public void setP_seq(int p_seq) {
 		this.p_seq = p_seq;
 	}
@@ -105,6 +105,6 @@ public class Dto_Mainview {
 	}
 
 
-	
+
 
 }

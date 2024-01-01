@@ -3,14 +3,14 @@ package com.javalec.function;
 import java.io.FileInputStream;
 
 public class Dto_pjh_CurrentSituation {
-	
+
 	/*
 	 * Description : 매출 현황 Dto
-	 * Date : 2023.12.31 
-	 * Author : 박지환 
+	 * Date : 2023.12.31
+	 * Author : 박지환
 	 * Update :
 	 * 		1. 현황 페이지 상품별 매출현황 cConstructor추가
-	 * 		
+	 *
 	 */
 	// Field
 	int p_seq;
@@ -46,7 +46,7 @@ public class Dto_pjh_CurrentSituation {
 	int saseq;
 	int sap_seq;
 	int totalprice;
-	
+
 	// --------------------------------Constructor----------------------
 
 	// 현황 페이지 일별매출,웖별매출,일주일별매출
@@ -56,9 +56,9 @@ public class Dto_pjh_CurrentSituation {
 		this.sprice = sprice;
 
 	}
-	
-	
-	
+
+
+
 	// 현황 페이지 상품별 매출현황
 	public Dto_pjh_CurrentSituation(String pbrand, String pname, int pprice, int sqty,int totalprice) {
 		super();
@@ -67,7 +67,7 @@ public class Dto_pjh_CurrentSituation {
 		this.pprice = pprice;
 		this.sqty = sqty;
 		this.totalprice = totalprice;
-		
+
 	}
 
 
@@ -78,8 +78,8 @@ public class Dto_pjh_CurrentSituation {
 		super();
 		this.sdate = sdate;
 	}
-	
-	
+
+
 
 	// --------------------------------method-------------------------
 	public int getP_seq() {

@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.javalec.function.Dao_pdg;
+import com.javalec.function.ShareVar;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -56,19 +57,25 @@ public class JoinPage extends JDialog {
 
 	/*
 	 * Description : 회원 가입 페이 Date : 20203.12.27 Author : Dong Geun Forrest Park
-	 * Update : o 1. GUI design o 2. 입력 받은 것으로 db 에 등록하기 3. id 길이가 너무 길면 쿼리가 안들어감. o
-	 * 4. 아이디 중복확인.
+	 * Update 2023.12.29  by PDG: 
+	 * o 		1. GUI design 
+	 * o		2. 입력 받은 것으로 db 에 등록하기 
+	 * o		3. id 길이가 너무 길면 쿼리가 안들어감.
+	 * o		4. 아이디 중복확인.
+	 * 			5. 아이디는 숫자와 영어로만 등록할수있습니다.
+	 * o		6. 비밀번호 확인 기능 필요 
+	 * o		7. 동의가 체크 되어야만 등록 되게 만들것 
+	 * o		8. 이미지 업로드 기능 추가할것.
 	 * 
-	 * 5. 아이디는 숫자와 영어로만 등록할수있습니다.
+	 * Update 2023.12.31 by PDG
 	 * 
-	 * 6. 비밀번호 확인 기능 필요 7. 동의가 체크 되어야만 등록 되게 만들것 8. 이미지 업로드 기능 추가할것.
-	 * 
+	 * 			1. 홈버튼 이미지 예전 것임 새로운것으로 바꿀것
+	 * 			2. 팝업 위치 변경
 	 */
 
 	static JoinPage joindialog = new JoinPage();
 	private JLabel lblNewLabel_6_1;
 	private JRadioButton rbNormalMember;
-	private JRadioButton rbPremiumMember;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JRadioButton rbInformationOfferAgree;
 	private JLabel lblNewLabel;
@@ -95,9 +102,9 @@ public class JoinPage extends JDialog {
 	 */
 	public JoinPage() {
 		setTitle("회원가입");
-		setBounds(100, 100, 800, 600);
+		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, ShareVar.window_size_x,  ShareVar.window_size_y);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(new Color(247, 245, 247));
+		contentPanel.setBackground(new Color(ShareVar.RGB_red, ShareVar.RGB_green, ShareVar.RGB_blue));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -124,7 +131,6 @@ public class JoinPage extends JDialog {
 		contentPanel.add(getBtnNewButton_2());
 		contentPanel.add(getLblNewLabel_6_1());
 		contentPanel.add(getRbNormalMember());
-		contentPanel.add(getRbPremiumMember());
 		contentPanel.add(getRbInformationOfferAgree());
 		contentPanel.add(getLblNewLabel());
 		contentPanel.add(getBtnCamera());
@@ -318,7 +324,7 @@ public class JoinPage extends JDialog {
 					registrationAction();
 				}
 			});
-			btnNewButton.setBounds(289, 491, 117, 35);
+			btnNewButton.setBounds(289, 459, 117, 35);
 		}
 		return btnNewButton;
 	}
@@ -351,19 +357,10 @@ public class JoinPage extends JDialog {
 		return rbNormalMember;
 	}
 
-	private JRadioButton getRbPremiumMember() {
-		if (rbPremiumMember == null) {
-			rbPremiumMember = new JRadioButton("프리미엄 멤버쉽");
-			buttonGroup.add(rbPremiumMember);
-			rbPremiumMember.setBounds(407, 420, 117, 23);
-		}
-		return rbPremiumMember;
-	}
-
 	private JRadioButton getRbInformationOfferAgree() {
 		if (rbInformationOfferAgree == null) {
 			rbInformationOfferAgree = new JRadioButton("정보 제공에 동의합니다.");
-			rbInformationOfferAgree.setBounds(301, 455, 167, 23);
+			rbInformationOfferAgree.setBounds(407, 420, 167, 23);
 		}
 		return rbInformationOfferAgree;
 	}
@@ -388,7 +385,7 @@ public class JoinPage extends JDialog {
 
 	private JButton getBtnImageUpload() {
 		if (btnImageUpload == null) {
-			btnImageUpload = new JButton("내 이미지 업로드");
+			btnImageUpload = new JButton("이미지 업로드");
 			btnImageUpload.setBounds(122, 204, 117, 29);
 		}
 		return btnImageUpload;
@@ -415,7 +412,7 @@ public class JoinPage extends JDialog {
 
 				}
 			});
-			btnNewButton_3.setBounds(418, 491, 117, 35);
+			btnNewButton_3.setBounds(418, 459, 117, 35);
 		}
 		return btnNewButton_3;
 	}
@@ -694,7 +691,7 @@ public class JoinPage extends JDialog {
 
 				}
 			});
-			btnNewButton_2.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/home1.png")));
+			btnNewButton_2.setIcon(new ImageIcon(JoinPage.class.getResource("/com/javalec/image/goToFirstPage.png")));
 			btnNewButton_2.setBounds(713, 16, 35, 35);
 		}
 		return btnNewButton_2;

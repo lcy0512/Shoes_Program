@@ -13,7 +13,7 @@ import javax.swing.text.JTextComponent;
 
 import com.javalec.function.Dao_pdg;
 import com.javalec.function.ShareVar;
-import com.mysql.cj.protocol.x.XProtocolRowFactory;
+
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

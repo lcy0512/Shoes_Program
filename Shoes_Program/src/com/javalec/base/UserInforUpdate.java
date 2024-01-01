@@ -42,7 +42,6 @@ public class UserInforUpdate extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JLabel lblID;
 	private JTextField tfID;
 	private JLabel lblPassword;
 	private JPasswordField pfPassword;
@@ -59,7 +58,6 @@ public class UserInforUpdate extends JDialog {
 	private JTextField tfTelno;
 	private JButton btnNewButton;
 	private JLabel lblNewLabel_6_1_2;
-	private JButton btnNewButton_1;
 	private JPasswordField pfPassword_Same;
 	private JLabel lblPassword_2;
 	private JButton btnNewButton_2;
@@ -70,14 +68,13 @@ public class UserInforUpdate extends JDialog {
 	 * Author : Dong Geun Forrest Park
 	 * Update 2024.01.01  by PDG: 
 	 * 			1. sharevar 에서 현재 아이디를 가져와서 디비에서 회원정보를 검색함. 
+	 * 			2. 정보를 업데이트하고 나면 ? 어디로 가야하는가 메인페이지로 가야한다. 
 	 * 
 	*/
 
 	static UserInforUpdate joindialog = new UserInforUpdate();
 	private JLabel lblNewLabel_6_1;
-	private JRadioButton rbNormalMember;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JRadioButton rbInformationOfferAgree;
 	private JLabel lblNewLabel;
 	private JButton btnCamera;
 	private JButton btnImageUpload;
@@ -98,6 +95,7 @@ public class UserInforUpdate extends JDialog {
 	private static int keyboardStartVerticalLine=5;
 	private static boolean keyAlphabetLowerOrUpper =false; // false equal lower case, it is initial state
 	private JButton btnKeyboard2;
+	private JButton btnGotoMainView;
 
 	/**
 	 * Launch the application.
@@ -134,7 +132,6 @@ public class UserInforUpdate extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getNameImage());
-		contentPanel.add(getLblID());
 		contentPanel.add(getLblPassword());
 		contentPanel.add(getLblNewLabel_6());
 		contentPanel.add(getLblEmail());
@@ -150,13 +147,10 @@ public class UserInforUpdate extends JDialog {
 		contentPanel.add(getTextField_1_3());
 		contentPanel.add(getBtnNewButton());
 		contentPanel.add(getLblNewLabel_6_1_2());
-		contentPanel.add(getBtnNewButton_1());
 		contentPanel.add(getLblPassword_2());
 		contentPanel.add(getPfPassword_Same());
 		contentPanel.add(getBtnNewButton_2());
 		contentPanel.add(getLblNewLabel_6_1());
-		contentPanel.add(getRbNormalMember());
-		contentPanel.add(getRbInformationOfferAgree());
 		contentPanel.add(getLblNewLabel());
 		contentPanel.add(getBtnCamera());
 		contentPanel.add(getBtnImageUpload());
@@ -168,27 +162,19 @@ public class UserInforUpdate extends JDialog {
 		contentPanel.add(getBtnEmailKeyboard());
 		contentPanel.add(getBtnNameKeyboard());
 		contentPanel.add(getBtnTellNokeyBoard());
-	}
-
-	private JLabel getLblID() {
-		if (lblID == null) {
-			lblID = new JLabel("아이디 : 필수 정보입니다.");
-			lblID.setForeground(Color.GRAY);
-			lblID.setBounds(283, 85, 185, 16);
-		}
-		return lblID;
+		contentPanel.add(getBtnGotoMainView());
 	}
 
 	private JTextField getTfID() {
 		if (tfID == null) {
 			tfID = new JTextField();
+			tfID.setEditable(false);
 			tfID.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyTyped(KeyEvent e) {
 
 					// id tf 에 타이핑 될때 라벨 사라짐.
 
-					lblID.setVisible(false);
 
 				}
 			});
@@ -348,11 +334,11 @@ public class UserInforUpdate extends JDialog {
 	////// 회원등록 버튼!
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
-			btnNewButton = new JButton("가입하기");
+			btnNewButton = new JButton("수정하기");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
-					registrationAction();
+					userInfoUpdate();
 				}
 			});
 			btnNewButton.setBounds(267, 480, 117, 35);
@@ -376,24 +362,6 @@ public class UserInforUpdate extends JDialog {
 			lblNewLabel_6_1.setBounds(230, 188, 35, 45);
 		}
 		return lblNewLabel_6_1;
-	}
-
-	private JRadioButton getRbNormalMember() {
-		if (rbNormalMember == null) {
-			rbNormalMember = new JRadioButton("일반 멤버쉽");
-			buttonGroup.add(rbNormalMember);
-			rbNormalMember.setSelected(true);
-			rbNormalMember.setBounds(277, 441, 99, 23);
-		}
-		return rbNormalMember;
-	}
-
-	private JRadioButton getRbInformationOfferAgree() {
-		if (rbInformationOfferAgree == null) {
-			rbInformationOfferAgree = new JRadioButton("정보 제공에 동의합니다.");
-			rbInformationOfferAgree.setBounds(385, 441, 167, 23);
-		}
-		return rbInformationOfferAgree;
 	}
 
 	private JLabel getLblNewLabel() {
@@ -468,9 +436,9 @@ public class UserInforUpdate extends JDialog {
 		boolean idOverlapCheck_whenOKbtnClicked = idOverlapCheckWhenOKClicked();
 
 		// 정보제공 동의 확인
-		boolean infocheck = informationOfferAgree();
 
-		if (i_chk == 0 && idOverlapCheck_whenOKbtnClicked && infocheck) {
+
+		if (i_chk == 0 && idOverlapCheck_whenOKbtnClicked ) {
 
 			// 화면에서 입력받은 값을 변수에 넣어 준다.
 
@@ -538,44 +506,6 @@ public class UserInforUpdate extends JDialog {
 		return i;
 	}
 
-	// ID 중복 체크 확인
-	private boolean idOverlapCheck() {
-
-		String id = tfID.getText().trim();
-		Dao_pdg dao = new Dao_pdg(id);
-
-		if (id.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "아이디를 입력하세요 .");
-			tfID.requestFocus();
-			return false;
-		}
-
-//		
-//		if (Pattern.matches("^[a-zA-Z]*$", id) ){
-//
-//			JOptionPane.showMessageDialog(null,"영문과 숫자로만 아이디를 만들수 있습니다. ");
-//			
-//			tfID.requestFocus();
-//			tfID.setEditable(true);
-//			
-//			return false;
-//		}
-
-		int isIdOverlaped = dao.isIdAlreadyExist();
-
-		if (isIdOverlaped != 0) {
-			JOptionPane.showMessageDialog(null, "중복된 아이디입니다.");
-			tfID.requestFocus();
-			tfID.setEditable(true);
-			return false;
-		} else {
-			JOptionPane.showMessageDialog(null, "사용가능한 아이디입니다. ");
-			tfID.setEditable(false);
-
-			return true;
-		}
-	}
-
 	// ok 클릭시 ID 중복 확인 다시!
 	private boolean idOverlapCheckWhenOKClicked() {
 
@@ -615,18 +545,7 @@ public class UserInforUpdate extends JDialog {
 		}
 	}
 
-	// 정보 제공 동의 확인
 
-	private boolean informationOfferAgree() {
-
-		if (rbInformationOfferAgree.isSelected() == false) {
-			JOptionPane.showMessageDialog(null, " 가입하시려면  정보 제공 동의가 필요합니다. ");
-			return false;
-		} else {
-			return true;
-		}
-
-	}
 
 	// 비밀번호 확인
 
@@ -653,21 +572,6 @@ public class UserInforUpdate extends JDialog {
 
 		return true;
 
-	}
-
-	private JButton getBtnNewButton_1() {
-		if (btnNewButton_1 == null) {
-			btnNewButton_1 = new JButton("ID중복확인");
-			btnNewButton_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-
-					// 중복확인 버튼
-					idOverlapCheck();
-				}
-			});
-			btnNewButton_1.setBounds(585, 76, 99, 35);
-		}
-		return btnNewButton_1;
 	}
 
 	private JPasswordField getPfPassword_Same() {
@@ -740,7 +644,7 @@ public class UserInforUpdate extends JDialog {
 
 				}
 			});
-			btnNewButton_2.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/goToFirstPage.png")));
+			btnNewButton_2.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/logout_new.png")));
 			btnNewButton_2.setBounds(713, 16, 35, 35);
 		}
 		return btnNewButton_2;
@@ -787,7 +691,7 @@ public class UserInforUpdate extends JDialog {
 		tfName.setText(userInfoList.get(0).getName());
 		lblName.setVisible(false);
 		tfID.setText(userInfoList.get(0).getCustomer_id());
-		lblID.setVisible(false);
+
 		tfTelno.setText(userInfoList.get(0).getTelno());
 		lblTelno.setVisible(false);
 		
@@ -797,7 +701,21 @@ public class UserInforUpdate extends JDialog {
 	
 	
 	
-	
+	// user 정보 업데이트 해줌. 
+	private void userInfoUpdate() {
+		
+		char[] pw1 = pfPassword.getPassword();
+		String passString1 = new String(pw1);
+		Dao_pdg dao_update = new Dao_pdg( tfID.getText(), tfName.getText(), passString1, tfTelno.getText(), tfEmail.getText());
+		
+		
+		dao_update.userUpdate();
+		JOptionPane.showMessageDialog(null, "회원 정보가 수정되었습니다.  ");
+		
+		
+	}
+		
+
 	
 	
 	
@@ -1138,4 +1056,30 @@ public class UserInforUpdate extends JDialog {
 
 
 
+	private JButton getBtnGotoMainView() {
+		if (btnGotoMainView == null) {
+			btnGotoMainView = new JButton("");
+			btnGotoMainView.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					goToMainView();
+				}
+			});
+			btnGotoMainView.setIcon(new ImageIcon(UserInforUpdate.class.getResource("/com/javalec/image/메인가기.png")));
+			btnGotoMainView.setBackground(new Color(238, 238, 238));
+			btnGotoMainView.setBounds(666, 16, 35, 35);
+		}
+		return btnGotoMainView;
+	}
+	
+	
+	private void goToMainView() {
+		
+		MainView mainview = new MainView();
+		
+		this.setVisible(false);
+		mainview.setVisible(true);
+		this.dispose();
+		
+	}
 }// ENd

@@ -49,6 +49,10 @@ import javax.swing.event.PopupMenuEvent;
 * Author : PJM
 * Date : 23.12.30
 * update : 23.12.30 15:45
+* 
+* 
+* Update 2024.01.02 by PDG
+* 			1. 회원정보수정 아이콘과 기능 추가함. 
 */
 
 public class ManagerPage_ extends JDialog {
@@ -89,6 +93,7 @@ public class ManagerPage_ extends JDialog {
 	private JButton btnMainView;
 	static ManagerPage_ managerDialog = new ManagerPage_();
 	private JButton btnCurrentSituation;
+	private JButton btnGotoUserinfo;
 
 	/**
 	 * Launch the application.
@@ -156,6 +161,7 @@ public class ManagerPage_ extends JDialog {
 		contentPanel.add(getBtnLogOut());
 		contentPanel.add(getBtnMainView());
 		contentPanel.add(getBtnCurrentSituation());
+		contentPanel.add(getBtnGotoUserinfo());
 	}
 
 	private JComboBox getCbSelection() {
@@ -815,6 +821,35 @@ public class ManagerPage_ extends JDialog {
 	}
 
 
+	private JButton getBtnGotoUserinfo() {
+		if (btnGotoUserinfo == null) {
+			btnGotoUserinfo = new JButton("");
+			btnGotoUserinfo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					goToUserInfoPage();
+					
+				}
+			});
+			btnGotoUserinfo.setIcon(new ImageIcon(ManagerPage_.class.getResource("/com/javalec/image/login_new.png")));
+			btnGotoUserinfo.setBounds(566, 33, 48, 45);
+		}
+		return btnGotoUserinfo;
+	}
+	
+	
+	private void goToUserInfoPage() {
+		
+		UserInforUpdate userUpdate = new UserInforUpdate();
+		
+		this.setVisible(false);
+		this.dispose();
+		userUpdate.setVisible(true);
+		
+	}
+	
+	
+	
 	}// End
 
 

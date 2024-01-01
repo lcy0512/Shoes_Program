@@ -40,7 +40,11 @@ public class Dao_pdg {
 		// TODO Auto-generated constructor stub
 	}
 
-	// 1. Insert 를 위한 생성자  + 3. 회원 수정을 위하여 회원정보를 가져오기위한 생성자. 
+	// 1. Insert 를 위한 생성자  
+	//+ 3. 회원 수정을 위하여 회원정보를 가져오기위한 생성자. 	
+	//+ 2.  중복확인을 위한 생성자 .+	
+	//+ 4. 회원정보 수정을 위한 생성자.
+	
 	public Dao_pdg(String customer_id, String name, String pw, String telno, String email) {
 		super();
 		this.customer_id = customer_id;
@@ -49,10 +53,7 @@ public class Dao_pdg {
 		this.telno = telno;
 		this.email = email;
 	}
-	
-	// 2.  중복확인을 위한 생성자 .
-	
-	
+
 	
 	
 	
@@ -180,7 +181,7 @@ public class Dao_pdg {
 	
 	
 	
-	// 4. 회원정보수정을 위한 조회 및 수정 
+	// 4. 회원정보수정을 위한 조회 
 	
 	public ArrayList<Dto_PDG_CustomerTable> fetchUserInfo(String userId) {
 		
@@ -227,7 +228,35 @@ public class Dao_pdg {
 		
 	}
 	
+	//5. 회원정보 수정하기 
 	
+	public void userUpdate () {
+		
+		
+		String updateQuery ="UPDATE customer SET  name = ? , pw = ?, telno = ?, email = ? "
+						  + " WHERE customer_id = ?";
+		
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
+			
+			preparedStatement = connection.prepareStatement(updateQuery);
+			preparedStatement.setString(1,name);
+			preparedStatement.setString(2,pw);
+			preparedStatement.setString(3,telno);
+			preparedStatement.setString(4,email);
+			preparedStatement.setString(5,customer_id);
+			
+			preparedStatement.executeUpdate();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	

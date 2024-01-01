@@ -13,6 +13,7 @@ import javax.swing.text.JTextComponent;
 
 import com.javalec.function.Dao_pdg;
 import com.javalec.function.ShareVar;
+import com.mysql.cj.protocol.x.XProtocolRowFactory;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -230,7 +231,14 @@ public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
 			
 			ShareVar.userID =id;
 			
-			if(id.equals("admin") && rbPattern1.isSelected() ) {
+			if(id.equals("admin")&& !rbPattern1.isSelected()&& passString.equals("123") ){
+				ShareVar.userID =id;
+				JOptionPane.showMessageDialog(null, "관리자 계정입니다. ");
+				JOptionPane.showMessageDialog(null, "아이디와 패스워드를 다시 입력해주세요.");
+//				goManagerPage();
+			}
+			
+			else if (id.equals("admin") && rbPattern1.isSelected()&& passString.equals("123") ){
 				ShareVar.userID =id;
 				//JOptionPane.showMessageDialog(null, "관리자 페이지로 이동합니다. ");
 				goManagerPage();

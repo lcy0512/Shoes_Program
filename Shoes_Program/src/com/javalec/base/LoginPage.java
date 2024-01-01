@@ -191,7 +191,7 @@ public class LoginPage extends JDialog /*implements KeyBoard_interface*/ {
 			tfID.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					ShareVar.currentTF =tfID;
+					//ShareVar.currentTF =tfID;
 				}
 			});
 			tfID.addKeyListener(new KeyAdapter() {

@@ -248,7 +248,7 @@ public class JoinPage extends JDialog {
 
 	private JLabel getLblEmail() {
 		if (lblEmail == null) {
-			lblEmail = new JLabel("[선택] 비밀번호 분실시 확인용 이메일");
+			lblEmail = new JLabel("[필수] 비밀번호 분실시 확인용 이메일");
 			lblEmail.setForeground(Color.GRAY);
 			lblEmail.setBounds(279, 272, 223, 16);
 		}

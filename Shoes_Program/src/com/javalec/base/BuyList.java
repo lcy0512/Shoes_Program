@@ -108,7 +108,7 @@ public class BuyList extends JDialog {
 			}
 		});
 		setTitle("장바구니");
-		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, 800, 600);
+		setBounds(ShareVar.position_window_x, ShareVar.position_window_y, 1024, 768);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

@@ -97,7 +97,7 @@ public class Dao_lcy {
 		ArrayList<Dto_lcy> Dto_lcyList = new ArrayList<Dto_lcy>();
 		String whereDefault = "select p.p_seq, p.brand, p.name, p.price, p.color, p.size, s.saveQty";
 		String where1 = " from product as p, save as s";
-		String where2 = " where p.p_seq = s.p_seq";
+		String where2 = " where p.p_seq = s.p_seq and s.customer_id = '" + ShareVar.userID + "'";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

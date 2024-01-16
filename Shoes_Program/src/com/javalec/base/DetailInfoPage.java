@@ -220,7 +220,7 @@ public class DetailInfoPage extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
-			cbQty.setBounds(536, 283, 61, 25);
+			cbQty.setBounds(536, 283, 70, 25);
 		}
 		return cbQty;
 	}
